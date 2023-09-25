@@ -6,8 +6,8 @@ export default defineConfig({
     plugins: [react()],
     define: {
         "process.env": process.env,
-        BASE_URL: process.env.VITE_BASEURL,
-        SECOND_URL: process.env.VITE_SECONDURL,
-        THIRD_URL: process.env.VITE_THIRDURL,
+        VITE_BASEURL: process.env.VITE_BASEURL,
+        VITE_SECONDURL: process.env.VITE_SECONDURL,
+        VITE_THIRDURL: process.env.VITE_THIRDURL,
     },
 });

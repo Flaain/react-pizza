@@ -46,8 +46,8 @@ class API {
 }
 
 export const api = new API({
-    baseUrl: import.meta.env.VITE_BASEURL,
-    secondUrl: import.meta.env.VITE_SECONDURL,
-    thirdUrl: import.meta.env.VITE_THIRDURL,
+    baseUrl: import.meta.env.VITE_BASE_URL,
+    secondUrl: import.meta.env.VITE_SECOND_URL,
+    thirdUrl: import.meta.env.VITE_THIRD_URL,
     headers: { "Content-Type": "application/json" },
 });

@@ -9,11 +9,11 @@ import { initialCategories, initialSortNames } from "../../../shared/initialValu
 
 const Home = () => {
     const { filteredPizzas, loading } = React.useContext(AppContext);
-    
+
     const [view, setView] = React.useState(6);
 
-    const handleScroll = ({ target: { documentElement: { scrollHeight, scrollTop } }}: Event) => {
-        if (scrollHeight - (scrollTop + window.innerHeight) < 100 && view < filteredPizzas.length) {
+    const handleScroll = () => {
+        if (document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight) < 100 && view < filteredPizzas.length) {
             setView((prevState) => prevState + 5);
         }
     };
@@ -31,7 +31,7 @@ const Home = () => {
             <Container>
                 <div className='flex flex-col gap-5'>
                     <Tools categories={initialCategories} sortNames={initialSortNames} />
-                    <Title title="Все пиццы"/>
+                    <Title title='Все пиццы' />
                 </div>
                 <PizzaList data={filteredPizzas.slice(0, view)} loading={loading} />
             </Container>

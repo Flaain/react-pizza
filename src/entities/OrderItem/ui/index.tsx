@@ -4,7 +4,7 @@ import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
 import { initialTypes } from "../../../shared/initialValues";
 import { Props } from "../interfaces";
 
-const OrderItem: React.FC<Props> = ({ pizzaId, id, title, price, type, size, count, imageUrl }) => {
+const OrderItem: React.FC<Props> = ({ title, price, type, size, count, imageUrl }) => {
     const [imageLoaded, setImageLoaded] = React.useState(false);
 
     return (

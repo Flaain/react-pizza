@@ -19,11 +19,12 @@ const PaymentInfoModal: React.FC<Props> = ({ closeHandler }) => {
     const [activeMenu, setActiveMenu] = React.useState<AvaiblePaymentMenus>("main");
     const [currentInfo, setCurrentInfo] = React.useState<PaymentInfo | null>(paymentInfo ?? null);
     const [userCards, setUserCards] = React.useState<Array<CreditCard>>(parseJSON(USER_CARDS_KEY) ?? []);
-    const [menus, setMenus] = React.useState<Menus>({
-        main: { component: <PaymentMain />, title: "Способ оплаты" },
+    
+    const menus: Menus = {
+        "main": { component: <PaymentMain />, title: "Способ оплаты" },
         "add-card": { component: <PaymentAddCard />, title: "Привязка карты" },
         "choose-card": { component: <PaymentUserCards />, title: "Выбор карты" },
-    });
+    };
 
     const handleSave = () => {
         setPaymentInfo(currentInfo);

@@ -5,6 +5,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
     plugins: [react()],
     define: {
+        "process.env": process.env,
         BASE_URL: process.env.VITE_BASEURL,
         SECOND_URL: process.env.VITE_SECONDURL,
         THIRD_URL: process.env.VITE_THIRDURL,

@@ -8,16 +8,9 @@ import { Link } from "react-router-dom";
 import { Pizza } from "../../../shared/api/interfaces/index";
 import { AppContext } from "../../../app/context";
 import pizzaReducer from "../../../widgets/PriceBlock/lib/utils/pizzaReducer";
+import { PizzaAction } from "../../../widgets/PriceBlock/lib/utils/interfaces";
 
-const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({
-    id,
-    title,
-    price,
-    category,
-    types,
-    sizes,
-    imageUrl,
-}) => {
+const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({ id, title, price, category, types, sizes, imageUrl }) => {
     const { cart } = React.useContext(AppContext);
     const { addToCart } = useCart();
 
@@ -34,7 +27,7 @@ const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({
         addToCart({ id, category, imageUrl, title }, state.type, state.size, state.price);
     };
 
-    const handleChange = ({ type, payload }) => {
+    const handleChange = ({ type, payload }: PizzaAction) => {
         dispatch({ type, payload });
     };
 

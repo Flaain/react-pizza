@@ -1,11 +1,10 @@
-import React from "react";
-import cn from "../../../shared/lib/classNames";
+import SortPopupList from "../../../widgets/SortPopupList/ui";
 import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
+import React from "react";
+import { Pizza } from "../../../shared/api/interfaces";
 import { Props } from "../interfaces";
 import { AppContext } from "../../../app/context";
 import { SORT_INDEX_KEY } from "../../../shared/initialValues";
-import { Pizza } from "../../../shared/api/interfaces";
-import SortPopupList from "../../../widgets/SortPopupList/ui";
 
 const SortPopup: React.FC<Props> = ({ names, currentSort, setCurrentSort }) => {
     const { setFilteredPizzas } = React.useContext(AppContext);

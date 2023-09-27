@@ -35,8 +35,10 @@ export interface AppContext {
     errorData: Error | null | unknown;
     selectedCategorie: number | null;
     currentSort: number;
+    searchValue: string;
     setSelectedCategorie: React.Dispatch<React.SetStateAction<number | null>>;
     setCurrentSort: React.Dispatch<React.SetStateAction<number>>;
+    setSearchValue: React.Dispatch<React.SetStateAction<string>>;
     setPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
     setFilteredPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
     setCart: React.Dispatch<React.SetStateAction<Cart[]>>;

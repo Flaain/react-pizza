@@ -6,4 +6,5 @@ export interface Props {
     reloadButton?: boolean;
     reloadButtonText?: string;
     screen?: boolean;
+    code?: Error | unknown;
 }

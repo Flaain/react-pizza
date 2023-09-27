@@ -4,15 +4,9 @@ import cn from "../../../shared/lib/classNames";
 import { Props } from "../interfaces";
 import { Link } from "react-router-dom";
 
-const NotFound: React.FC<Props> = ({
-    title,
-    description,
-    backLink,
-    backLinkText = "Вернуться назад",
-    reloadButton,
-    reloadButtonText = "Обновить страницу",
-    screen,
-}) => {
+const NotFound: React.FC<Props> = ({ title, description, backLink, backLinkText, reloadButton, reloadButtonText, screen, code }) => {
+    const [showError, setShowError] = React.useState(false);
+
     return (
         <section>
             <Container
@@ -30,6 +24,14 @@ const NotFound: React.FC<Props> = ({
                     >
                         {backLinkText}
                     </Link>
+                )}
+                {!!code && (
+                    <div className='flex flex-col gap-2'>
+                        <button onClick={() => setShowError((prevState) => !prevState)}>
+                            {showError ? "скрыть код ошибки" : "раскрыть код ошибки"}
+                        </button>
+                        {showError && <code>{JSON.stringify(code)}</code>}
+                    </div>
                 )}
                 {reloadButton && !backLink && (
                     <button

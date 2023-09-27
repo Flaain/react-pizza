@@ -16,6 +16,7 @@ const App = () => {
     const [selectedCategorie, setSelectedCategorie] = React.useState<number | null>(parseJSON(CATEGORIE_KEY));
     const [cart, setCart] = React.useState<Array<Cart>>(parseJSON(CART_KEY) ?? []);
     const [currentSort, setCurrentSort] = React.useState<number>(parseJSON(SORT_INDEX_KEY) ?? 0);
+    const [searchValue, setSearchValue] = React.useState("");
     const [loading, setLoading] = React.useState<boolean>(true);
     const [errorData, setErrorData] = React.useState<Error | unknown>(null);
 
@@ -26,10 +27,18 @@ const App = () => {
                 const sortDirection = initialSortNames[currentSort].sort.includes("-") ? -1 : 1;
 
                 setPizzas(data);
-                setFilteredPizzas((typeof selectedCategorie === "number" ? data.filter(({ category }) => category === selectedCategorie) : data).sort((a, b) => {
-                    const sortProperty = initialSortNames[currentSort].sort.replace("-", "");
-                    return ((Number(a[sortProperty as keyof Pizza]) - Number(b[sortProperty as keyof Pizza])) * sortDirection);
-                }));
+                setFilteredPizzas(
+                    (typeof selectedCategorie === "number"
+                        ? data.filter(({ category }) => category === selectedCategorie)
+                        : data
+                    ).sort((a, b) => {
+                        const sortProperty = initialSortNames[currentSort].sort.replace("-", "");
+                        return (
+                            (Number(a[sortProperty as keyof Pizza]) - Number(b[sortProperty as keyof Pizza])) *
+                            sortDirection
+                        );
+                    })
+                );
             } catch (error) {
                 console.error(error);
                 setErrorData(error);
@@ -47,7 +56,9 @@ const App = () => {
                 title='Не удалось получить данные с сервера'
                 description='Пожалуйста, проверьте свое соединение с интернетом и обновите страницу'
                 reloadButton
+                reloadButtonText="Обновить страницу"
                 screen
+                code={errorData}
             />
         );
     }
@@ -69,6 +80,8 @@ const App = () => {
                 setSelectedCategorie,
                 currentSort,
                 setCurrentSort,
+                searchValue,
+                setSearchValue,
             }}
         >
             <Routing />

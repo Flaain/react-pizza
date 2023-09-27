@@ -31,7 +31,7 @@ const PizzaDetails = () => {
     }, [activeItem]);
 
     if (!loading && (!name || !activeItem)) {
-        return <NotFound title='Что-то пошло не так, пицца не найдена' backLink />;
+        return <NotFound title='Что-то пошло не так, пицца не найдена' backLink backLinkText="Вернуться назад" />;
     }
 
     return (

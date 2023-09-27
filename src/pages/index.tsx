@@ -13,7 +13,7 @@ const Routing = () => {
                     <Route path='/' element={<Home />} />
                     <Route path='cart' element={<Cart />} />
                     <Route path='pizza/:name' element={<PizzaDetails />} />
-                    <Route path='*' element={<NotFound title='Страница не найдена' backLink />} />
+                    <Route path='*' element={<NotFound title='Страница не найдена' backLink backLinkText="Вернуться назад" />} />
                 </Route>
             </Routes>
         </>

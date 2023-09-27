@@ -22,7 +22,7 @@ const PriceBlock: React.FC<Props> = ({ activeItem }) => {
     const [pizzaState, dispatch] = React.useReducer(pizzaReducer, INITIAL_STATE);
 
     const handleAddToCart = () => {
-        addToCart(activeItem, pizzaState.type, pizzaState.size, pizzaState.price);
+        addToCart(activeItem, pizzaState);
     };
 
     const handleChange = ({ type, payload }: PizzaAction) => dispatch({ type, payload });

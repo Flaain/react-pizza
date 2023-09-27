@@ -4,6 +4,7 @@ import getIntlPrice from "../../lib/helpers/getIntlPrice";
 import { Item } from "./interfaces";
 import { AppContext } from "../../../app/context";
 import { CartItem } from "../../../app/context/interfaces";
+import { PizzaState } from "../../../widgets/PriceBlock/lib/utils/interfaces";
 
 export const useCart = () => {
     const { cart, setCart } = React.useContext(AppContext);
@@ -17,10 +18,10 @@ export const useCart = () => {
 
     const totalItems = React.useMemo(() => cart.reduce((acc, { items }) => acc += items.reduce((sum, { count }) => sum += count, 0) ,0), [cart])
 
-    const addToCart = React.useCallback(({ id, category, title, imageUrl }: Item, type: number, size: number, price: number) => {
+    const addToCart = React.useCallback(({ id, category, title, imageUrl }: Item, state: PizzaState) => {
         const cartItem = cart.find(({ id: _id }) => _id === id);
-
-        const newItem: CartItem = { id: Math.max(...(cartItem?.items.map(({ id }) => id) ?? [0])) + 1, type, size, price, count: 1 };
+        const existingIds = cartItem ? Math.max(...cartItem.items.map(({ id }) => id)) : 0; 
+        const newItem: CartItem = { id: existingIds + 1, count: 1, ...state };
 
         if (cartItem) {
             const itemIndex = cartItem.items.findIndex((item) => compareItems(item, newItem));

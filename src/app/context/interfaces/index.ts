@@ -4,6 +4,7 @@ import { CreditCard, DeliveryInfo, PaymentInfo, Promocode } from "../../../pages
 import { InitialDelivery } from "../../../features/DeliveryModal/interfaces";
 import { AvaiblePaymentMenus } from "../types";
 import { Menus } from "../../../entities/PaymentInfoModal/interfaces";
+import { SetURLSearchParams } from "react-router-dom";
 
 export interface Cart {
     id: number;
@@ -32,6 +33,7 @@ export interface AppContext {
     filteredPizzas: Pizza[];
     cart: Cart[];
     loading: boolean;
+    searchParams: URLSearchParams;
     errorData: Error | null | unknown;
     selectedCategorie: number | null;
     currentSort: number;
@@ -39,6 +41,7 @@ export interface AppContext {
     setSelectedCategorie: React.Dispatch<React.SetStateAction<number | null>>;
     setCurrentSort: React.Dispatch<React.SetStateAction<number>>;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+    setSearchParams: SetURLSearchParams;
     setPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
     setFilteredPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
     setCart: React.Dispatch<React.SetStateAction<Cart[]>>;

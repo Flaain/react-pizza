@@ -3,11 +3,11 @@ import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
 import OptionsSelector from "../../../widgets/OptionsSelector/ui";
 import AddToCartButton from "../../../features/AddToCartButton/ui";
+import pizzaReducer from "../../../widgets/PriceBlock/lib/utils/pizzaReducer";
 import { useCart } from "../../../shared/hooks/useCart";
 import { Link } from "react-router-dom";
 import { Pizza } from "../../../shared/api/interfaces/index";
 import { AppContext } from "../../../app/context";
-import pizzaReducer from "../../../widgets/PriceBlock/lib/utils/pizzaReducer";
 import { PizzaAction } from "../../../widgets/PriceBlock/lib/utils/interfaces";
 
 const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({ id, title, price, category, types, sizes, imageUrl }) => {
@@ -24,7 +24,7 @@ const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({ id, title, pric
 
     const handleAddToCart = () => {
         setCount((prevState) => prevState + 1);
-        addToCart({ id, category, imageUrl, title }, state.type, state.size, state.price);
+        addToCart({ id, category, imageUrl, title }, state);
     };
 
     const handleChange = ({ type, payload }: PizzaAction) => {

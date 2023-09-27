@@ -31,7 +31,6 @@ class API {
 
     async getPizzas(endpoint = "/pizzas"): Promise<Data<Array<Pizza>>> {
         const response = await fetch(this._baseUrl + endpoint);
-        console.log(import.meta.env.VITE_BASE_URL)
         return this._checkResponse(response);
     }
 

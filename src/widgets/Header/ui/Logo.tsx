@@ -1,10 +1,19 @@
+import React from "react";
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import { Link } from "react-router-dom";
 import { LogoProps } from "../interfaces";
+import { AppContext } from "../../../app/context";
 
 const Logo: React.FC<LogoProps> = ({ title, description }) => {
+    const { setSearchParams, setSearchValue } = React.useContext(AppContext);
+
+    const handleClick = () => {
+        setSearchParams({});
+        setSearchValue('');
+    }
+
     return (
-        <Link to='/' className='flex items-center gap-5 group'>
+        <Link to='/' className='flex items-center gap-5 group' onClick={handleClick}>
             <img
                 src={getImageUrl("logo.png")}
                 alt='logo'
@@ -12,7 +21,7 @@ const Logo: React.FC<LogoProps> = ({ title, description }) => {
             />
             <div className='flex flex-col'>
                 <strong className='uppercase m-0 text-xl font-extrabold text-primary-black'>{title}</strong>
-                {description && <p className='text-gray-400 m-0'>самая вкусная пицца во вселенной</p>}
+                {description && <p className='text-gray-400 m-0'>{description}</p>}
             </div>
         </Link>
     );

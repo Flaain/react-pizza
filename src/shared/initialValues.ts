@@ -16,16 +16,40 @@ export const initialCategories = [
 
 export const initialSortNames = [
     {
+        id: 1,
+        name: "Алфавиту",
+        sort: "title",
+        img: "sort.svg",
+    },
+    {
+        id: 2,
+        name: "Алфавиту",
+        sort: "-title",
+        img: "sort.svg",
+    },
+    {
+        id: 3,
         name: "Популярности",
         sort: "rating",
+        img: "sort.svg",
     },
     {
-        name: "Цене ( возрастание )",
+        id: 4,
+        name: "Популярности",
+        sort: "-rating",
+        img: "sort.svg",
+    },
+    {
+        id: 5,
+        name: "Цене",
         sort: "price",
+        img: "sort.svg",
     },
     {
-        name: "Цене ( убывание )",
+        id: 6,
+        name: "Цене",
         sort: "-price",
+        img: "sort.svg",
     },
 ];
 
@@ -37,3 +61,4 @@ export const USER_CARDS_KEY = "user-cards";
 export const CATEGORIE_KEY = "categorie-index";
 export const CART_KEY = "cart";
 export const SORT_INDEX_KEY = "sort-index";
+export const INITIAL_VIEW = 6;

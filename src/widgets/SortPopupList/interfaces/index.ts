@@ -1,5 +1,7 @@
+import { Names } from "../../../features/SortPopup/interfaces";
+
 export interface Props {
-    names: Array<{ name: string; sort: string }>;
+    names: Array<Names>;
     handleSort: (sortType: string, index: number) => void;
     currentSort: number;
 }

@@ -15,7 +15,7 @@ const PizzaDetails = () => {
     const { filteredPizzas, loading } = React.useContext(AppContext);
     const { name } = useParams();
 
-    const activeItem = React.useMemo(() => filteredPizzas.find(({ title }) => title === name), [loading, name]);
+    const activeItem = React.useMemo(() => filteredPizzas.find(({ title }) => title.toLowerCase() === name?.toLowerCase()), [loading, name]);
     const relatedItems = React.useMemo(() => filteredPizzas.filter(({ id }) => id !== activeItem?.id), [activeItem]);
 
     const [imageLoaded, setImageLoaded] = React.useState(false);

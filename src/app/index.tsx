@@ -3,6 +3,7 @@ import Routing from "../pages";
 import NotFound from "../pages/NotFound/ui";
 import parseJSON from "../shared/lib/helpers/parseJSON";
 import saveToLocalStorage from "../shared/lib/helpers/saveToLocalStorage";
+import getSortedArr from "../shared/lib/helpers/getSortedArr";
 import Spinner from "../shared/ui/Spinner/ui";
 import { api } from "../shared/api";
 import { Pizza } from "../shared/api/interfaces";
@@ -18,7 +19,7 @@ const App = () => {
     const [cart, setCart] = React.useState<Array<Cart>>(parseJSON(CART_KEY) ?? []);
     const [currentSort, setCurrentSort] = React.useState<number>(parseJSON(SORT_INDEX_KEY) ?? 0);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [searchValue, setSearchValue] = React.useState(searchParams.get('query') ?? '');
+    const [searchValue, setSearchValue] = React.useState(searchParams.get("query") ?? "");
     const [loading, setLoading] = React.useState<boolean>(true);
     const [errorData, setErrorData] = React.useState<Error | unknown>(null);
 
@@ -26,20 +27,16 @@ const App = () => {
         (async () => {
             try {
                 const { data } = await api.getPizzas();
+
                 const sortDirection = initialSortNames[currentSort].sort.includes("-") ? -1 : 1;
+                const property = initialSortNames[currentSort].sort.replace("-", "");
 
                 setPizzas(data);
                 setFilteredPizzas(
                     (typeof selectedCategorie === "number"
                         ? data.filter(({ category }) => category === selectedCategorie)
                         : data
-                    ).sort((a, b) => {
-                        const sortProperty = initialSortNames[currentSort].sort.replace("-", "");
-                        return (
-                            (Number(a[sortProperty as keyof Pizza]) - Number(b[sortProperty as keyof Pizza])) *
-                            sortDirection
-                        );
-                    })
+                    ).sort((a, b) => getSortedArr(a, b, sortDirection, property))
                 );
             } catch (error) {
                 console.error(error);
@@ -58,7 +55,7 @@ const App = () => {
                 title='Не удалось получить данные с сервера'
                 description='Пожалуйста, проверьте свое соединение с интернетом и обновите страницу'
                 reloadButton
-                reloadButtonText="Обновить страницу"
+                reloadButtonText='Обновить страницу'
                 screen
                 code={errorData}
             />
@@ -85,7 +82,7 @@ const App = () => {
                 searchValue,
                 setSearchValue,
                 searchParams,
-                setSearchParams
+                setSearchParams,
             }}
         >
             <Routing />

@@ -4,12 +4,12 @@ import PizzaList from "../../../widgets/PizzaList/ui";
 import Tools from "../../../widgets/Tools/ui";
 import Title from "../../../shared/ui/Title/ui";
 import { AppContext } from "../../../app/context";
-import { initialCategories, initialSortNames } from "../../../shared/initialValues";
+import { INITIAL_VIEW, initialCategories, initialSortNames } from "../../../shared/initialValues";
 
 const Home = () => {
     const { filteredPizzas } = React.useContext(AppContext);
 
-    const [view, setView] = React.useState(6);
+    const [view, setView] = React.useState(INITIAL_VIEW);
 
     const handleScroll = () => {
         if (document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight) < 100 && view < filteredPizzas.length) {
@@ -30,7 +30,7 @@ const Home = () => {
                     <Tools categories={initialCategories} sortNames={initialSortNames} />
                     <Title title='Все пиццы' />
                 </div>
-                <PizzaList data={filteredPizzas.slice(0, view)} />
+                <PizzaList data={filteredPizzas} view={view}/>
             </Container>
         </section>
     );

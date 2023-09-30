@@ -9,17 +9,15 @@ import { api } from "../shared/api";
 import { Pizza } from "../shared/api/interfaces";
 import { AppContext } from "./context";
 import { Cart } from "./context/interfaces";
-import { CART_KEY, CATEGORIE_KEY, SORT_INDEX_KEY, initialSortNames } from "../shared/initialValues";
+import { CART_KEY, initialSortNames } from "../shared/initialValues";
 import { useSearchParams } from "react-router-dom";
 
 const App = () => {
     const [pizzas, setPizzas] = React.useState<Array<Pizza>>([]);
     const [filteredPizzas, setFilteredPizzas] = React.useState<Array<Pizza>>([]);
-    const [selectedCategorie, setSelectedCategorie] = React.useState<number | null>(parseJSON(CATEGORIE_KEY));
     const [cart, setCart] = React.useState<Array<Cart>>(parseJSON(CART_KEY) ?? []);
-    const [currentSort, setCurrentSort] = React.useState<number>(parseJSON(SORT_INDEX_KEY) ?? 0);
     const [searchParams, setSearchParams] = useSearchParams();
-    const [searchValue, setSearchValue] = React.useState(searchParams.get("query") ?? "");
+    const [searchValue, setSearchValue] = React.useState(searchParams.get('query') ?? '');
     const [loading, setLoading] = React.useState<boolean>(true);
     const [errorData, setErrorData] = React.useState<Error | unknown>(null);
 
@@ -28,13 +26,14 @@ const App = () => {
             try {
                 const { data } = await api.getPizzas();
 
+                const currentSort = searchParams.get('sort') !== null ? Number(searchParams.get('sort')) : 0;
                 const sortDirection = initialSortNames[currentSort].sort.includes("-") ? -1 : 1;
                 const property = initialSortNames[currentSort].sort.replace("-", "");
 
                 setPizzas(data);
                 setFilteredPizzas(
-                    (typeof selectedCategorie === "number"
-                        ? data.filter(({ category }) => category === selectedCategorie)
+                    (searchParams.get("categorie") !== null
+                        ? data.filter(({ category }) => category === Number(searchParams.get("categorie")))
                         : data
                     ).sort((a, b) => getSortedArr(a, b, sortDirection, property))
                 );
@@ -75,10 +74,6 @@ const App = () => {
                 setPizzas,
                 cart,
                 setCart,
-                selectedCategorie,
-                setSelectedCategorie,
-                currentSort,
-                setCurrentSort,
                 searchValue,
                 setSearchValue,
                 searchParams,

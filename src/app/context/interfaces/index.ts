@@ -35,11 +35,7 @@ export interface AppContext {
     loading: boolean;
     searchParams: URLSearchParams;
     errorData: Error | null | unknown;
-    selectedCategorie: number | null;
-    currentSort: number;
     searchValue: string;
-    setSelectedCategorie: React.Dispatch<React.SetStateAction<number | null>>;
-    setCurrentSort: React.Dispatch<React.SetStateAction<number>>;
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
     setSearchParams: SetURLSearchParams;
     setPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;

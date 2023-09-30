@@ -7,13 +7,15 @@ import { Props } from "../interfaces";
 import { AppContext } from "../../../app/context";
 import { SORT_INDEX_KEY, initialSortNames } from "../../../shared/initialValues";
 
-const SortPopup: React.FC<Props> = ({ names, currentSort, setCurrentSort }) => {
-    const { setFilteredPizzas } = React.useContext(AppContext);
+const SortPopup: React.FC<Props> = ({ names }) => {
+    const { setFilteredPizzas, searchParams, setSearchParams } = React.useContext(AppContext);
 
     const [opened, setOpened] = React.useState(false);
 
     const listRef = React.useRef<HTMLUListElement>(null);
     const spanRef = React.useRef<HTMLSpanElement>(null);
+    
+    const currentSort = searchParams.get('sort') !== null ? Number(searchParams.get('sort')) : 0;
 
     React.useEffect(() => {
         const handleOutsideClick = ({ target }: MouseEvent) => {
@@ -39,8 +41,11 @@ const SortPopup: React.FC<Props> = ({ names, currentSort, setCurrentSort }) => {
         const sortDirection = sortType.includes("-") ? -1 : 1;
         const property = sortType.replace('-', ''); 
 
-        setCurrentSort(index);
         setFilteredPizzas((prevState) => [...prevState.sort((a, b) => getSortedArr(a, b, sortDirection, property))]);
+        setSearchParams((prevState) => {
+            prevState.set('sort', String(index));
+            return prevState;
+        })
         saveToLocalStorage({ key: SORT_INDEX_KEY, data: index });
     };
 

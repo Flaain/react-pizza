@@ -12,11 +12,11 @@ import { AppContext } from "../../../app/context";
 import { useParams } from "react-router-dom";
 
 const PizzaDetails = () => {
-    const { filteredPizzas, loading } = React.useContext(AppContext);
+    const { pizzas, loading } = React.useContext(AppContext);
     const { name } = useParams();
 
-    const activeItem = React.useMemo(() => filteredPizzas.find(({ title }) => title.toLowerCase() === name?.toLowerCase()), [loading, name]);
-    const relatedItems = React.useMemo(() => filteredPizzas.filter(({ id }) => id !== activeItem?.id), [activeItem]);
+    const activeItem = React.useMemo(() => pizzas.find(({ title }) => title.toLowerCase() === name?.toLowerCase()), [loading, name]);
+    const relatedItems = React.useMemo(() => pizzas.filter(({ id }) => id !== activeItem?.id), [activeItem]);
 
     const [imageLoaded, setImageLoaded] = React.useState(false);
     const [closeView, setCloseView] = React.useState(false);

@@ -9,7 +9,6 @@ const PizzaList: React.FC<Props> = ({ data, view }) => {
 
     const isEmpty = !data.filter(({ title }) => title.toLowerCase().includes(searchValue.toLowerCase())).length;
 
-    console.log(searchValue)
     return (
         <ul className='py-[30px] flex flex-wrap justify-between items-center gap-10'>
             {isEmpty ? (

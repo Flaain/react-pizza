@@ -7,6 +7,4 @@ export interface Names {
 
 export interface Props {
     names: Array<Names>;
-    currentSort: number;
-    setCurrentSort: React.Dispatch<React.SetStateAction<number>>;
 }

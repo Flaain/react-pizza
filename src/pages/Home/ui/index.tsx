@@ -7,10 +7,11 @@ import { AppContext } from "../../../app/context";
 import { INITIAL_VIEW, initialCategories, initialSortNames } from "../../../shared/initialValues";
 
 const Home = () => {
-    const { filteredPizzas } = React.useContext(AppContext);
+    const { filteredPizzas, searchParams } = React.useContext(AppContext);
 
     const [view, setView] = React.useState(INITIAL_VIEW);
-
+    const title = `${searchParams.get("categorie") !== null ? initialCategories[Number(searchParams.get("categorie")) + 1].name : "Все"} пиццы`
+    
     const handleScroll = () => {
         if (document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight) < 100 && view < filteredPizzas.length) {
             setView((prevState) => prevState + 3);
@@ -28,9 +29,9 @@ const Home = () => {
             <Container>
                 <div className='flex flex-col gap-5'>
                     <Tools categories={initialCategories} sortNames={initialSortNames} />
-                    <Title title='Все пиццы' />
+                    <Title title={title} />
                 </div>
-                <PizzaList data={filteredPizzas} view={view}/>
+                <PizzaList data={filteredPizzas} view={view} />
             </Container>
         </section>
     );

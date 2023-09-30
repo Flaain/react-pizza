@@ -3,22 +3,16 @@ import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import { Link } from "react-router-dom";
 import { LogoProps } from "../interfaces";
 import { AppContext } from "../../../app/context";
-import getSortedArr from "../../../shared/lib/helpers/getSortedArr";
-import { initialSortNames } from "../../../shared/initialValues";
 
 const Logo: React.FC<LogoProps> = ({ title, description }) => {
     const { pizzas, setFilteredPizzas, setSearchParams, setSearchValue } = React.useContext(AppContext);
 
     const handleClick = () => {
-        const arr = [...pizzas];
-        const sortDirection = initialSortNames[0].sort.includes('-') ? -1 : 1;
-        const property = initialSortNames[0].sort.replace('-', '');
-
         setSearchParams((prevState) => {
             prevState.forEach((value) => prevState.delete(value));
             return prevState;
         });
-        setFilteredPizzas(arr.sort((a, b) => getSortedArr(a, b, sortDirection, property)));
+        setFilteredPizzas(pizzas);
         setSearchValue("");
     };
 

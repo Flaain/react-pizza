@@ -10,14 +10,12 @@ export const AppContext = React.createContext<Context>({
     pizzas: [],
     searchValue: '',
     searchParams: new URLSearchParams(),
-    filteredPizzas: [],
     cart: [],
     loading: true,
     errorData: null,
     setSearchParams: () => new Error("Function not implemented."),
     setPizzas: () => new Error("Function not implemented."),
     setSearchValue: () => new Error("Function not implemented."),
-    setFilteredPizzas: () => new Error("Function not implemented."),
     setCart: () => new Error("Function not implemented."),
 });
 

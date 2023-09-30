@@ -5,7 +5,7 @@ import { Props } from "../interfaces";
 const SortPopupItem: React.FC<Props> = ({ name, sort, index, currentSort, handleSort }) => {
     return (
         <li
-            onClick={() => handleSort(sort, index)}
+            onClick={() => handleSort(index)}
             className={cn(
                 "group flex items-center gap-2 p-2 rounded-lg cursor-pointer hover:bg-primary-orange hover:text-white transition-colors duration-200 ease-in-out",
                 currentSort === index && "bg-primary-orange text-white"

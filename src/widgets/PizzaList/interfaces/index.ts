@@ -4,4 +4,6 @@ export interface Props {
     data: Pizza[];
     loading?: boolean;
     view: number;
+    searchValue: string;
+    searchParams: URLSearchParams
 }

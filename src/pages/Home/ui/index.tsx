@@ -7,13 +7,14 @@ import { AppContext } from "../../../app/context";
 import { INITIAL_VIEW, initialCategories, initialSortNames } from "../../../shared/initialValues";
 
 const Home = () => {
-    const { filteredPizzas, searchParams } = React.useContext(AppContext);
+    const { pizzas, searchParams, searchValue } = React.useContext(AppContext);
 
     const [view, setView] = React.useState(INITIAL_VIEW);
+    
     const title = `${searchParams.get("categorie") !== null ? initialCategories[Number(searchParams.get("categorie")) + 1].name : "Все"} пиццы`
     
     const handleScroll = () => {
-        if (document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight) < 100 && view < filteredPizzas.length) {
+        if (document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight) < 100 && view < pizzas.length) {
             setView((prevState) => prevState + 3);
         }
     };
@@ -22,7 +23,7 @@ const Home = () => {
         document.addEventListener("scroll", handleScroll);
 
         return () => document.removeEventListener("scroll", handleScroll);
-    }, [view, filteredPizzas]);
+    }, [view, pizzas]);
 
     return (
         <section>
@@ -31,7 +32,7 @@ const Home = () => {
                     <Tools categories={initialCategories} sortNames={initialSortNames} />
                     <Title title={title} />
                 </div>
-                <PizzaList data={filteredPizzas} view={view} />
+                <PizzaList {...{ data: pizzas, view, searchParams, searchValue }}/>
             </Container>
         </section>
     );

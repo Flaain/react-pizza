@@ -1,14 +1,12 @@
 import React from "react";
 import SortPopupList from "../../../widgets/SortPopupList/ui";
-import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
 import cn from "../../../shared/lib/classNames";
-import getSortedArr from "../../../shared/lib/helpers/getSortedArr";
-import { Props } from "../interfaces";
 import { AppContext } from "../../../app/context";
-import { SORT_INDEX_KEY, initialSortNames } from "../../../shared/initialValues";
+import { Props } from "../interfaces";
+import { initialSortNames } from "../../../shared/initialValues";
 
 const SortPopup: React.FC<Props> = ({ names }) => {
-    const { setFilteredPizzas, searchParams, setSearchParams } = React.useContext(AppContext);
+    const { searchParams, setSearchParams } = React.useContext(AppContext);
 
     const [opened, setOpened] = React.useState(false);
 
@@ -37,16 +35,11 @@ const SortPopup: React.FC<Props> = ({ names }) => {
         };
     }, []);
 
-    const handleSort = (sortType: string, index: number) => {
-        const sortDirection = sortType.includes("-") ? -1 : 1;
-        const property = sortType.replace('-', ''); 
-
-        setFilteredPizzas((prevState) => [...prevState.sort((a, b) => getSortedArr(a, b, sortDirection, property))]);
+    const handleSort = (index: number) => {
         setSearchParams((prevState) => {
             prevState.set('sort', String(index));
             return prevState;
         })
-        saveToLocalStorage({ key: SORT_INDEX_KEY, data: index });
     };
 
     return (
@@ -59,7 +52,7 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                     onClick={() => setOpened((prevState) => !prevState)}
                 >
                     <svg
-                        className={cn('pointer-events-none', !initialSortNames[currentSort].sort.includes("-") && "rotate-180")}
+                        className={cn('pointer-events-none', !initialSortNames[currentSort]?.sort.includes("-") && "rotate-180")}
                         width='11'
                         height='9'
                         viewBox='0 0 11 9'
@@ -92,7 +85,7 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    {names[currentSort].name}
+                    {names[currentSort]?.name}
                 </span>
             </p>
             {opened && <SortPopupList {...{ currentSort, handleSort, names, ref: listRef }} />}

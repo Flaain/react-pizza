@@ -30,7 +30,6 @@ export interface Error {
 
 export interface AppContext {
     pizzas: Pizza[];
-    filteredPizzas: Pizza[];
     cart: Cart[];
     loading: boolean;
     searchParams: URLSearchParams;
@@ -39,7 +38,6 @@ export interface AppContext {
     setSearchValue: React.Dispatch<React.SetStateAction<string>>;
     setSearchParams: SetURLSearchParams;
     setPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
-    setFilteredPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
     setCart: React.Dispatch<React.SetStateAction<Cart[]>>;
 }
 

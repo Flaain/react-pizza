@@ -3,7 +3,6 @@ import SortPopupList from "../../../widgets/SortPopupList/ui";
 import cn from "../../../shared/lib/classNames";
 import { AppContext } from "../../../app/context";
 import { Props } from "../interfaces";
-import { initialSortNames } from "../../../shared/initialValues";
 
 const SortPopup: React.FC<Props> = ({ names }) => {
     const { searchParams, setSearchParams } = React.useContext(AppContext);
@@ -12,8 +11,6 @@ const SortPopup: React.FC<Props> = ({ names }) => {
 
     const listRef = React.useRef<HTMLUListElement>(null);
     const spanRef = React.useRef<HTMLSpanElement>(null);
-    
-    const currentSort = searchParams.get('sort') !== null ? Number(searchParams.get('sort')) : 0;
 
     React.useEffect(() => {
         const handleOutsideClick = ({ target }: MouseEvent) => {
@@ -34,13 +31,29 @@ const SortPopup: React.FC<Props> = ({ names }) => {
             document.removeEventListener("click", handleOutsideClick);
         };
     }, []);
+    const getSortParam = () => {
+        if (typeof names[Number(searchParams.get("sort"))]?.sort === "undefined") {
+            return 0;
+        }
+        return Number(searchParams.get("sort"));
+    };
+    const currentSort = getSortParam();
 
     const handleSort = (index: number) => {
         setSearchParams((prevState) => {
-            prevState.set('sort', String(index));
+            prevState.set("sort", String(index));
             return prevState;
-        })
+        });
     };
+
+    React.useEffect(() => {
+        if (typeof names[Number(searchParams.get("sort"))]?.sort === "undefined") {
+            setSearchParams((prevState) => {
+                prevState.set("sort", String(0));
+                return prevState;
+            });
+        }
+    }, [currentSort]);
 
     return (
         <div className='flex flex-col gap-5 relative'>
@@ -52,7 +65,7 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                     onClick={() => setOpened((prevState) => !prevState)}
                 >
                     <svg
-                        className={cn('pointer-events-none', !initialSortNames[currentSort]?.sort.includes("-") && "rotate-180")}
+                        className={cn("pointer-events-none", !names[currentSort]?.sort.includes("-") && "rotate-180")}
                         width='11'
                         height='9'
                         viewBox='0 0 11 9'

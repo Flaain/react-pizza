@@ -3,17 +3,35 @@ import Card from "../../../entities/Card/ui";
 import Title from "../../../shared/ui/Title/ui";
 import getSortedArr from "../../../shared/lib/helpers/getSortedArr";
 import { Props } from "../interfaces";
-import { initialSortNames } from "../../../shared/initialValues";
+import { initialCategories, initialSortNames } from "../../../shared/initialValues";
 import { Pizza } from "../../../shared/api/interfaces";
 
 const PizzaList: React.FC<Props> = ({ data, view, searchValue, searchParams }) => {
-    const currentSort = searchParams.get("sort") !== null ? Number(searchParams.get("sort")) : 0;
-    const selectedCategorie = searchParams.get("categorie") !== null ? Number(searchParams.get("categorie")) : null;
+    const getCategorieParam = () => {
+        if (typeof initialCategories[Number(searchParams.get("categorie"))]?.categorie === "undefined") {
+            return null;
+        }
+        return Number(searchParams.get("categorie"));
+    };
+
+    const getSortParam = () => {
+        if (typeof initialSortNames[Number(searchParams.get("sort"))]?.sort === "undefined") {
+            return 0;
+        }
+        return Number(searchParams.get("sort"));
+    };
+
+    const currentSort = getSortParam();
+    const selectedCategorieIndex = getCategorieParam();
+
     const sortDirection = initialSortNames[currentSort]?.sort.includes("-") ? -1 : 1;
     const property = initialSortNames[currentSort]?.sort.replace("-", "");
 
     const handleFilter = ({ title, category }: Pizza) => {
-        return title.toLowerCase().includes(searchValue.toLowerCase()) && (selectedCategorie === null || category === selectedCategorie);
+        return (
+            title.toLowerCase().includes(searchValue.toLowerCase()) &&
+            (selectedCategorieIndex === null || category === initialCategories[selectedCategorieIndex]?.categorie)
+        );
     };
 
     return (

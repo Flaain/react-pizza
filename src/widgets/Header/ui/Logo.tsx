@@ -2,22 +2,10 @@ import React from "react";
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import { Link } from "react-router-dom";
 import { LogoProps } from "../interfaces";
-import { AppContext } from "../../../app/context";
 
 const Logo: React.FC<LogoProps> = ({ title, description }) => {
-    const { pizzas, setFilteredPizzas, setSearchParams, setSearchValue } = React.useContext(AppContext);
-
-    const handleClick = () => {
-        setSearchParams((prevState) => {
-            prevState.forEach((value) => prevState.delete(value));
-            return prevState;
-        });
-        setFilteredPizzas(pizzas);
-        setSearchValue("");
-    };
-
     return (
-        <Link to='/' className='flex items-center gap-5 group' onClick={handleClick}>
+        <Link to='/' className='flex items-center gap-5 group'>
             <img
                 src={getImageUrl("logo.png")}
                 alt='logo'

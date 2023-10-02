@@ -1,6 +1,6 @@
 export interface Props {
     name: string;
-    categorie: number | undefined;
+    index: number;
     selectedCategorie: number | null;
-    handleClick: (categorie: number | undefined) => void;
+    handleClick: (index: number) => void;
 }

@@ -11,7 +11,15 @@ const Home = () => {
 
     const [view, setView] = React.useState(INITIAL_VIEW);
     
-    const title = `${searchParams.get("categorie") !== null ? initialCategories[Number(searchParams.get("categorie")) + 1].name : "Все"} пиццы`
+    const getCategorieParam = () => {
+        if (typeof initialCategories[Number(searchParams.get("categorie"))]?.categorie === "undefined") {
+            return null;
+        }
+        return Number(searchParams.get("categorie"));
+    };
+
+    const currentCategorie = getCategorieParam();
+    const title = `${currentCategorie !== null ? initialCategories[currentCategorie]?.name : 'Все'} пиццы`
     
     const handleScroll = () => {
         if (document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight) < 100 && view < pizzas.length) {

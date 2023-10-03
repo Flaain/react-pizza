@@ -1,11 +1,12 @@
 import React from "react";
 import SortPopupList from "../../../widgets/SortPopupList/ui";
 import cn from "../../../shared/lib/classNames";
-import { AppContext } from "../../../app/context";
+import { AppContext, HomeContext } from "../../../app/context";
 import { Props } from "../interfaces";
 
 const SortPopup: React.FC<Props> = ({ names }) => {
-    const { searchParams, setSearchParams } = React.useContext(AppContext);
+    const { setSearchParams } = React.useContext(AppContext);
+    const { selectedSortIndex } = React.useContext(HomeContext);
 
     const [opened, setOpened] = React.useState(false);
 
@@ -31,13 +32,6 @@ const SortPopup: React.FC<Props> = ({ names }) => {
             document.removeEventListener("click", handleOutsideClick);
         };
     }, []);
-    const getSortParam = () => {
-        if (typeof names[Number(searchParams.get("sort"))]?.sort === "undefined") {
-            return 0;
-        }
-        return Number(searchParams.get("sort"));
-    };
-    const currentSort = getSortParam();
 
     const handleSort = (index: number) => {
         setSearchParams((prevState) => {
@@ -45,15 +39,6 @@ const SortPopup: React.FC<Props> = ({ names }) => {
             return prevState;
         });
     };
-
-    React.useEffect(() => {
-        if (typeof names[Number(searchParams.get("sort"))]?.sort === "undefined") {
-            setSearchParams((prevState) => {
-                prevState.set("sort", String(0));
-                return prevState;
-            });
-        }
-    }, [currentSort]);
 
     return (
         <div className='flex flex-col gap-5 relative'>
@@ -65,7 +50,7 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                     onClick={() => setOpened((prevState) => !prevState)}
                 >
                     <svg
-                        className={cn("pointer-events-none", !names[currentSort]?.sort.includes("-") && "rotate-180")}
+                        className={cn("pointer-events-none", !names[selectedSortIndex]?.sort.includes("-") && "rotate-180")}
                         width='11'
                         height='9'
                         viewBox='0 0 11 9'
@@ -98,10 +83,10 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                             </clipPath>
                         </defs>
                     </svg>
-                    {names[currentSort]?.name}
+                    {names[selectedSortIndex]?.name}
                 </span>
             </p>
-            {opened && <SortPopupList {...{ currentSort, handleSort, names, ref: listRef }} />}
+            {opened && <SortPopupList {...{ selectedSortIndex, handleSort, names, ref: listRef }} />}
         </div>
     );
 };

@@ -88,3 +88,8 @@ export interface CartContext {
     setOrdered?: React.Dispatch<React.SetStateAction<boolean>>;
     setOrderLoading?: React.Dispatch<React.SetStateAction<boolean>>;
 }
+
+export interface HomeContext {
+    selectedSortIndex: number;
+    selectedCategorieIndex: number | null;
+}

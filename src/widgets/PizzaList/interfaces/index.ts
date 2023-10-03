@@ -5,5 +5,4 @@ export interface Props {
     loading?: boolean;
     view: number;
     searchValue: string;
-    searchParams: URLSearchParams
 }

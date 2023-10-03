@@ -2,30 +2,15 @@ import React from "react";
 import Card from "../../../entities/Card/ui";
 import Title from "../../../shared/ui/Title/ui";
 import getSortedArr from "../../../shared/lib/helpers/getSortedArr";
+import getSortInfo from "../../../shared/lib/helpers/getSortInfo";
 import { Props } from "../interfaces";
 import { initialCategories, initialSortNames } from "../../../shared/initialValues";
 import { Pizza } from "../../../shared/api/interfaces";
+import { HomeContext } from "../../../app/context";
 
-const PizzaList: React.FC<Props> = ({ data, view, searchValue, searchParams }) => {
-    const getCategorieParam = () => {
-        if (typeof initialCategories[Number(searchParams.get("categorie"))]?.categorie === "undefined") {
-            return null;
-        }
-        return Number(searchParams.get("categorie"));
-    };
-
-    const getSortParam = () => {
-        if (typeof initialSortNames[Number(searchParams.get("sort"))]?.sort === "undefined") {
-            return 0;
-        }
-        return Number(searchParams.get("sort"));
-    };
-
-    const currentSort = getSortParam();
-    const selectedCategorieIndex = getCategorieParam();
-
-    const sortDirection = initialSortNames[currentSort]?.sort.includes("-") ? -1 : 1;
-    const property = initialSortNames[currentSort]?.sort.replace("-", "");
+const PizzaList: React.FC<Props> = ({ data, view, searchValue }) => {
+    const { selectedSortIndex, selectedCategorieIndex } = React.useContext(HomeContext);
+    const { sortDirection, property } = getSortInfo(initialSortNames, selectedSortIndex);
 
     const handleFilter = ({ title, category }: Pizza) => {
         return (
@@ -42,12 +27,12 @@ const PizzaList: React.FC<Props> = ({ data, view, searchValue, searchParams }) =
                 data
                     .filter(handleFilter)
                     .sort((a, b) => getSortedArr(a, b, sortDirection, property))
+                    .slice(0, view)
                     .map((item) => (
                         <li key={item.id}>
                             <Card {...item} />
                         </li>
                     ))
-                    .slice(0, view)
             )}
         </ul>
     );

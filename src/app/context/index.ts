@@ -4,6 +4,7 @@ import {
     AppContext as Context,
     DeliveryModalContext as DMC,
     PaymentModalContext as PMC,
+    HomeContext as HC
 } from "./interfaces";
 
 export const AppContext = React.createContext<Context>({
@@ -57,3 +58,8 @@ export const CartContext = React.createContext<CC>({
     setPaymentInfoModalOpened: () => new Error("Function not implemented."),
     setMinimizeCartItems: () => new Error("Function not implemented."),
 });
+
+export const HomeContext = React.createContext<HC>({
+    selectedSortIndex: 0,
+    selectedCategorieIndex: null
+})

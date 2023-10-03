@@ -1,6 +1,7 @@
 import React from "react";
 import SortPopupList from "../../../widgets/SortPopupList/ui";
 import cn from "../../../shared/lib/classNames";
+import { AnimatePresence } from "framer-motion";
 import { AppContext, HomeContext } from "../../../app/context";
 import { Props } from "../interfaces";
 
@@ -50,7 +51,10 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                     onClick={() => setOpened((prevState) => !prevState)}
                 >
                     <svg
-                        className={cn("pointer-events-none", !names[selectedSortIndex]?.sort.includes("-") && "rotate-180")}
+                        className={cn(
+                            "pointer-events-none",
+                            !names[selectedSortIndex]?.sort.includes("-") && "rotate-180"
+                        )}
                         width='11'
                         height='9'
                         viewBox='0 0 11 9'
@@ -86,7 +90,9 @@ const SortPopup: React.FC<Props> = ({ names }) => {
                     {names[selectedSortIndex]?.name}
                 </span>
             </p>
-            {opened && <SortPopupList {...{ selectedSortIndex, handleSort, names, ref: listRef }} />}
+            <AnimatePresence>
+                {opened && <SortPopupList {...{ selectedSortIndex, handleSort, names, ref: listRef }} />}
+            </AnimatePresence>
         </div>
     );
 };

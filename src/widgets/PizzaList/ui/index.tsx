@@ -8,8 +8,8 @@ import { initialCategories, initialSortNames } from "../../../shared/initialValu
 import { Pizza } from "../../../shared/api/interfaces";
 import { HomeContext } from "../../../app/context";
 
-const PizzaList: React.FC<Props> = ({ data, view, searchValue }) => {
-    const { selectedSortIndex, selectedCategorieIndex } = React.useContext(HomeContext);
+const PizzaList: React.FC<Props> = ({ data, searchValue }) => {
+    const { view, selectedSortIndex, selectedCategorieIndex } = React.useContext(HomeContext);
     const { sortDirection, property } = getSortInfo(initialSortNames, selectedSortIndex);
 
     const handleFilter = ({ title, category }: Pizza) => {

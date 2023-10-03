@@ -92,4 +92,5 @@ export interface CartContext {
 export interface HomeContext {
     selectedSortIndex: number;
     selectedCategorieIndex: number | null;
+    view: number;
 }

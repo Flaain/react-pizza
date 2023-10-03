@@ -16,7 +16,7 @@ const Search = () => {
     const navigate = useNavigate();
 
     React.useEffect(() => {
-        setSearchValue(searchParams.get('query') ?? '');
+        setSearchValue(query);
         setValue('');
     }, [currentPath])
 
@@ -49,7 +49,7 @@ const Search = () => {
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         
-        if (!value) return;
+        if (!value || currentPath === "/") return;
         
         navigate(`/?query=${value}`);
     };

@@ -6,6 +6,7 @@ import {
     PaymentModalContext as PMC,
     HomeContext as HC
 } from "./interfaces";
+import { INITIAL_VIEW } from "../../shared/initialValues";
 
 export const AppContext = React.createContext<Context>({
     pizzas: [],
@@ -61,5 +62,6 @@ export const CartContext = React.createContext<CC>({
 
 export const HomeContext = React.createContext<HC>({
     selectedSortIndex: 0,
-    selectedCategorieIndex: null
+    selectedCategorieIndex: null,
+    view: INITIAL_VIEW,
 })

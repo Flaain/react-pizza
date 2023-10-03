@@ -49,14 +49,14 @@ const Home = () => {
     }, [selectedSortIndex]);
 
     return (
-        <HomeContext.Provider value={{ selectedSortIndex, selectedCategorieIndex }}>
+        <HomeContext.Provider value={{ view, selectedSortIndex, selectedCategorieIndex }}>
             <section>
                 <Container>
                     <div className='flex flex-col gap-5'>
                         <Tools categories={initialCategories} sortNames={initialSortNames} />
                         <Title title={title} />
                     </div>
-                    <PizzaList {...{ data: pizzas, view, searchValue }} />
+                    <PizzaList data={pizzas} searchValue={searchValue} />
                 </Container>
             </section>
         </HomeContext.Provider>

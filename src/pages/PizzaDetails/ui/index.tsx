@@ -9,21 +9,30 @@ import Spinner from "../../../shared/ui/Spinner/ui";
 import Title from "../../../shared/ui/Title/ui";
 import PriceBlock from "../../../widgets/PriceBlock/ui";
 import { AppContext } from "../../../app/context";
-import { useParams } from "react-router-dom";
+import { useParams, useSearchParams } from "react-router-dom";
+import { Pizza } from "../../../shared/api/interfaces";
 
 const PizzaDetails = () => {
     const { pizzas, loading } = React.useContext(AppContext);
     const { name } = useParams();
 
-    const activeItem = React.useMemo(() => pizzas.find(({ title }) => title.toLowerCase() === name?.toLowerCase()), [loading, name]);
+    const activeItem = React.useMemo(() => pizzas.find(({ title }) => title.toLowerCase() === name?.toLowerCase()), [loading, name])!;
     const relatedItems = React.useMemo(() => pizzas.filter(({ id }) => id !== activeItem?.id), [activeItem]);
 
     const [imageLoaded, setImageLoaded] = React.useState(false);
-    const [closeView, setCloseView] = React.useState(false);
+    // const [closeView, setCloseView] = React.useState(false);
+    const [detailsPageParams, setDetailsPageParams] = useSearchParams();
 
     React.useEffect(() => {
-        setCloseView(false);
-        
+        // setCloseView(false);
+        setDetailsPageParams((prevState) => {
+            prevState.forEach((value, key) => {
+                if (prevState.get(key) !== null && typeof activeItem[`${key as keyof Pizza}s`][Number(value)] === "undefined") {
+                    prevState.delete(key);
+                }
+            })
+            return prevState;
+        }, { replace: true });
         return () => {
             window.history.scrollRestoration = "manual";
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -31,7 +40,7 @@ const PizzaDetails = () => {
     }, [activeItem]);
 
     if (!loading && (!name || !activeItem)) {
-        return <NotFound title='Что-то пошло не так, пицца не найдена' backLink backLinkText="Вернуться назад" />;
+        return <NotFound title='Что-то пошло не так, пицца не найдена' backLink backLinkText='Вернуться назад' />;
     }
 
     return (
@@ -46,7 +55,7 @@ const PizzaDetails = () => {
                     <Spinner />
                 ) : (
                     <>
-                        {closeView && <div onClick={() => setCloseView(false)}>close view</div>}
+                        {/* {closeView && <div onClick={() => setCloseView(false)}>close view</div>} */}
                         <div className='flex flex-col gap-3'>
                             <div className='flex items-center justify-start gap-5'>
                                 <button
@@ -75,12 +84,12 @@ const PizzaDetails = () => {
                             <img
                                 loading='lazy'
                                 src={imageLoaded ? activeItem?.imageUrl : getImageUrl("thumbnail-xl.svg")}
-                                onClick={() => imageLoaded && setCloseView(true)}
+                                // onClick={() => imageLoaded && setCloseView(true)}
                                 onLoad={() => setImageLoaded(true)}
                                 alt={activeItem?.title}
                                 className='max-w-[450px] max-h-full'
                             />
-                            <PriceBlock activeItem={activeItem!} />
+                            <PriceBlock {...{ activeItem, detailsPageParams, setDetailsPageParams }} />
                         </div>
                         {activeItem?.description && (
                             <div className='flex flex-col gap-5 pb-5'>

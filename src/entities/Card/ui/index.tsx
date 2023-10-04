@@ -51,10 +51,10 @@ const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({ id, title, pric
                 <OptionsSelector
                     availableSizes={sizes}
                     availableTypes={types}
-                    handleChange={handleChange}
+                    activeSize={state.size}
+                    activeType={state.type}
                     initialPrice={price}
-                    size={state.size}
-                    type={state.type}
+                    handleChange={handleChange}
                 />
                 <div className='flex items-center justify-between w-full mt-[5px]'>
                     <span className='text-xl font-bold text-primary-black'>от {getIntlPrice(state.price)}</span>

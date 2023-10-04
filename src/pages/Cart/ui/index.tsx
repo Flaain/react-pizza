@@ -56,12 +56,11 @@ const Cart = () => {
     const handleOrder = async () => {
         try {
             setOrderLoading(true);
-            const order = cart.map((cartItem) => ({
-                ...cartItem,
-                ...(pizzas.find((pizzaItem) => pizzaItem.id === cartItem.id) as Pizza),
-            }));
 
+            const order = cart.map((cartItem) => ({ ...cartItem, ...(pizzas.find((pizzaItem) => pizzaItem.id === cartItem.id) as Pizza) }));
+            
             const { data } = await api.postOrder("/orders", { deliveryInfo, order, totalPrice: total } as Order);
+            
             setOrderData(data);
         } catch (error) {
             console.error(error);

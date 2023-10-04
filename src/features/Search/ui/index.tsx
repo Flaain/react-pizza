@@ -9,7 +9,7 @@ const Search = () => {
     const { setSearchValue, searchParams, setSearchParams } = React.useContext(AppContext);
 
     const [value, setValue] = React.useState("");
-    
+
     const query = searchParams.get("query") ?? "";
     const currentPath = window.location.pathname;
 
@@ -17,24 +17,26 @@ const Search = () => {
 
     React.useEffect(() => {
         setSearchValue(query);
-        setValue('');
-    }, [currentPath])
+        setValue("");
+    }, [currentPath]);
 
     const handleChange = ({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
         if (currentPath === "/") {
-            setSearchParams((prevState) => { 
-                if (!value.trim().length) {
-                    prevState.delete('query');
-                    setValue('');
-                } else prevState.set('query', value);
-                return prevState;
-            }, { replace: true });
+            setSearchParams(
+                (prevState) => {
+                    if (!value.trim().length) {
+                        prevState.delete("query");
+                        setValue("");
+                    } else prevState.set("query", value);
+                    return prevState;
+                },
+                { replace: true }
+            );
         } else setValue(value);
 
         handleDelay(value.trim());
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const handleDelay = React.useCallback(debounce((value: string) => setSearchValue(value)), []);
 
     const handleClear = () => {
@@ -48,16 +50,16 @@ const Search = () => {
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
+
         if (!value || currentPath === "/") return;
-        
+
         navigate(`/?query=${value}`);
     };
 
     return (
         <form className='basis-[300px] relative' onSubmit={handleSubmit}>
             <Input
-                classNames='border outline-none focus:bg-gray-100 focus:border-primary-orange border-solid border-primary-gray py-[5px] px-[40px] box-border rounded-lg w-full transition-colors duration-200'
+                classNames='border outline-none focus:placeholder:opacity-0 placeholder:transition-opacity placeholder:duration-200 placeholder-ease-in-out focus:bg-gray-100 focus:border-primary-orange border-solid border-primary-gray py-[5px] px-[40px] box-border rounded-lg w-full transition-colors duration-200'
                 type='text'
                 value={currentPath === "/" ? query : value}
                 onChange={handleChange}

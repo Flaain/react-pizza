@@ -4,9 +4,14 @@ export interface PizzaState {
     size: number;
 }
 
+export interface PayloadParams {
+    param: string;
+    valueParam: number;
+}
+
 export interface PizzaAction {
     type: string;
     payload: PizzaPayload;
 }
 
-type PizzaPayload = PizzaState | Omit<PizzaState, "size" | "price"> | Omit<PizzaState, "type">;
+type PizzaPayload = PizzaState | (Omit<PizzaState, "size" | "price"> & PayloadParams) | (Omit<PizzaState, "type"> & PayloadParams);

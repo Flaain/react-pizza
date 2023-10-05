@@ -10,7 +10,7 @@ import Title from "../../../shared/ui/Title/ui";
 import PriceBlock from "../../../widgets/PriceBlock/ui";
 import { AppContext } from "../../../app/context";
 import { useParams, useSearchParams } from "react-router-dom";
-import { Pizza } from "../../../shared/api/interfaces";
+import { DetailsParamKey } from "../interfaces";
 
 const PizzaDetails = () => {
     const { pizzas, loading } = React.useContext(AppContext);
@@ -27,7 +27,7 @@ const PizzaDetails = () => {
         // setCloseView(false);
         setDetailsPageParams((prevState) => {
             prevState.forEach((value, key) => {
-                if (prevState.get(key) !== null && typeof activeItem[`${key as keyof Pizza}s`][Number(value)] === "undefined") {
+                if (prevState.get(key) !== null && typeof activeItem[`${key as DetailsParamKey}s`][Number(value)] === "undefined") {
                     prevState.delete(key);
                 }
             })

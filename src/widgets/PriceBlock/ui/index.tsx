@@ -28,10 +28,12 @@ const PriceBlock: React.FC<Props> = ({ activeItem, detailsPageParams, setDetails
 
     const handleChange = ({ type, payload }: PizzaAction) => {
         dispatch({ type, payload });
-        setDetailsPageParams((prevState) => {
-            prevState.set(payload.param, String(payload.valueParam));
-            return prevState;
-        }, { replace: true });
+        if ("param" in payload && "valueParam" in payload) {
+            setDetailsPageParams((prevState) => {
+                prevState.set(payload.param, String(payload.valueParam));
+                return prevState;
+            }, { replace: true });
+        }
     };
 
     return (

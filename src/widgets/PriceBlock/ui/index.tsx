@@ -22,10 +22,6 @@ const PriceBlock: React.FC<Props> = ({ activeItem, detailsPageParams, setDetails
 
     const [pizzaState, dispatch] = React.useReducer(pizzaReducer, INITIAL_STATE);
 
-    const handleAddToCart = () => {
-        addToCart(activeItem, pizzaState);
-    };
-
     const handleChange = ({ type, payload }: PizzaAction) => {
         dispatch({ type, payload });
         if ("param" in payload && "valueParam" in payload) {
@@ -47,7 +43,7 @@ const PriceBlock: React.FC<Props> = ({ activeItem, detailsPageParams, setDetails
                 initialPrice={activeItem.price}
                 handleChange={handleChange}
             />
-            <AddToCartButton title='Добавить в корзину' initialCount={initialCount} handleClick={handleAddToCart} />
+            <AddToCartButton title='Добавить в корзину' initialCount={initialCount} handleClick={() => addToCart(activeItem, pizzaState)} />
         </div>
     );
 };

@@ -18,6 +18,7 @@ import { api } from "../../../shared/api";
 import { Order, Pizza } from "../../../shared/api/interfaces";
 import { DeliveryInfo, PaymentInfo, Promocode } from "../interfaces";
 import { DELIVERY_INFO_KEY, PAYMENT_INFO_KEY } from "../../../shared/initialValues";
+import { AnimatePresence } from "framer-motion";
 
 const Cart = () => {
     const { pizzas, cart, setCart } = React.useContext(AppContext);
@@ -57,10 +58,10 @@ const Cart = () => {
         try {
             setOrderLoading(true);
 
-            const order = cart.map((cartItem) => ({ ...cartItem, ...(pizzas.find((pizzaItem) => pizzaItem.id === cartItem.id) as Pizza) }));
-            
+            const order = cart.map((cartItem) => ({...cartItem, ...(pizzas.find((pizzaItem) => pizzaItem.id === cartItem.id) as Pizza)}));
+
             const { data } = await api.postOrder("/orders", { deliveryInfo, order, totalPrice: total } as Order);
-            
+
             setOrderData(data);
         } catch (error) {
             console.error(error);
@@ -90,10 +91,15 @@ const Cart = () => {
         >
             <section>
                 <Container classNames='grid grid-cols-7 max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border py-5'>
-                    {deliveryModalOpened && <DeliveryModal title='Способ доставки' />}
-                    {paymentInfoModalOpened && (
-                        <PaymentInfoModal closeHandler={() => setPaymentInfoModalOpened(false)} />
-                    )}
+                    <AnimatePresence>
+                        {deliveryModalOpened && <DeliveryModal key='deliveryModal' title='Способ доставки' />}
+                        {paymentInfoModalOpened && (
+                            <PaymentInfoModal
+                                key='paymentModal'
+                                closeHandler={() => setPaymentInfoModalOpened(false)}
+                            />
+                        )}
+                    </AnimatePresence>
                     <div className='col-span-5'>
                         <div
                             className={cn(

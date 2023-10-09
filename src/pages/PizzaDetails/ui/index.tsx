@@ -25,14 +25,21 @@ const PizzaDetails = () => {
 
     React.useEffect(() => {
         // setCloseView(false);
-        setDetailsPageParams((prevState) => {
-            prevState.forEach((value, key) => {
-                if (prevState.get(key) !== null && typeof activeItem[`${key as DetailsParamKey}s`][Number(value)] === "undefined") {
-                    prevState.delete(key);
-                }
-            })
-            return prevState;
-        }, { replace: true });
+        setDetailsPageParams(
+            (prevState) => {
+                prevState.forEach((value, key) => {
+                    if (
+                        !activeItem[`${key as DetailsParamKey}s`] ||
+                        (prevState.get(key) !== null &&
+                            typeof activeItem[`${key as DetailsParamKey}s`][Number(value)] === "undefined")
+                    ) {
+                        prevState.delete(key);
+                    }
+                });
+                return prevState;
+            },
+            { replace: true }
+        );
         return () => {
             window.history.scrollRestoration = "manual";
             window.scrollTo({ top: 0, behavior: "smooth" });
@@ -96,7 +103,11 @@ const PizzaDetails = () => {
                                 <h2 className='text-2xl font-bold text-primary-black'>О Пицце </h2>
                                 <div className='flex items-start gap-8'>
                                     <CollapseInfo description={activeItem.description} title='Описание' />
-                                    <CollapseInfo MAX_LENGTH={150} description={activeItem.ingredients} title='Ингредиенты' />
+                                    <CollapseInfo
+                                        MAX_LENGTH={150}
+                                        description={activeItem.ingredients}
+                                        title='Ингредиенты'
+                                    />
                                 </div>
                             </div>
                         )}

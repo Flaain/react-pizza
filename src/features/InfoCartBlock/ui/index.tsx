@@ -7,7 +7,7 @@ const InfoCartBlock: React.FC<Props> = ({ callToActionItem, callToActionReason, 
         <div className='flex flex-col col-span-full items-start self-start mr-10 mb-10 py-5 px-10 rounded-xl box-border bg-white shadow-lg border border-solid border-primary-gray'>
             <button
                 disabled={disabled}
-                className='flex items-center justify-between w-full mb-5 group'
+                className='flex items-center outline-none justify-between w-full mb-5 group'
                 onClick={() => updater(true)}
             >
                 <span className='text-2xl font-bold text-primary-black group-hover:text-primary-orange'>{title}</span>

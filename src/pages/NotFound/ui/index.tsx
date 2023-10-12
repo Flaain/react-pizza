@@ -3,8 +3,18 @@ import Container from "../../../shared/ui/Container";
 import cn from "../../../shared/lib/classNames";
 import { Props } from "../interfaces";
 import { Link } from "react-router-dom";
+import Title from "../../../shared/ui/Title/ui";
 
-const NotFound: React.FC<Props> = ({ title, description, backLink, backLinkText, reloadButton, reloadButtonText, screen, code }) => {
+const NotFound: React.FC<Props> = ({
+    title,
+    description,
+    backLink,
+    backLinkText,
+    reloadButton,
+    reloadButtonText,
+    screen,
+    code,
+}) => {
     const [showError, setShowError] = React.useState(false);
 
     return (
@@ -15,7 +25,7 @@ const NotFound: React.FC<Props> = ({ title, description, backLink, backLinkText,
                     screen ? "min-h-screen" : "min-h-[calc(100vh-132px)]"
                 )}
             >
-                <h1 className='text-primary-black text-4xl font-bold text-center'>{title}</h1>
+                <Title title={title} />
                 {description && <p className='text-gray-400 text-xl font-medium text-center'>{description}</p>}
                 {backLink && !reloadButton && (
                     <Link

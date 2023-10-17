@@ -2,25 +2,25 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Props } from "../interfaces";
 
-const ModalContainer: React.FC<Props> = ({ children, updater }) => {
+const ModalContainer: React.FC<Props> = ({ children, paramsUpdater, stateUpdater }) => {
     React.useEffect(() => {
         const handleKeyUp = ({ key }: KeyboardEvent) => {
             if (key === "Escape") {
-                updater(false);
+                stateUpdater ? stateUpdater(false) : paramsUpdater!();
             }
         };
 
-        document.body.style.overflow = "hidden";
+        document.body.classList.add('overflow-hidden')
         document.addEventListener("keyup", handleKeyUp);
         return () => {
-            document.body.style.overflow = "unset";
+            document.body.classList.remove('overflow-hidden')
             document.removeEventListener("keyup", handleKeyUp);
         };
     }, []);
 
     const handleOverlayClick = ({ target, currentTarget }: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         if (target === currentTarget) {
-            updater(false);
+            stateUpdater ? stateUpdater(false) : paramsUpdater!();
         }
     };
 

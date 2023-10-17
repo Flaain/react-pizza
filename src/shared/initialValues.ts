@@ -17,13 +17,13 @@ export const initialCategories = [
 export const initialSortNames = [
     {
         id: 1,
-        name: "Алфавиту",
+        name: "Алфавиту (А-Я)",
         sort: "title",
         img: "sort.svg",
     },
     {
         id: 2,
-        name: "Алфавиту",
+        name: "Алфавиту (Я-А)",
         sort: "-title",
         img: "sort.svg",
     },

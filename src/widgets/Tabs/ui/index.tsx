@@ -5,19 +5,12 @@ import AddressAddForm from "../../../features/AddressAddForm/ui";
 import parseJSON from "../../../shared/lib/helpers/parseJSON";
 import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
 import TabsSelectors from "../../../features/TabsSelectors/ui";
-import { DeliveryModalContext } from "../../../app/context";
+import { AppContext, DeliveryModalContext } from "../../../app/context";
 import { DELIVERY_INFO_KEY, DELIVERY_MODAL_INDEX_KEY, USER_ADDRESSES_KEY } from "../../../shared/initialValues";
 
 const Tabs = () => {
-    const {
-        currentInfo,
-        setCurrentInfo,
-        initialDelivery,
-        deliveryInfo,
-        setInitialDelivery,
-        setDeliveryInfo,
-        setDeliveryModalOpened,
-    } = React.useContext(DeliveryModalContext);
+    const { currentInfo, setCurrentInfo, initialDelivery, deliveryInfo, setInitialDelivery, setDeliveryInfo } = React.useContext(DeliveryModalContext);
+    const { setSearchParams } = React.useContext(AppContext)
 
     const [indexTab, setIndexTab] = React.useState(parseJSON("delivery-modal-index-tab") ?? 0);
     const [showAddForm, setShowAddForm] = React.useState(false);
@@ -66,7 +59,10 @@ const Tabs = () => {
 
     const handleSave = () => {
         setDeliveryInfo(currentInfo);
-        setDeliveryModalOpened(false);
+        setSearchParams((prevState) => {
+            prevState.delete('delivery-method');
+            return prevState;
+        });
 
         saveToLocalStorage(
             { key: DELIVERY_INFO_KEY, data: JSON.stringify(currentInfo) },

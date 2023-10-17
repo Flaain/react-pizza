@@ -46,7 +46,7 @@ const PaymentInfoModal: React.FC<Props> = ({ closeHandler }) => {
                 userCards,
             }}
         >
-            <ModalContainer updater={setPaymentInfoModalOpened}>
+            <ModalContainer stateUpdater={setPaymentInfoModalOpened}>
                 <ModalBody>
                     <div className='flex items-center gap-5'>
                         {activeMenu !== "main" && (

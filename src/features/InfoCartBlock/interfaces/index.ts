@@ -4,7 +4,8 @@ export interface Props {
     callToActionReason: DeliveryInfo | PaymentInfo;
     callToActionText: string;
     callToActionItem: JSX.Element;
-    updater: React.Dispatch<React.SetStateAction<boolean>>;
     disabled: boolean;
     title: string;
+    stateUpdater?: React.Dispatch<React.SetStateAction<boolean>>;
+    paramsUpdater?: () => void;
 }

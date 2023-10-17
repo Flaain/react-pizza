@@ -1,4 +1,5 @@
 export interface Props {
     children: React.ReactNode;
-    updater: React.Dispatch<React.SetStateAction<boolean>>;
+    stateUpdater?: React.Dispatch<React.SetStateAction<boolean>>;
+    paramsUpdater?: () => void;
 }

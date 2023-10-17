@@ -27,7 +27,6 @@ export const DeliveryModalContext = React.createContext<DMC>({
     initialDelivery: [],
     setCurrentInfo: () => new Error("Function not implemented."),
     setDeliveryInfo: () => new Error("Function not implemented."),
-    setDeliveryModalOpened: () => new Error("Function not implemented."),
     setInitialDelivery: () => new Error("Function not implemented."),
 });
 
@@ -54,7 +53,6 @@ export const CartContext = React.createContext<CC>({
     minimizeCartItems: false,
     promocodes: [],
     setDeliveryInfo: () => new Error("Function not implemented."),
-    setDeliveryModalOpened: () => new Error("Function not implemented."),
     setPaymentInfo: () => new Error("Function not implemented."),
     setPaymentInfoModalOpened: () => new Error("Function not implemented."),
     setMinimizeCartItems: () => new Error("Function not implemented."),

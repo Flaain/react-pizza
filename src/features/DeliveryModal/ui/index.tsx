@@ -7,12 +7,13 @@ import ModalHeader from "../../../shared/ui/ModalHeader/ui";
 import Spinner from "../../../shared/ui/Spinner/ui";
 import { InitialDelivery, Props } from "../interfaces";
 import { DeliveryInfo } from "../../../pages/Cart/interfaces";
-import { CartContext, DeliveryModalContext } from "../../../app/context";
+import { AppContext, CartContext, DeliveryModalContext } from "../../../app/context";
 import { api } from "../../../shared/api";
 import { USER_ADDRESSES_KEY } from "../../../shared/initialValues";
 
 const DeliveryModal: React.FC<Props> = ({ title }) => {
-    const { deliveryInfo, setDeliveryInfo, setDeliveryModalOpened } = React.useContext(CartContext);
+    const { deliveryInfo, setDeliveryInfo } = React.useContext(CartContext);
+    const { setSearchParams } = React.useContext(AppContext);
 
     const [modalLoading, setModalLoading] = React.useState(true);
     const [currentInfo, setCurrentInfo] = React.useState<DeliveryInfo | null>(deliveryInfo ?? null);
@@ -59,6 +60,13 @@ const DeliveryModal: React.FC<Props> = ({ title }) => {
         };
     }, []);
 
+    const deleteParam = (key: string) => {
+        setSearchParams((prevState) => {
+            prevState.delete(key);
+            return prevState;
+        });
+    };
+
     return (
         <DeliveryModalContext.Provider
             value={{
@@ -68,12 +76,11 @@ const DeliveryModal: React.FC<Props> = ({ title }) => {
                 setInitialDelivery,
                 deliveryInfo,
                 setDeliveryInfo,
-                setDeliveryModalOpened,
             }}
         >
-            <ModalContainer updater={setDeliveryModalOpened}>
+            <ModalContainer paramsUpdater={() => deleteParam('delivery-method')}>
                 <ModalBody>
-                    <ModalHeader {...{ title, closeHandler: () => setDeliveryModalOpened(false) }} />
+                    <ModalHeader {...{ title, closeHandler: () => deleteParam('delivery-method') }} />
                     {modalLoading ? <Spinner /> : <Tabs />}
                 </ModalBody>
             </ModalContainer>

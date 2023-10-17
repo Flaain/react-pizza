@@ -48,7 +48,6 @@ export interface DeliveryModalContext {
     initialDelivery: Array<InitialDelivery>;
     setInitialDelivery: React.Dispatch<React.SetStateAction<Array<InitialDelivery>>>;
     setDeliveryInfo: React.Dispatch<React.SetStateAction<DeliveryInfo | null>>;
-    setDeliveryModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export interface ActiveCard {
@@ -82,7 +81,6 @@ export interface CartContext {
     setDeliveryInfo: React.Dispatch<React.SetStateAction<DeliveryInfo | null>>;
     setPaymentInfo: React.Dispatch<React.SetStateAction<PaymentInfo | null>>;
     setOrderData?: React.Dispatch<React.SetStateAction<Order | null>>;
-    setDeliveryModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
     setMinimizeCartItems: React.Dispatch<React.SetStateAction<boolean>>;
     setPaymentInfoModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
     setOrdered?: React.Dispatch<React.SetStateAction<boolean>>;

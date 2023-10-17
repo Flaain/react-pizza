@@ -10,11 +10,11 @@ import { useCart } from "../../../shared/hooks/useCart";
 import { FORM_TYPES } from "../lib/utils/formTypes";
 import { PizzaAction, PizzaState } from "../lib/utils/interfaces";
 
-const PriceBlock: React.FC<Props> = ({ activeItem, detailsPageParams, setDetailsPageParams }) => {
+const PriceBlock: React.FC<Props> = ({ activeItem, searchParams, setSearchParams }) => {
     const { cart } = React.useContext(AppContext);
     const { addToCart } = useCart();
 
-    const INITIAL_STATE = React.useMemo<PizzaState>(() => getInitialState(activeItem, detailsPageParams), [activeItem]);
+    const INITIAL_STATE = React.useMemo<PizzaState>(() => getInitialState(activeItem, searchParams), [activeItem]);
     const cartItem = React.useMemo(() => cart.find(({ id }) => id === activeItem.id), [cart, activeItem]);
     const initialCount = React.useMemo(() => cartItem?.items.reduce((acc, { count }) => (acc += count), 0) ?? 0, [cartItem]);
 
@@ -25,7 +25,7 @@ const PriceBlock: React.FC<Props> = ({ activeItem, detailsPageParams, setDetails
     const handleChange = ({ type, payload }: PizzaAction) => {
         dispatch({ type, payload });
         if ("param" in payload && "valueParam" in payload) {
-            setDetailsPageParams((prevState) => {
+            setSearchParams((prevState) => {
                 prevState.set(payload.param, String(payload.valueParam));
                 return prevState;
             }, { replace: true });

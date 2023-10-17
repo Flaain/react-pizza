@@ -21,7 +21,7 @@ import { DELIVERY_INFO_KEY, PAYMENT_INFO_KEY } from "../../../shared/initialValu
 import { AnimatePresence } from "framer-motion";
 
 const Cart = () => {
-    const { pizzas, cart, setCart } = React.useContext(AppContext);
+    const { pizzas, cart, setCart, searchParams } = React.useContext(AppContext);
     const { totalItems, price: { total } } = useCart();
 
     const [promocodes, setPromocodes] = React.useState<Array<Promocode>>([]);
@@ -30,7 +30,6 @@ const Cart = () => {
     const [orderLoading, setOrderLoading] = React.useState(false);
     const [ordered, setOrdered] = React.useState(false);
     const [orderData, setOrderData] = React.useState<Order | null>(null);
-    const [deliveryModalOpened, setDeliveryModalOpened] = React.useState(false);
     const [paymentInfoModalOpened, setPaymentInfoModalOpened] = React.useState(false);
     const [deliveryInfo, setDeliveryInfo] = React.useState<DeliveryInfo | null>(parseJSON(DELIVERY_INFO_KEY) ?? null);
     const [paymentInfo, setPaymentInfo] = React.useState<PaymentInfo | null>(parseJSON(PAYMENT_INFO_KEY) ?? null);
@@ -84,7 +83,6 @@ const Cart = () => {
                 paymentInfo,
                 minimizeCartItems,
                 setMinimizeCartItems,
-                setDeliveryModalOpened,
                 setPaymentInfoModalOpened,
                 setPaymentInfo,
             }}
@@ -92,13 +90,8 @@ const Cart = () => {
             <section>
                 <Container classNames='grid grid-cols-7 max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border py-5'>
                     <AnimatePresence>
-                        {deliveryModalOpened && <DeliveryModal key='deliveryModal' title='Способ доставки' />}
-                        {paymentInfoModalOpened && (
-                            <PaymentInfoModal
-                                key='paymentModal'
-                                closeHandler={() => setPaymentInfoModalOpened(false)}
-                            />
-                        )}
+                        {searchParams.get('delivery-method') && <DeliveryModal key='deliveryModal' title='Способ доставки' />}
+                        {paymentInfoModalOpened && (<PaymentInfoModal key='paymentModal' closeHandler={() => setPaymentInfoModalOpened(false)} />)}
                     </AnimatePresence>
                     <div className='col-span-5'>
                         <div

@@ -4,7 +4,6 @@ import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
 import { Props } from "../interfaces";
 import { DeliveryModalContext } from "../../../app/context";
-import { DELIVERY_INFO_KEY, USER_ADDRESSES_KEY } from "../../../shared/initialValues";
 import { DeliveryInfo } from "../../../pages/Cart/interfaces";
 
 const TabContentItem: React.FC<Props> = ({

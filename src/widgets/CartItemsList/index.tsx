@@ -1,10 +1,8 @@
 import React from "react";
 import CartItem from "../../entities/CartItem/ui";
 import { Props } from "./interfaces";
-import { CartContext } from "../../app/context";
 
 const CartItemsList: React.FC<Props> = ({ cart }) => {
-    const { orderLoading } = React.useContext(CartContext);
 
     return (
         <ul className='flex flex-col gap-5'>

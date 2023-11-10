@@ -4,35 +4,45 @@ import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
 import OptionsSelector from "../../../widgets/OptionsSelector/ui";
 import AddToCartButton from "../../../features/AddToCartButton/ui";
 import pizzaReducer from "../../../widgets/PriceBlock/lib/utils/pizzaReducer";
-import { useCart } from "../../../shared/hooks/useCart";
 import { Link } from "react-router-dom";
 import { Pizza } from "../../../shared/api/interfaces/index";
-import { AppContext } from "../../../app/context";
-import { PizzaAction } from "../../../widgets/PriceBlock/lib/utils/interfaces";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../app/redux/store";
+import { addToCart } from "../../../app/redux/slices/cartSlice";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { PizzaState } from "../../../widgets/PriceBlock/lib/utils/interfaces";
 
 const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({ id, title, price, category, types, sizes, imageUrl }) => {
-    const { cart } = React.useContext(AppContext);
-    const { addToCart } = useCart();
+    const { pizzas } = useSelector((state: RootState) => state.pizzas);
+    const { cart } = useSelector((state: RootState) => state.cart);
 
     const INITIAL_STATE = { type: types[0], size: sizes[0], price };
 
-    const activeCount = React.useMemo(() => cart.find(({ id: _id }) => _id === id)?.items.reduce((acc, { count }) => (acc += count), 0), [cart]);
+    const dispatch = useDispatch();
+    
+    const activeCount = React.useMemo(() => cart.find(({ id: _id }) => _id === id)?.items.reduce((acc, { count }) => (acc += count), 0), [cart, id]);
+    const self = React.useMemo(() => pizzas.find(({ id: _id }) => _id === id), [id, pizzas]);
 
-    const [state, dispatch] = React.useReducer(pizzaReducer, INITIAL_STATE);
+    const [state, dispatchPizza] = React.useReducer(pizzaReducer, INITIAL_STATE);
+    
     const [imageLoaded, setImageLoaded] = React.useState(false);
     const [count, setCount] = React.useState(activeCount ?? 0);
 
     const handleAddToCart = () => {
         setCount((prevState) => prevState + 1);
-        addToCart({ id, category, imageUrl, title }, state);
+        dispatch(addToCart({ id, category, imageUrl, title, ...state }))
     };
 
-    const handleChange = ({ type, payload }: PizzaAction) => {
-        dispatch({ type, payload });
+    const handleChange = ({ type, payload }: PayloadAction<PizzaState>) => {
+        dispatchPizza({ type, payload });
     };
+
+    if (!self) {
+        throw new Error(`Cannot find pizza with ${id} id`);
+    }
 
     return (
-        <article className='flex flex-col justify-center items-center max-w-[400px]'>
+        <article className='flex flex-col justify-center items-center max-w-[400px] max-md:min-w-full max-md:max-w-none'>
             <picture>
                 <Link to={`pizza/${title}`}>
                     <img
@@ -44,18 +54,11 @@ const Card: React.FC<Omit<Pizza, "description" | "rating">> = ({ id, title, pric
                     />
                 </Link>
             </picture>
-            <div className='flex flex-col justify-center items-center gap-2'>
+            <div className='flex flex-col justify-center items-center gap-2 w-full'>
                 <h2 className='text-primary-black font-bold text-lg cursor-pointer'>
                     <Link to={`pizza/${title}`}>{title}</Link>
                 </h2>
-                <OptionsSelector
-                    availableSizes={sizes}
-                    availableTypes={types}
-                    activeSize={state.size}
-                    activeType={state.type}
-                    initialPrice={price}
-                    handleChange={handleChange}
-                />
+                <OptionsSelector {...{ activeItem: self, state, handleChange, }}/>
                 <div className='flex items-center justify-between w-full mt-[5px]'>
                     <span className='text-xl font-bold text-primary-black'>от {getIntlPrice(state.price)}</span>
                     <AddToCartButton title='Добавить' handleClick={handleAddToCart} initialCount={count} />

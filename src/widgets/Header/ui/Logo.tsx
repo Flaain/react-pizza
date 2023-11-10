@@ -11,7 +11,7 @@ const Logo: React.FC<LogoProps> = ({ title, description }) => {
                 alt='logo'
                 className='transition-transform group-hover:rotate-45 duration-200 ease-in-out'
             />
-            <div className='flex flex-col'>
+            <div className='max-sm:flex max-lg:hidden flex-col flex'>
                 <strong className='uppercase m-0 text-xl font-extrabold text-primary-black'>{title}</strong>
                 {description && <p className='text-gray-400 m-0'>{description}</p>}
             </div>

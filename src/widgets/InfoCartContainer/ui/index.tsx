@@ -1,13 +1,9 @@
 import React from "react";
 import DeliveryInfoList from "../../DeliveryInfoList/ui";
 import InfoCartBlock from "../../../features/InfoCartBlock/ui";
-import { AppContext, CartContext } from "../../../app/context";
 import PaymentInfoList from "../../PaymentInfoList/ui";
 
 const InfoCartContainer = () => {
-    const { deliveryInfo, orderLoading, paymentInfo, setPaymentInfoModalOpened } = React.useContext(CartContext);
-    const { setSearchParams } = React.useContext(AppContext);
-
     return (
         <div className='grid grid-cols-2'>
             <InfoCartBlock

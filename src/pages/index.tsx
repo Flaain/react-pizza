@@ -1,23 +1,6 @@
-import BaseLayout from "../app/layouts/ui/BaseLayout";
-import PizzaDetails from "./PizzaDetails/ui";
-import NotFound from "./NotFound/ui";
-import Home from "./Home/ui";
-import Cart from "./Cart/ui";
-import { Routes, Route } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
+import { CartPage } from "./Cart";
+import { NotFoundPage } from "./NotFound";
+import { HomePage } from "./Home";
 
-const Routing = () => {
-    return (
-        <>
-            <Routes>
-                <Route element={<BaseLayout />}>
-                    <Route path='/' element={<Home />} />
-                    <Route path='cart' element={<Cart />} />
-                    <Route path='pizza/:name' element={<PizzaDetails />} />
-                    <Route path='*' element={<NotFound title='Страница не найдена' backLink backLinkText="Вернуться назад" />} />
-                </Route>
-            </Routes>
-        </>
-    );
-};
-
-export default Routing;
+export const pages: Array<RouteObject> = [NotFoundPage, HomePage, CartPage];

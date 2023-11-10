@@ -4,21 +4,19 @@ import PaymentAddCard from "../../../features/PaymentAddCard/ui";
 import ModalContainer from "../../../shared/ui/ModalContainer/ui";
 import ModalBody from "../../../shared/ui/ModalBody/ui";
 import ModalHeader from "../../../shared/ui/ModalHeader/ui";
-import parseJSON from "../../../shared/lib/helpers/parseJSON";
 import PaymentUserCards from "../../../features/PaymentUserCards/ui";
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
+import getItemFromLocalStorage from "../../../shared/lib/helpers/getDataFromLocalStorage";
 import { AvaiblePaymentMenus } from "../../../app/context/types";
-import { CartContext, PaymentModalContext } from "../../../app/context";
-import { PAYMENT_INFO_KEY, USER_CARDS_KEY } from "../../../shared/initialValues";
+import { PaymentModalContext } from "../../../app/context";
 import { CreditCard, PaymentInfo } from "../../../pages/Cart/interfaces";
 import { Menus, Props } from "../interfaces";
 
 const PaymentInfoModal: React.FC<Props> = ({ closeHandler }) => {
-    const { setPaymentInfoModalOpened, setPaymentInfo, paymentInfo } = React.useContext(CartContext);
     const [activeMenu, setActiveMenu] = React.useState<AvaiblePaymentMenus>("main");
     const [currentInfo, setCurrentInfo] = React.useState<PaymentInfo | null>(paymentInfo ?? null);
-    const [userCards, setUserCards] = React.useState<Array<CreditCard>>(parseJSON(USER_CARDS_KEY) ?? []);
+    const [userCards, setUserCards] = React.useState<Array<CreditCard>>(getItemFromLocalStorage(USER_CARDS_KEY, []));
     
     const menus: Menus = {
         "main": { component: <PaymentMain />, title: "Способ оплаты" },
@@ -27,8 +25,6 @@ const PaymentInfoModal: React.FC<Props> = ({ closeHandler }) => {
     };
 
     const handleSave = () => {
-        setPaymentInfo(currentInfo);
-        setPaymentInfoModalOpened(false);
         saveToLocalStorage({ key: PAYMENT_INFO_KEY, data: JSON.stringify(currentInfo) });
     };
 

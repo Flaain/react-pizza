@@ -1,7 +1,7 @@
-import { Pizza } from "../../../shared/api/interfaces";
-
 export interface Props {
-    data: Pizza[];
-    searchValue: string;
+    categorie: number | null;
+    sortDirection: number;
+    property: string;
+    searchQuery: string;
     loading?: boolean;
 }

@@ -4,18 +4,19 @@ import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import cn from "../../../shared/lib/classNames";
 import CollapseInfo from "../../../features/CollapseInfo/ui";
 import RelatedItems from "../../../widgets/RelatedItems/ui";
-import NotFound from "../../NotFound/ui";
+import NotFound from "../../NotFound/ui/ui";
 import Spinner from "../../../shared/ui/Spinner/ui";
 import PriceBlock from "../../../widgets/PriceBlock/ui";
 import DetailsHeader from "./DetailsHeader";
-import { AppContext } from "../../../app/context";
 import { useParams } from "react-router-dom";
 import { DetailsParamKey } from "../interfaces";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/redux/store";
 
 const PizzaDetails = () => {
-    const { pizzas, loading, searchParams, setSearchParams } = React.useContext(AppContext);
     const { name } = useParams();
-
+    const { loading, pizzas } = useSelector((state: RootState) => state.pizzas);
+    
     const activeItem = React.useMemo(() => pizzas.find(({ title }) => title.toLowerCase() === name?.toLowerCase()), [loading, name])!;
     const relatedItems = React.useMemo(() => pizzas.filter(({ id }) => id !== activeItem?.id), [activeItem]);
 

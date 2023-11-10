@@ -2,15 +2,22 @@ export interface Props {
     title: string;
 }
 
-export interface Addresses {
+export interface Address {
     address: string;
     rating?: number;
     deliveryPrice?: number;
 }
 
-export interface InitialDelivery {
+export interface DeliveryMethod {
     name: string;
-    addresses: Array<Addresses>;
+    addresses: Array<Address>;
     isEditable?: boolean;
     isAddable?: boolean;
+}
+
+export interface initialState {
+    loading: boolean;
+    deliveryMethods: Array<DeliveryMethod>;
+    error: unknown;
+    tabIndex: number;
 }

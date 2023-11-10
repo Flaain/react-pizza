@@ -1,44 +1,14 @@
 import React from "react";
-import { Order, Pizza } from "../../../shared/api/interfaces";
+import { Order } from "../../../shared/api/interfaces";
 import { CreditCard, DeliveryInfo, PaymentInfo, Promocode } from "../../../pages/Cart/interfaces";
 import { InitialDelivery } from "../../../features/DeliveryModal/interfaces";
 import { AvaiblePaymentMenus } from "../types";
 import { Menus } from "../../../entities/PaymentInfoModal/interfaces";
-import { SetURLSearchParams } from "react-router-dom";
-
-export interface Cart {
-    id: number;
-    category: number;
-    title: string;
-    imageUrl: string;
-    items: CartItem[];
-}
-
-export interface CartItem {
-    id: number;
-    size: number;
-    type: number;
-    price: number;
-    count: number;
-}
 
 export interface Error {
     status: number;
     text: string;
     message: string;
-}
-
-export interface AppContext {
-    pizzas: Pizza[];
-    cart: Cart[];
-    loading: boolean;
-    searchParams: URLSearchParams;
-    errorData: Error | null | unknown;
-    searchValue: string;
-    setSearchValue: React.Dispatch<React.SetStateAction<string>>;
-    setSearchParams: SetURLSearchParams;
-    setPizzas: React.Dispatch<React.SetStateAction<Pizza[]>>;
-    setCart: React.Dispatch<React.SetStateAction<Cart[]>>;
 }
 
 export interface DeliveryModalContext {
@@ -85,10 +55,4 @@ export interface CartContext {
     setPaymentInfoModalOpened: React.Dispatch<React.SetStateAction<boolean>>;
     setOrdered?: React.Dispatch<React.SetStateAction<boolean>>;
     setOrderLoading?: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-export interface HomeContext {
-    selectedSortIndex: number;
-    selectedCategorieIndex: number | null;
-    view: number;
 }

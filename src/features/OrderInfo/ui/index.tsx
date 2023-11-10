@@ -4,12 +4,11 @@ import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
 import PromocodeForm from "../../PromocodeForm/ui";
 import { Props } from "../interfaces";
-import { useCart } from "../../../shared/hooks/useCart";
-import { CartContext } from "../../../app/context";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../../app/redux/store";
 
-const OrderInfo: React.FC<Props> = ({ handleOrder }) => {
-    const { deliveryInfo, paymentInfo, orderLoading, setDeliveryModalOpened, setPaymentInfoModalOpened, promocodes } = React.useContext(CartContext);
-    const { price: { total, intl } } = useCart();
+const OrderInfo: React.FC<Props> = ({ handleOrder, setPaymentInfoModalOpened }) => {
+    const dispatch = useDispatch();
 
     const [showPromocodeForm, setShowPromocodeForm] = React.useState(false);
 
@@ -25,7 +24,7 @@ const OrderInfo: React.FC<Props> = ({ handleOrder }) => {
                         <button
                             disabled={orderLoading}
                             className='flex items-center justify-between group'
-                            onClick={() => setDeliveryModalOpened(true)}
+                            onClick={() => dispatch(changeDeliveryMethodParam('opened'))}
                         >
                             <span className='text-base font-medium text-primary-black group-hover:text-primary-orange'>
                                 Доставка {deliveryInfo.type.toLowerCase()}
@@ -46,7 +45,7 @@ const OrderInfo: React.FC<Props> = ({ handleOrder }) => {
                         <button
                             disabled={orderLoading}
                             className='flex items-center justify-between group'
-                            onClick={() => setPaymentInfoModalOpened(true)}
+                            onClick={() => dispatch(changeDeliveryMethodParam('opened'))}
                         >
                             <span className='text-base font-medium text-primary-black group-hover:text-primary-orange'>
                                 Оплата {paymentInfo.title.toLowerCase()}
@@ -71,7 +70,7 @@ const OrderInfo: React.FC<Props> = ({ handleOrder }) => {
             ) : (
                 <button
                     className='flex items-center justify-between group'
-                    onClick={() => (deliveryInfo ? setPaymentInfoModalOpened(true) : setDeliveryModalOpened(true))}
+                    onClick={() => (deliveryInfo ? setPaymentInfoModalOpened(true) : dispatch(changeDeliveryMethodParam('opened')))}
                 >
                     <span className='text-lg text-primary-black font-medium group-hover:text-primary-orange'>
                         {deliveryInfo ? "Заполните форму оплаты" : "Заполните форму доставки"}
@@ -95,7 +94,7 @@ const OrderInfo: React.FC<Props> = ({ handleOrder }) => {
                 </button>
                 {showPromocodeForm && <PromocodeForm promocodes={promocodes} />}
                 <button
-                    disabled={orderLoading || !deliveryInfo || !paymentInfo}
+                    disabled={orderLoading || (!deliveryInfo || !paymentInfo)}
                     onClick={handleOrder}
                     type='button'
                     className={cn(

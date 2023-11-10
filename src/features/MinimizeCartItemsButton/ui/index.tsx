@@ -1,10 +1,8 @@
 import React from "react";
 import cn from "../../../shared/lib/classNames";
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
-import { CartContext } from "../../../app/context";
 
 const MinimizeCartItemsButton = () => {
-    const { orderLoading, setMinimizeCartItems, minimizeCartItems } = React.useContext(CartContext);
     return (
         <button
             disabled={orderLoading}

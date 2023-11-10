@@ -1,12 +1,8 @@
 import React from "react";
 import cn from "../../../shared/lib/classNames";
 import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
-import { PaymentModalContext } from "../../../app/context";
-import { USER_CARDS_KEY } from "../../../shared/initialValues";
 
 const PaymentAddCard = () => {
-    const { setCurrentInfo, setUserCards, userCards, setActiveMenu } = React.useContext(PaymentModalContext);
-
     const [address, setAddress] = React.useState("");
     const [cvv, setCVV] = React.useState("");
     const [expiry, setExpity] = React.useState("");

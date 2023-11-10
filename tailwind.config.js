@@ -9,12 +9,17 @@ export default {
                 "primary-black": "#181818",
                 "primary-gray": "#F3F3F7",
                 "expanded-linear": "linear-gradient(rgba(255,255,255,0), #fff)",
-                "modal": "rgba(0, 0, 0, .5)"
+                modal: "rgba(0, 0, 0, .5)",
             },
             keyframes: {
                 loading: {
                     "0%": { transform: "translate(-50%, -50%) rotate(0)" },
                     "100%": { transform: "translate(-50%, -50%) rotate(360deg)" },
+                },
+                shimmer: {
+                    "100%": {
+                        transform: "translateX(100%)",
+                    },
                 },
             },
             animation: {

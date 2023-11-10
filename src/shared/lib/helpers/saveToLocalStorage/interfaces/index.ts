@@ -1,4 +1,4 @@
 export interface Args {
     key: string;
-    data: any;
+    data: string;
 }

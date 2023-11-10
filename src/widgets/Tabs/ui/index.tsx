@@ -2,17 +2,18 @@ import React from "react";
 import cn from "../../../shared/lib/classNames";
 import TabContent from "../../../features/TabContent/ui";
 import AddressAddForm from "../../../features/AddressAddForm/ui";
-import parseJSON from "../../../shared/lib/helpers/parseJSON";
 import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
 import TabsSelectors from "../../../features/TabsSelectors/ui";
-import { AppContext, DeliveryModalContext } from "../../../app/context";
-import { DELIVERY_INFO_KEY, DELIVERY_MODAL_INDEX_KEY, USER_ADDRESSES_KEY } from "../../../shared/initialValues";
+import getDataFromLocalStorage from "../../../shared/lib/helpers/getDataFromLocalStorage";
+import { localStorageKeys } from "../../../shared/config/constants";
+import { useSelector } from "react-redux";
+import { RootState } from "../../../app/redux";
+import { DeliveryInfo } from "../../../pages/Cart";
 
 const Tabs = () => {
-    const { currentInfo, setCurrentInfo, initialDelivery, deliveryInfo, setInitialDelivery, setDeliveryInfo } = React.useContext(DeliveryModalContext);
-    const { setSearchParams } = React.useContext(AppContext)
+    const { deliveryInfo } = useSelector(({ cart }: RootState) => cart);
 
-    const [indexTab, setIndexTab] = React.useState(parseJSON("delivery-modal-index-tab") ?? 0);
+    const [currentInfo, setCurrentInfo] = React.useState<DeliveryInfo | null>(deliveryInfo);
     const [showAddForm, setShowAddForm] = React.useState(false);
     const [query, setQuery] = React.useState("");
 

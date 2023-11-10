@@ -1,5 +1,5 @@
-import { Cart } from "../../../app/context/interfaces";
 import { DeliveryInfo } from "../../../pages/Cart/interfaces";
+import { CartInterface } from "@/pages/Cart";
 
 export interface Pizza {
     id: number;
@@ -19,15 +19,9 @@ export interface StaticAddresses {
     rating: number;
 }
 
-export interface Reject {
-    status: number;
-    text: string;
-    message: string;
-}
-
 export interface Data<T> {
     status: number;
-    text: string;
+    statusText: string;
     message: string;
     data: T;
 }
@@ -40,7 +34,7 @@ export interface Base {
 }
 
 export interface Order {
-    order: Array<Pizza & Cart>;
+    order: Array<Pizza & CartInterface>;
     totalPrice: number | string;
     deliveryInfo: DeliveryInfo;
 }

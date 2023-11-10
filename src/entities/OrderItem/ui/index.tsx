@@ -1,7 +1,7 @@
 import React from "react";
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
-import { initialTypes } from "../../../shared/initialValues";
+import { initialTypes } from "../../../shared/config/constants/initialValues";
 import { Props } from "../interfaces";
 
 const OrderItem: React.FC<Props> = ({ title, price, type, size, count, imageUrl }) => {

@@ -1,14 +1,14 @@
 import React from "react";
 import cn from "../../../shared/lib/classNames";
 import { Props } from "../interfaces";
-import { initialTypes } from "../../../shared/initialValues";
-import { FORM_TYPES } from "../../../widgets/PriceBlock/lib/utils/formTypes";
+import { initialTypes } from "../../../shared/config/constants/initialValues";
+import { ActionTypes } from "../../../widgets/PriceBlock/lib/utils/formTypes";
 
-const DoughPicker: React.FC<Props> = ({ availableTypes, activeType, handleChange }) => {
-    const [activeTabIndex, setActiveTabIndex] = React.useState(activeType);
+const DoughPicker: React.FC<Props> = ({ activeItem, state, handleChange, width }) => {
+    const [activeTabIndex, setActiveTabIndex] = React.useState(state.type);
     const [elementWidth, setElementWidth] = React.useState<number | null>(null);
     const [elementOffsetLeft, setElementOffsetLeft] = React.useState<number | null>(null);
-    
+
     const tabsRef = React.useRef<Array<HTMLLabelElement | null>>([]);
 
     React.useEffect(() => {
@@ -16,12 +16,12 @@ const DoughPicker: React.FC<Props> = ({ availableTypes, activeType, handleChange
 
         setElementOffsetLeft(offsetLeft);
         setElementWidth(clientWidth);
-    }, [activeTabIndex])
+    }, [activeTabIndex, width])
 
-    React.useEffect(() => setActiveTabIndex(activeType), [availableTypes, activeType])
+    React.useEffect(() => setActiveTabIndex(state.type), [activeItem, state]);
 
     const handleTypeChange = (index: number, availableType: number) => {
-        handleChange({ type: FORM_TYPES.SET_TYPE, payload: { type: index, param: "type", valueParam: availableType } })
+        handleChange({ type: ActionTypes.SET_TYPE, payload: { ...state, type: index, param: "type", valueParam: availableType } })
         setActiveTabIndex(index)
     }
 
@@ -35,14 +35,14 @@ const DoughPicker: React.FC<Props> = ({ availableTypes, activeType, handleChange
             </span>
             <ul className='grid grid-cols-2 gap-2 w-full p-1'>
                 {initialTypes.map((name, index) => {
-                    const availableTypeIndex = availableTypes.findIndex((availableType) => availableType === index);
+                    const availableTypeIndex = activeItem.types.findIndex((availableType) => availableType === index);
 
                     return (
                         <li key={name} className='flex'>
                             <label
                                 ref={(element) => (tabsRef.current[index] = element)}
                                 className={cn(
-                                    "px-9 py-2 rounded-lg flex items-center justify-center w-full text-primary-black text-sm font-bold transition-shadow duration-200 ease-in-out",
+                                    "px-9 py-2 rounded-lg flex items-center justify-center w-full text-primary-black text-sm max-md:text-base font-bold transition-shadow duration-200 ease-in-out",
                                     availableTypeIndex !== -1 ? "cursor-pointer" : "opacity-50 cursor-default",
                                 )}
                             >
@@ -52,7 +52,7 @@ const DoughPicker: React.FC<Props> = ({ availableTypes, activeType, handleChange
                                     name='type'
                                     className='sr-only'
                                     value={name}
-                                    checked={activeType === index}
+                                    checked={state.type === index}
                                     disabled={availableTypeIndex === -1}
                                     {...(availableTypeIndex !== -1 && { onChange: () => handleTypeChange(index, availableTypeIndex)})}
                                 />

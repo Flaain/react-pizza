@@ -1,14 +1,15 @@
-import { FORM_TYPES } from "./formTypes";
-import { PizzaAction, PizzaState } from "./interfaces";
+import { PayloadAction } from "@reduxjs/toolkit";
+import { ActionTypes } from "./formTypes";
+import { PizzaState } from "./interfaces";
 
-const pizzaReducer = (state: PizzaState, { type, payload }: PizzaAction) => {
+const pizzaReducer = (state: PizzaState, { type, payload }: PayloadAction<PizzaState>) => {
     switch (type) {
-        case FORM_TYPES.SET_TYPE:
-            return { ...state, type: (payload as PizzaState).type };
-        case FORM_TYPES.SET_SIZE:
-            return { ...state, size: (payload as Omit<PizzaState, "type">).size, price: (payload as Omit<PizzaState, "type">).price };
-        case FORM_TYPES.UPDATE:
-            return { ...state, ...(payload as PizzaState) };
+        case ActionTypes.SET_TYPE:
+            return { ...state, type: payload.type };
+        case ActionTypes.SET_SIZE:
+            return { ...state, size: payload.size, price: payload.price };
+        case ActionTypes.UPDATE:
+            return { ...state, ...payload };
         default:
             return state;
     }

@@ -3,7 +3,7 @@ import SortPopupItem from "../../../features/SortPopupItem/ui";
 import { motion } from "framer-motion";
 import { Props } from "../interfaces";
 
-const SortPopupList = React.forwardRef<HTMLUListElement, Props>(({ names, handleSort, selectedSortIndex }, ref) => {
+const SortPopupList = React.forwardRef<HTMLUListElement, Props>(({ names, handleSort, sortIndex }, ref) => {
     return (
         <motion.ul
             initial={{ top: 60, opacity: 0 }}
@@ -14,7 +14,7 @@ const SortPopupList = React.forwardRef<HTMLUListElement, Props>(({ names, handle
             className='absolute right-0 appearance-none p-2 rounded shadow-lg bg-white flex flex-col gap-2'
         >
             {names.map((item, index) => (
-                <SortPopupItem key={item.id} {...{ ...item, index, handleSort, selectedSortIndex }} />
+                <SortPopupItem key={item.id} {...{ ...item, index, handleSort, sortIndex }} />
             ))}
         </motion.ul>
     );

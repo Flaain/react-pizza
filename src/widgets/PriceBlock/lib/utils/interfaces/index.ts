@@ -2,16 +2,24 @@ export interface PizzaState {
     type: number;
     price: number;
     size: number;
+    param?: string;
+    valueParam?: string | number;
+}
+
+export interface SizeChange {
+    price: number;
+    size: number;
+    param?: string;
+    valueParam?: string | number;
+}
+
+export interface TypeChange {
+    type: number;
+    param?: string;
+    valueParam?: string | number;
 }
 
 export interface PayloadParams {
     param: string;
     valueParam: number;
 }
-
-export interface PizzaAction {
-    type: string;
-    payload: PizzaPayload;
-}
-
-type PizzaPayload = PizzaState | (Omit<PizzaState, "size" | "price"> & PayloadParams) | (Omit<PizzaState, "type"> & PayloadParams);

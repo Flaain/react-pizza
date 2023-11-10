@@ -2,14 +2,11 @@ import React from "react";
 import cn from "../../../shared/lib/classNames";
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
+import saveToLocalStorage from "../../../shared/lib/helpers/saveToLocalStorage";
 import { Props } from "../interfaces";
-import { AppContext } from "../../../app/context";
-import { initialTypes } from "../../../shared/initialValues";
 import { Link } from "react-router-dom";
 
 const CartItem: React.FC<Props> = ({ pizzaId, id, count, img, size, title, type, price, loading }) => {
-    const { setCart } = React.useContext(AppContext);
-
     const [imageLoaded, setImageLoaded] = React.useState(false);
     const [itemCount, setItemCount] = React.useState(count ?? 1);
 
@@ -23,8 +20,8 @@ const CartItem: React.FC<Props> = ({ pizzaId, id, count, img, size, title, type,
 
             setItemCount((prevState) => (dataset.minus ? (prevState <= 1 ? prevState : prevState - 1) : prevState + 1));
 
-            setCart((prevState) =>
-                prevState.map((pizza) => {
+            setCart((prevState) => {
+                const updatedCart = prevState.map((pizza) => {
                     if (pizzaId === pizza.id) {
                         return {
                             ...pizza,
@@ -40,25 +37,32 @@ const CartItem: React.FC<Props> = ({ pizzaId, id, count, img, size, title, type,
                         };
                     }
                     return pizza;
-                })
-            );
+                });
+
+                saveToLocalStorage({ key: CART_KEY, data: JSON.stringify(updatedCart) });
+
+                return updatedCart;
+            });
         }
     };
 
     const handleRemoveItem = () => {
-        setCart((prevState) =>
-            prevState
-                .map((pizza) => {
-                    if (pizza.id === pizzaId) {
-                        return {
-                            ...pizza,
-                            items: pizza.items.filter((item) => item.id !== id),
-                        };
-                    }
-                    return pizza;
-                })
-                .filter((pizza) => pizza.items.length !== 0)
-        );
+        setCart((prevState) => {
+            const updatedCart = prevState.map((pizza) => {
+                if (pizza.id === pizzaId) {
+                    return {
+                        ...pizza,
+                        items: pizza.items.filter((item) => item.id !== id),
+                    };
+                }
+                return pizza;
+            })
+            .filter((pizza) => pizza.items.length !== 0);
+
+            saveToLocalStorage({ key: CART_KEY, data: JSON.stringify(updatedCart) });
+
+            return updatedCart;
+        });
     };
 
     const handleChange = ({ target: { valueAsNumber } }: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,8 +70,8 @@ const CartItem: React.FC<Props> = ({ pizzaId, id, count, img, size, title, type,
     };
 
     const handleBlur = ({ target: { valueAsNumber } }: React.FocusEvent<HTMLInputElement>) => {
-        setCart((prevState) =>
-            prevState.map((pizza) => {
+        setCart((prevState) => {
+            const updatedCart = prevState.map((pizza) => {
                 if (pizzaId === pizza.id) {
                     return {
                         ...pizza,
@@ -83,8 +87,12 @@ const CartItem: React.FC<Props> = ({ pizzaId, id, count, img, size, title, type,
                     };
                 }
                 return pizza;
-            })
-        );
+            });
+
+            saveToLocalStorage({ key: CART_KEY, data: JSON.stringify(updatedCart) });
+
+            return updatedCart;
+        });
     };
 
     return (

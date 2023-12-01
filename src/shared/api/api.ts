@@ -1,5 +1,4 @@
-import { Promocode } from "@/pages/Cart/interfaces";
-import { Base, Order, Data, Pizza, StaticAddresses } from "./interfaces";
+import { Promocode, Base, Order, Data, StaticAddresses, ResWithMeta, Product } from "./interfaces";
 
 export class API {
     private _baseUrl: string;
@@ -20,9 +19,14 @@ export class API {
         return this._checkResponse(response, endpoint);
     }
 
-    async getPizzas(endpoint = "/products"): Promise<Data<Array<Pizza>>> {
+    async getProductDetails(endpoint: string): Promise<Data<Product>> {
         const response = await fetch(this._baseUrl + endpoint);
         return this._checkResponse(response, endpoint);
+    }
+
+    async getProducts(endpoint = "/products", controller?: AbortController) {
+        const response = await fetch(this._baseUrl + endpoint, controller && { signal: controller.signal });
+        return this._checkResponse<ResWithMeta>(response, endpoint);
     }
 
     async getPromocodes(endpoint = "/promocodes"): Promise<Data<Array<Promocode>>> {

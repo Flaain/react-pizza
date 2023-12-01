@@ -1,4 +1,4 @@
-import { Names } from "../../../../features/SortPopup/interfaces";
+import { Names } from "../../../../features/SortPopup/model/interfaces";
 
 const getSortParamIndex = (initial: Array<Names>, searchParams: URLSearchParams, key: string) => {
     if (typeof initial[Number(searchParams.get(key))]?.sort === "undefined" || document.location.pathname !== '/') {

@@ -1,4 +1,4 @@
-import { Names } from "../../../../features/SortPopup/interfaces";
+import { Names } from "../../../../features/SortPopup/model/interfaces";
 import { Categories } from "../../../../widgets/Tools/interfaces";
 
 const updateParam = (params: URLSearchParams, property: string, initial: Array<Categories | Names>, index: number | null) => {

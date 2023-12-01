@@ -1,19 +1,20 @@
 import React from "react";
 
-import { RootState, fetchPizzas, rootSelector } from "../redux";
-import { useDispatch, useSelector } from "react-redux";
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
+import { fetchProducts } from "../redux";
 import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
 import { RouterProvider } from "react-router-dom";
 import { appRouter } from "../appRouter";
+import { appSelector } from "@/shared/model/selectors";
+import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 
 const App = () => {
-    const { error } = useSelector(rootSelector);
+    const { error } = useAppSelector(appSelector);
 
-    const dispatch = useDispatch<ThunkDispatch<RootState, unknown, AnyAction>>();
+    const dispatch = useAsyncThunkDispatch();
 
     React.useEffect(() => {
-        dispatch(fetchPizzas());
+        const controller = new AbortController();
+        dispatch(fetchProducts(controller));
     }, []);
 
     return error ? (

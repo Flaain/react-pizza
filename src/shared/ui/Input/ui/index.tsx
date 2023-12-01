@@ -1,8 +1,8 @@
 import React from "react";
 import { Props } from "../interfaces";
 
-const Input: React.FC<Props> = ({ classNames, ...props }) => {
-    return <input {...props} className={classNames} />;
+const Input: React.FC<Props> = (props) => {
+    return <input {...props} />;
 };
 
 export default Input;

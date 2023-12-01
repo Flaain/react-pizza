@@ -2,6 +2,7 @@ import { createBrowserRouter } from "react-router-dom";
 import { baseLayout } from "./layout/baseLayout";
 import { pages } from "@/pages";
 import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
+import { AuthPage } from "@/pages/Auth";
 
 export const appRouter = createBrowserRouter([
     {
@@ -16,4 +17,5 @@ export const appRouter = createBrowserRouter([
         ),
         children: pages,
     },
+    AuthPage,
 ]);

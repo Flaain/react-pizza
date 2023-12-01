@@ -1,52 +1,20 @@
 import React from "react";
 import Container from "@/shared/ui/Container";
-import CartItemsList from "@/widgets/CartItemsList";
 import EmptyCart from "./CartEmpty";
-import cn from "@/shared/lib/classNames";
-import MinimizeCartInfo from "@/features/MinimizeCartInfo/ui";
-import OrderInfo from "@/features/OrderInfo/ui";
-import PaymentInfoModal from "@/entities/PaymentInfoModal/ui";
-import MinimizeCartItemsButton from "@/features/MinimizeCartItemsButton/ui";
-import InfoCartContainer from "@/widgets/InfoCartContainer/ui";
 
-import { AnimatePresence } from "framer-motion";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/app/redux";
-import { rootSelector } from "@/app/redux";
-import { clearCart, clearOrder } from "../store/slice";
-import { fetchPromocodes, handleOrder } from "../store/asyncActions";
-import { AnyAction, ThunkDispatch } from "@reduxjs/toolkit";
-import { Outlet, useSearchParams } from "react-router-dom";
-import { cartSelector } from "../store/selectors";
+import { Outlet } from "react-router-dom";
+import { cartSelector } from "@/shared/model/selectors";
+import { useAppSelector } from "@/shared/model/store";
 
 const Cart = () => {
-    const {
-        cart,
-        orderLoading,
-        order,
-        ordered,
-        deliveryInfo,
-        priceView: { total, totalItems },
-    } = useSelector(cartSelector);
-    const { pizzas } = useSelector(rootSelector);
+    const { cart, ordered } = useAppSelector(cartSelector);
 
-    const [searchParams, setSearchParams] = useSearchParams();
     const [minimizeCartItems, setMinimizeCartItems] = React.useState(false);
     const [paymentInfoModalOpened, setPaymentInfoModalOpened] = React.useState(false);
 
-    const isMinimizable = React.useMemo(() => cart.reduce((acc, { items }) => (acc += items.length), 0) > 1, [cart]);
+    const isMinimizable = React.useMemo(() => [...cart.values()].reduce((acc, { items }) => (acc += items.length), 0) > 1, [cart]);
 
-    const dispatch = useDispatch<ThunkDispatch<RootState, unknown, AnyAction>>();
-
-    React.useEffect(() => {
-        dispatch(fetchPromocodes());
-
-        return () => {
-            dispatch(clearOrder());
-        };
-    }, []);
-
-    if (!cart.length && !ordered) return <EmptyCart />;
+    if (!cart.size && !ordered) return <EmptyCart />;
 
     return (
         <section>

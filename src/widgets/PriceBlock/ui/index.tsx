@@ -1,5 +1,5 @@
 import React from "react";
-import OptionsSelector from "../../OptionsSelector/ui";
+import OptionsSelector from "../../OptionsSelector/ui/ui";
 import AddToCartButton from "../../../features/AddToCartButton/ui";
 import getIntlPrice from "../../../shared/lib/helpers/getIntlPrice";
 import pizzaReducer from "../lib/utils/pizzaReducer";

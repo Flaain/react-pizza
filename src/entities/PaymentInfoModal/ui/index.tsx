@@ -25,7 +25,7 @@ const PaymentInfoModal: React.FC<Props> = ({ closeHandler }) => {
     };
 
     const handleSave = () => {
-        saveToLocalStorage({ key: PAYMENT_INFO_KEY, data: JSON.stringify(currentInfo) });
+        saveToLocalStorage({ key: PAYMENT_INFO_KEY, data: currentInfo });
     };
 
     return (

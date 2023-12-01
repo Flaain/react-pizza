@@ -1,1 +1,0 @@
-export type AvaiblePaymentMenus = "main" | "add-card" | "choose-card";

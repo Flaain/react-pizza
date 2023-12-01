@@ -1,5 +1,6 @@
 export interface Props {
     name: string;
-    index: number;
-    handleClick: (index: number) => void;
+    categorie: number | null;
+    activeCategory: number | null;
+    handleClick: (categorie: number | null) => void;
 }

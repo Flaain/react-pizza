@@ -1,10 +1,10 @@
 import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
 import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../app/redux/store";
+import { useAppSelector } from "@/shared/model/store";
+import { cartSelector } from "@/shared/model/selectors";
 
 const CartPreview = () => {
-    const { totalItems, intl } = useSelector(({ cart }: RootState) => cart.priceView);
+    const { priceView: { intl, totalItems } } = useAppSelector(cartSelector);
     return (
         <Link
             to='cart'

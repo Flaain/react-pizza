@@ -1,11 +1,11 @@
-import { Names } from "../../../features/SortPopup/interfaces";
+import { SetURLSearchParams } from "react-router-dom";
 
 export interface Categories {
     name: string;
-    categorie?: number;
+    categorie: number | null;
 }
 
 export interface Props {
-    categories: Array<Categories>;
-    sortNames: Array<Names>;
+    searchParams: URLSearchParams;
+    setSearchParams: SetURLSearchParams;
 }

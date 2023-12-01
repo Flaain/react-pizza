@@ -1,6 +1,6 @@
-import { Pizza } from "../../../shared/api/interfaces";
+import { Product } from "@/shared/api/interfaces";
 
 export interface Props {
-    items: Pizza[];
+    items: Array<Product>;
     title: string;
 }

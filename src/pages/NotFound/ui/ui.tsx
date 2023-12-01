@@ -6,15 +6,24 @@ import { Props } from "../interfaces";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-const NotFound: React.FC<Props> = ({ title, description, backLink, backLinkText, reloadButton, reloadButtonText, screen, error }) => {
+const NotFound: React.FC<Props> = ({
+    title,
+    description,
+    backLink,
+    backLinkText = "Вернуться назад",
+    reloadButton,
+    reloadButtonText,
+    screen,
+    error,
+}) => {
     const [showError, setShowError] = React.useState(false);
-    
-    const convertedError = JSON.stringify(error);
+
+    const convertedError = JSON.stringify(error, null, 2);
 
     const handleCopyClipboard = () => {
         navigator.clipboard.writeText(JSON.stringify(convertedError));
-        alert('Код ошибки был скопирован в буфер обмена');
-    }
+        alert("Код ошибки был скопирован в буфер обмена");
+    };
 
     return (
         <section>
@@ -25,17 +34,25 @@ const NotFound: React.FC<Props> = ({ title, description, backLink, backLinkText,
                 )}
             >
                 <Title title={title} />
-                {description && <p className='text-gray-400 text-xl font-medium text-center max-md:text-lg'>{description}</p>}
+                {description && (
+                    <p className='text-gray-400 text-xl font-medium text-center max-md:text-lg'>{description}</p>
+                )}
                 {!!error && (
-                    <motion.div animate={{ height: showError ? 'auto' : '30px' }} transition={{ ease: 'easeInOut', duration: 0.2 }} className='flex flex-col gap-2'
+                    <motion.div
+                        animate={{ height: showError ? "auto" : "30px" }}
+                        transition={{ ease: "easeInOut", duration: 0.2 }}
+                        className='flex flex-col gap-2'
                     >
-                        <button className="bg-primary-black/5 whitespace-nowrap text-primary-orange py-2 px-6 w-[230px] rounded-full flex self-center items-center justify-center" onClick={() => setShowError((prevState) => !prevState)}>
+                        <button
+                            className='bg-primary-black/5 whitespace-nowrap text-primary-orange py-2 px-6 w-[230px] rounded-full flex self-center items-center justify-center'
+                            onClick={() => setShowError((prevState) => !prevState)}
+                        >
                             {showError ? "скрыть код ошибки" : "раскрыть код ошибки"}
                         </button>
                         <AnimatePresence>
                             {showError && (
-                                <motion.pre
-                                    className="cursor-pointer bg-primary-orange/10 p-5 rounded"
+                                <motion.code
+                                    className='cursor-pointer bg-primary-orange/10 p-5 rounded'
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
                                     exit={{ opacity: 0 }}
@@ -44,7 +61,7 @@ const NotFound: React.FC<Props> = ({ title, description, backLink, backLinkText,
                                     onClick={handleCopyClipboard}
                                 >
                                     {convertedError}
-                                </motion.pre>
+                                </motion.code>
                             )}
                         </AnimatePresence>
                     </motion.div>

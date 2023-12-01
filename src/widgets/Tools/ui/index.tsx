@@ -1,17 +1,17 @@
 import React from "react";
-import CategoriesList from "../../../widgets/CategoriesList/ui";
-import SortPopup from "../../../features/SortPopup/ui";
+import CategoriesList from "@/widgets/CategoriesList/ui";
+import SortPopup from "@/features/SortPopup/ui/ui";
+import getCategoryFromSearchParams from "@/pages/Home/lib/helpers/getCategoryFromSearchParams";
 import { Props } from "../interfaces";
-import useViewport from "../../../shared/hooks/useViewport";
-import SidebarCategories from "../../../features/SidebarCategories/ui";
 
-const Tools: React.FC<Props> = ({ categories, sortNames }) => {
-    const { width, breakepoints: { lg } } = useViewport();
-
+const Tools: React.FC<Props> = ({ searchParams, setSearchParams }) => {
     return (
         <div className='flex items-center justify-between'>
-            {width <= lg ? <SidebarCategories /> : <CategoriesList categories={categories} />}
-            {/* <SortPopup names={sortNames} /> */}
+            <CategoriesList
+                setSearchParams={setSearchParams}
+                activeCategory={getCategoryFromSearchParams("category", searchParams)}
+            />
+            <SortPopup activeSort={searchParams.get("sort") ?? "-rating"} setSearchParams={setSearchParams}/>
         </div>
     );
 };

@@ -1,5 +1,6 @@
-import { Categories } from "../../Tools/interfaces";
+import { SetURLSearchParams } from "react-router-dom";
 
 export interface Props {
-    categories: Array<Categories>;
+    setSearchParams: SetURLSearchParams;
+    activeCategory: number | null;
 }

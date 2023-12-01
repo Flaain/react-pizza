@@ -12,9 +12,7 @@ export const useSortPopup = () => {
         };
 
         const handleKeyup = ({ key }: KeyboardEvent) => {
-            if (key === "Escape") {
-                setOpened(false);
-            }
+            key === "Escape" && setOpened(false);
         };
 
         document.addEventListener("keyup", handleKeyup);

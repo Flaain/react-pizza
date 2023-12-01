@@ -21,7 +21,7 @@ export const useSortPopup = () => {
         document.addEventListener("click", handleOutsideClick);
 
         return () => {
-            document.addEventListener("keyup", handleKeyup);
+            document.removeEventListener("keyup", handleKeyup);
             document.removeEventListener("click", handleOutsideClick);
         };
     }, []);

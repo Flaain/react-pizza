@@ -1,6 +1,6 @@
 import React from "react";
 import getImageUrl from "../../../lib/helpers/getImageUrl";
-import { Props } from "../interfaces";
+import { Props } from "../model/interfaces";
 
 const ModalHeader: React.FC<Props> = ({ title, closeHandler }) => {
     return (

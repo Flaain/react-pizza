@@ -3,7 +3,6 @@ import Container from "@/shared/ui/Container";
 import ProductList from "@/widgets/ProductList/ui";
 import Tools from "@/widgets/Tools/ui";
 import Title from "@/shared/ui/Title/ui";
-import useInfiniteScroll from "../lib/useInfiniteScroll";
 import Spinner from "@/shared/ui/Spinner/ui";
 import getNotFoundTitle from "../lib/helpers/getNotFoundTitle";
 import { Page as NotFound } from "@/pages/NotFound";
@@ -22,16 +21,7 @@ const Home = () => {
 
     const title = activeCategory !== null ? initialCategories.get(Number(activeCategory))?.name : "Все";
 
-    const handleScroll = useInfiniteScroll();
     const dispatch = useAsyncThunkDispatch();
-
-    React.useEffect(() => {
-        document.addEventListener("scroll", handleScroll);
-
-        return () => {
-            document.removeEventListener("scroll", handleScroll);
-        };
-    }, [handleScroll, products]);
 
     React.useEffect(() => {
         const controller = new AbortController();
@@ -41,7 +31,7 @@ const Home = () => {
         return () => controller.abort();
     }, [searchParams])
     
-    if (!products.length && !loading) return <NotFound title={getNotFoundTitle(activeCategory, searchParams.get("search") ?? "")} backLink />;
+    if (!loading && !products.length) return <NotFound title={getNotFoundTitle(activeCategory, searchParams.get("search") ?? "")} backLink />;
 
     return (
         <section>

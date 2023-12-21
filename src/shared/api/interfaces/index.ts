@@ -11,7 +11,7 @@ export interface Meta {
     total_pages: number;
     per_page: number;
     current_page: number;
-    remaining_count: 4;
+    remaining_count: number;
 }
 
 export interface ResWithMeta {
@@ -51,8 +51,6 @@ export interface Data<T> {
 
 export interface Base {
     baseUrl: string;
-    secondUrl?: string;
-    thirdUrl?: string;
     headers?: { "Content-Type": string };
 }
 

@@ -1,37 +1,26 @@
 import React from "react";
-import { getProductPerPage } from "../../model/asyncActions";
-import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
+import { useAppSelector } from "@/shared/model/store";
 import { appSelector } from "@/shared/model/selectors";
+import { UseInfiniteScrollOptions } from "../../model/interfaces";
 
-const useInfiniteScroll = (initialPage = 1) => {
-    const { products, _meta, perPageLoading } = useAppSelector(appSelector);
+const useInfiniteScroll = <T extends HTMLElement>({ callback, root, rootMargin, threshold, deps }: UseInfiniteScrollOptions) => {
+    const { products, _meta } = useAppSelector(appSelector);
 
-    const [page, setPage] = React.useState(_meta?.current_page ?? initialPage);
+    const observer = React.useRef<IntersectionObserver | null>(null);
 
-    const dispatch = useAsyncThunkDispatch();
-
-    const handleScroll = React.useCallback(() => {
-        const scrollPosition = document.documentElement.scrollHeight - (document.documentElement.scrollTop + window.innerHeight);
-        const metaConditions = _meta && _meta.total_items > products.length && _meta.total_pages > page;
-
-        scrollPosition < 100 && metaConditions && setPage((prevState) => prevState + 1);
-    }, [page, products, _meta]);
-
-    React.useEffect(() => {
-        !perPageLoading && page > 1 && dispatch(getProductPerPage({ page, params: new URLSearchParams(document.location.search) }));
-    }, [page]);
-
-    React.useEffect(() => {
-        _meta && setPage(_meta.current_page);
-        return () => {
-            setPage(1);
+    const ref = React.useCallback((node: T) => {
+        if (deps.every(Boolean)) {
+            observer.current?.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && _meta!.total_pages > _meta!.current_page && _meta!.total_items > products.length) {
+                    callback(_meta!.current_page + 1, new URLSearchParams(document.location.search));
+                }
+            }, { root, rootMargin, threshold });
+            node && observer.current.observe(node);
         }
-    }, [_meta]); /* <-- i think this is a bad code but i don't know to to rewrite better. 
-    Main problem is when i scroll to the end and change category the page is not changes.
-    So for example: I scroll to the end of "Все" category and my state page quals 3. 
-    Now i change category to "Мясные" or something and my page is still 3.*/
+    }, [deps, callback]);
 
-    return handleScroll;
+    return ref;
 };
 
 export default useInfiniteScroll;

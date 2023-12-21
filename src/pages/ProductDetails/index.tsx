@@ -1,7 +1,7 @@
 import Spinner from "@/shared/ui/Spinner/ui";
 import React from "react";
 import { currentRoute } from "./model/currentRoute";
-import { RouteObject, defer } from "react-router-dom";
+import { RouteObject } from "react-router-dom";
 import { api } from "@/shared/api";
 import { Page as NotFound } from "../NotFound";
 
@@ -18,6 +18,8 @@ export const ViewWithSuspense = () => {
 export const ProductDetailsPage: RouteObject = {
     path: currentRoute,
     element: <ViewWithSuspense />,
-    loader: ({ params: { id } }) => defer({ product: api.getProductDetails(`product/${id}`)}),
-    errorElement: <NotFound title="Что-то пошло не так, продукт не найден" backLink backLinkText="Вернуться на главную" />
+    loader: ({ params: { id } }) => ({ product: api.getProductDetails(`product/${id}`) }),
+    errorElement: (
+        <NotFound title='Что-то пошло не так, продукт не найден' backLink backLinkText='Вернуться на главную' />
+    ),
 };

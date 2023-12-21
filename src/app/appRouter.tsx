@@ -8,12 +8,7 @@ export const appRouter = createBrowserRouter([
     {
         element: baseLayout,
         errorElement: (
-            <NotFound
-                title='Что-то пошло не так'
-                description='Пожалуйста, попробуйте обновить страницу'
-                reloadButton
-                reloadButtonText='Обновить страницу'
-            />
+            <NotFound title='Что-то пошло не так' description='Пожалуйста, попробуйте обновить страницу' reloadButton />
         ),
         children: pages,
     },

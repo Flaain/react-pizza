@@ -1,20 +1,45 @@
 import React from "react";
 import Container from "@/shared/ui/Container";
-import EmptyCart from "./CartEmpty";
+import EmptyCart from "./EmptyCart";
+import cn from "@/shared/lib/classNames";
+import MinimizeCartItemsButton from "@/features/MinimizeCartItemsButton/ui/ui";
+import MinimazeCartInfo from "@/features/MinimizeCartInfo/ui/ui";
+import CartItemsList from "./CartItemsList";
+import Checkout from "@/features/Checkout/ui/ui";
+import InfoContainer from "@/shared/ui/InfoContainer";
 
-import { Outlet } from "react-router-dom";
-import { cartSelector } from "@/shared/model/selectors";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
+import { clearCart } from "../model/slice";
+import { useDispatch } from "react-redux";
 
 const Cart = () => {
-    const { cart, ordered } = useAppSelector(cartSelector);
+    const { cart, ordered, orderLoading, priceView: { totalItems } } = useAppSelector(cartSelector);
+    const { jwt, deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
     const [minimizeCartItems, setMinimizeCartItems] = React.useState(false);
     const [paymentInfoModalOpened, setPaymentInfoModalOpened] = React.useState(false);
 
-    const isMinimizable = React.useMemo(() => [...cart.values()].reduce((acc, { items }) => (acc += items.length), 0) > 1, [cart]);
+    const cartArr = React.useMemo(() => [...cart.values()], [cart]);
+    const isMinimizable = React.useMemo(() => cartArr.reduce((acc, { items }) => (acc += items.length), 0) > 1, [cartArr]);
+    const isCartEmpty = !cart.size && !ordered;
 
-    if (!cart.size && !ordered) return <EmptyCart />;
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+
+    const handleOrder = () => {
+        console.log('test')
+    }
+
+    if (isCartEmpty) {
+        return (
+            <>
+                <Navigate to='/cart' replace />
+                <EmptyCart />
+            </>
+        );
+    }
 
     return (
         <section>
@@ -22,7 +47,7 @@ const Cart = () => {
                 <Outlet />
                 {/* <AnimatePresence>
                     {paymentInfoModalOpened && (<PaymentInfoModal key='paymentModal' closeHandler={() => setPaymentInfoModalOpened(false)} />)}
-                </AnimatePresence>
+                </AnimatePresence> */}
                 <div className='col-span-5'>
                     <div
                         className={cn(
@@ -37,22 +62,29 @@ const Cart = () => {
                             <div className='flex items-center gap-5'>
                                 <button
                                     disabled={orderLoading}
-                                    onClick={() => dispatch(clearCart)}
+                                    onClick={() => dispatch(clearCart())}
                                     className='text-primary-black border-b border-dashed hover:text-primary-orange hover:border-primary-orange'
                                 >
                                     Очистить корзину
                                 </button>
-                                {isMinimizable && <MinimizeCartItemsButton />}
+                                {isMinimizable && (
+                                    <MinimizeCartItemsButton
+                                        title={minimizeCartItems ? "показать товары" : "скрыть товары"}
+                                        disabled={orderLoading}
+                                        minimizeCartItems={minimizeCartItems}
+                                        onClick={() => setMinimizeCartItems((prevState) => !prevState)}
+                                    />
+                                )}
                             </div>
                         </div>
-                        {minimizeCartItems ? <MinimizeCartInfo /> : <CartItemsList cart={cart} />}
+                        {minimizeCartItems ? <MinimazeCartInfo /> : <CartItemsList cart={cartArr} />}
                     </div>
-                    <InfoCartContainer />
+                    <InfoContainer disabled={orderLoading}/>
                 </div>
-                <OrderInfo
-                    handleOrder={() => deliveryInfo && dispatch(handleOrder({ cart, deliveryInfo, pizzas, total }))}
+                <Checkout
+                    handleOrder={handleOrder}
                     setPaymentInfoModalOpened={setPaymentInfoModalOpened}
-                /> */}
+                />
             </Container>
         </section>
     );

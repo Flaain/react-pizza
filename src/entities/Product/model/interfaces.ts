@@ -27,3 +27,20 @@ export interface UpdateAction {
     type: "UPDATE";
     payload: ProductSelectorState;
 }
+
+export interface CartItemProps {
+    productId: number;
+    itemId: number;
+    count: number;
+    type: number;
+    size: number;
+    price: number;
+    img: string;
+    title: string;
+    loading: boolean;
+}
+
+export interface ImageSkeletonProps {
+    width: number;
+    height: number;
+}

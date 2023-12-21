@@ -7,7 +7,7 @@ import { Props } from "../interfaces";
 
 const RelatedItems: React.FC<Props> = ({ items, title }) => {
     const scrollRef = React.useRef<HTMLUListElement | null>(null);
-
+    const additionalPosition = 30;
     const {
         position,
         itemWidth,
@@ -27,7 +27,7 @@ const RelatedItems: React.FC<Props> = ({ items, title }) => {
                     <button
                         disabled={isPrevDisabled}
                         onClick={handlePrev}
-                        onMouseEnter={() => handleMouseEnter("prev", 30, !isPrevDisabled)}
+                        onMouseEnter={() => handleMouseEnter("prev", additionalPosition, !isPrevDisabled)}
                         onMouseLeave={handleMouseLeave}
                         className={cn(
                             "min-w-[30px] min-h-[30px] flex items-center justify-center rounded-full transition-opacity duration-200 ease-in-out",
@@ -45,7 +45,7 @@ const RelatedItems: React.FC<Props> = ({ items, title }) => {
                     </button>
                     <button
                         disabled={isNextDisabled}
-                        onMouseEnter={() => handleMouseEnter("next", 30, !isNextDisabled)}
+                        onMouseEnter={() => handleMouseEnter("next", additionalPosition, !isNextDisabled)}
                         onMouseLeave={handleMouseLeave}
                         onClick={handleNext}
                         className={cn(

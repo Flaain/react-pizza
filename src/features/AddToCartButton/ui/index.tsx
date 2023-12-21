@@ -9,7 +9,7 @@ const AddToCartButton: React.FC<Props> = ({ title, initialCount, handleClick }) 
         handleClick();
     };
 
-    React.useEffect(() => setCount(initialCount ?? 0), [initialCount]);
+    // React.useEffect(() => setCount(initialCount ?? 0), [initialCount]);
 
     return (
         <button

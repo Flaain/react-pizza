@@ -12,7 +12,7 @@ const NotFound: React.FC<Props> = ({
     backLink,
     backLinkText = "Вернуться назад",
     reloadButton,
-    reloadButtonText,
+    reloadButtonText = 'Обновить страницу',
     screen,
     error,
 }) => {
@@ -21,7 +21,7 @@ const NotFound: React.FC<Props> = ({
     const convertedError = JSON.stringify(error, null, 2);
 
     const handleCopyClipboard = () => {
-        navigator.clipboard.writeText(JSON.stringify(convertedError));
+        navigator.clipboard.writeText(convertedError);
         alert("Код ошибки был скопирован в буфер обмена");
     };
 

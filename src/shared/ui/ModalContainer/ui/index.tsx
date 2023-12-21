@@ -1,27 +1,24 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Props } from "../interfaces";
+import { Props } from "../model/interfaces";
 
-const ModalContainer: React.FC<Props> = ({ children, paramsUpdater, stateUpdater }) => {
+const ModalContainer: React.FC<Props> = ({ children, closeHandler }) => {
     React.useEffect(() => {
         const handleKeyUp = ({ key }: KeyboardEvent) => {
-            if (key === "Escape") {
-                stateUpdater ? stateUpdater(false) : paramsUpdater!();
-            }
+            key === "Escape" && closeHandler();
         };
 
-        document.body.classList.add('overflow-hidden')
+        document.body.classList.add("overflow-hidden");
         document.addEventListener("keyup", handleKeyUp);
+        
         return () => {
-            document.body.classList.remove('overflow-hidden')
+            document.body.classList.remove("overflow-hidden");
             document.removeEventListener("keyup", handleKeyUp);
         };
     }, []);
 
     const handleOverlayClick = ({ target, currentTarget }: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-        if (target === currentTarget) {
-            stateUpdater ? stateUpdater(false) : paramsUpdater!();
-        }
+        target === currentTarget && closeHandler();
     };
 
     return (

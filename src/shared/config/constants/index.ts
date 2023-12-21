@@ -3,6 +3,7 @@ import { Categories } from "@/widgets/Tools/interfaces";
 
 export const initialTypes = ["тонкое", "традиционное"];
 export const initialSizes = [25, 30, 40];
+export const maxAddressLength = 200;
 
 export const initialCategories = new Map<number | null, Categories>([
     [null, { name: "Все", categorie: null }],
@@ -31,7 +32,8 @@ export const localStorageKeys = {
     CATEGORIE: "categorie-index",
     CART: "cart",
     SORT_INDEX: "sort-index",
-    JWT: "token"
+    JWT: "token",
+    TERMS: "agreed-with-terms"
 };
 
 export const routerList = {

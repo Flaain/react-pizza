@@ -1,8 +1,10 @@
 import { Navigate } from "react-router-dom";
 import { AuthGuardProps } from "./interfaces";
+import { useAppSelector } from "./store";
+import { userSelector } from "./selectors";
 
 export const AuthGuard: React.FC<AuthGuardProps> = ({ children }) => {
-    const isAuthorized = null;
+    const { jwt } = useAppSelector(userSelector)
 
-    return isAuthorized ? <Navigate to='/' replace /> : children;
+    return jwt ? <Navigate to='/' replace /> : children;
 };

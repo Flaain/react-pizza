@@ -1,3 +1,4 @@
+import { getCuttedString } from "../lib/helpers/getCuttedString";
 import { Promocode, Base, Order, Data, StaticAddresses, ResWithMeta, Product } from "./interfaces";
 
 export class API {
@@ -11,10 +12,12 @@ export class API {
 
     private async _checkResponse<T>(response: Response, endpoint: string): Promise<Data<T>> {
         const data = await response.json();
-        return response.ok ? { status: response.status, statusText: response.statusText, message: "Успех", data } : Promise.reject({ ...data, endpoint });
+        return response.ok
+            ? { status: response.status, statusText: response.statusText, message: "Успех", data }
+            : Promise.reject({ ...data, endpoint: getCuttedString(endpoint, 10) });
     }
 
-    async getStaticAddresses(endpoint = "/export-points"): Promise<Data<Array<StaticAddresses>>> {
+    async getStaticAddresses(endpoint = "/addresses"): Promise<Data<Array<StaticAddresses>>> {
         const response = await fetch(this._baseUrl + endpoint);
         return this._checkResponse(response, endpoint);
     }

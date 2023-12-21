@@ -1,6 +1,7 @@
-import { DeliveryInfo } from "@/pages/Cart/model/interfaces";
 import { Meta, Product } from "@/shared/api/interfaces";
 import { CartInterface } from "@/pages/Cart";
+import { DeliveryInfo, PaymentInfo } from "@/pages/Cart/model/interfaces";
+import { Address } from "@/shared/model/interfaces";
 
 export interface ViewportState {
     width: number;
@@ -34,4 +35,12 @@ export interface OrderHandler {
     pizzas: Array<Product>;
     deliveryInfo: DeliveryInfo;
     total: number;
+}
+
+export interface UserSliceState {
+    jwt: string | null;
+    deliveryInfo: DeliveryInfo | null;
+    paymentInfo: PaymentInfo | null;
+    lang: string,
+    addresses: Map<string, Address>
 }

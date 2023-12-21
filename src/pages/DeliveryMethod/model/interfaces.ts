@@ -1,0 +1,31 @@
+import { Address } from "@/shared/model/interfaces";
+import { TabContentProps } from "@/widgets/Tabs/model/interfaces";
+import { NavigateFunction } from "react-router-dom";
+
+export interface Props {
+    title: string;
+}
+
+export interface DeliveryMethod {
+    name: string;
+    addresses: Array<Address>;
+    method: string;
+    component: React.ComponentType<TabContentProps>;
+}
+
+export interface initialState {
+    loading: boolean;
+    deliveryMethods: Array<DeliveryMethod>;
+    error: unknown;
+    tabIndex: number;
+}
+
+export interface DeliveryMethodModalContentProps {
+    title: string;
+    navigate: NavigateFunction;
+}
+
+export interface LazyErrorElementProps {
+    error: unknown;
+    navigate: NavigateFunction;
+}

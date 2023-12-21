@@ -1,4 +1,1 @@
-export default (name: string) => {
-    const path = `../../../../shared/assets/${name}`;
-    return new URL(path, import.meta.url).href;
-}
+export default (name: string) => new URL(`/src/shared/assets/${name}`, import.meta.url).href;

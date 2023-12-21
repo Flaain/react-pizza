@@ -1,5 +1,8 @@
 import { Order } from "@/shared/api/interfaces";
 
+type PaymentMethod = 'card' | 'cash';
+type DeliveryMethod = 'pickup' | 'courier';
+
 export interface CartInterface {
     id: number;
     category: number;
@@ -20,7 +23,7 @@ export interface DeliveryInfo {
     address: string;
     rating?: number;
     deliveryPrice?: number;
-    type: string;
+    method: DeliveryMethod;
 }
 
 export interface CreditCard {
@@ -30,16 +33,13 @@ export interface CreditCard {
 }
 
 export interface PaymentInfo {
-    method: string;
-    title: string;
+    method: PaymentMethod;
     card?: CreditCard;
 }
 
 export interface CartSlice {
     cart: Map<number, CartInterface>;
     orderLoading: boolean;
-    deliveryInfo: DeliveryInfo | null;
-    paymentInfo: PaymentInfo | null;
     order: Order | null;
     ordered: boolean;
     priceView: {
@@ -48,4 +48,8 @@ export interface CartSlice {
         totalItems: number;
     };
     error: unknown;
+}
+
+export interface CartListProps {
+    cart: Array<CartInterface>;
 }

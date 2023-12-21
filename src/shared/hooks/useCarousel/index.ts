@@ -24,7 +24,14 @@ const useCarousel = ({ items, scrollRef, options }: Props) => {
         setPosition((prevState) => prevState - (itemsLeft >= slidesToScroll ? slidesToScroll * (itemWidth + gap) : itemsLeft * (itemWidth + gap)));
     };
 
-    const handleMouseEnter = (direction: string, additional: number, condition: boolean) => {
+    /**
+     * 
+     * @param {string} direction direction in which we need to add an additional position.
+     * @param {number} additional additional number to main position.
+     * @param {boolean} condition only if condition true additional will apply to main position.
+     */
+
+    const handleMouseEnter = (direction: "prev" | "next", additional: number, condition: boolean) => {
         const positionAdditional = direction === "next" ? position - additional : position + additional;
         condition && scrollRef.current && (scrollRef.current.style.transform = `translateX(${positionAdditional}px)`);
     };

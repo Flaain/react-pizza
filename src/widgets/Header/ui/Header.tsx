@@ -1,7 +1,7 @@
 import Logo from "./Logo";
-import Container from "../../../shared/ui/Container";
+import Container from "@/shared/ui/Container";
 import CartPreview from "../../CartPreview/ui";
-import Search from "../../../features/Search/ui";
+import Search from "@/features/Search/ui";
 
 const Header = () => {
     return (

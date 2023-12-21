@@ -5,7 +5,7 @@ import { Props } from "../interfaces";
 const CollapseInfo: React.FC<Props> = ({ description, MAX_LENGTH = 100, title }) => {
     const [expanded, setExpanded] = React.useState(description.length <= MAX_LENGTH ?? false);
 
-    React.useEffect(() => setExpanded(description.length <= MAX_LENGTH ?? false), [description])
+    // React.useEffect(() => setExpanded(description.length <= MAX_LENGTH ?? false), [description])
 
     return (
         <div className='flex flex-col gap-5 items-start'>

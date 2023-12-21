@@ -22,6 +22,7 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", async (c
         if (!tempParams.size) return [];
         
         !tempParams.has('sortBy') && tempParams.set('sortBy', '-rating');
+        tempParams.has('title') && tempParams.set('title', `${tempParams.get('title')}*`);
 
         const { data } = await api.getProducts(`/products?_select=-description,-ingredients&page=1&limit=6&${tempParams.toString()}`, controller);
         return data;
@@ -30,4 +31,4 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", async (c
         console[isAbortError ? 'log' : 'error'](error); 
         return rejectWithValue(isAbortError ? null : error);
     }
-});
+}); // the whole function is a bad on my opinion. But right now i don't know how to rewrite it in better way

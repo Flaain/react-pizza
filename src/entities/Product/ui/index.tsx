@@ -1,9 +1,9 @@
 import React from "react";
-import OptionsSelector from "@/widgets/OptionsSelector/ui/ui";
 import productSelectorReducer from "../model/reducer";
 import AddToCartButton from "@/features/AddToCartButton/ui";
 import ImageSkeleton from "./Skeletons/ImageSkeleton";
 import Image from "@/shared/ui/Image/ui";
+import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/pages/Cart";
@@ -20,17 +20,14 @@ const Card: React.FC<Props> = ({ id, title, price, category, types, sizes, image
 
     const activeCount = React.useMemo(() => cart.get(id)?.items.reduce((acc, { count }) => acc + count, 0), [cart, id]);
     const activeSizeIndex = React.useMemo(() => initialSizes.findIndex((size) => size === sizes[0].size), []);
-    const initialPrice = React.useMemo(() => price + sizes[0].additional, []);
+    
+    const initialPrice = price + sizes[0].additional;
+    const initialState = { type: types[0], size: activeSizeIndex, price: initialPrice, initialPrice };
 
-    const [productState, productDispatch] = React.useReducer(productSelectorReducer, {
-        type: types[0],
-        size: activeSizeIndex,
-        price: initialPrice,
-        initialPrice
-    });
-    const { priceRef } = useAnimatedPrice(initialPrice, productState.price);
-
+    const [productState, productDispatch] = React.useReducer(productSelectorReducer, initialState);
     const [count, setCount] = React.useState(activeCount ?? 0);
+
+    const { priceRef } = useAnimatedPrice(initialPrice, productState.price);
 
     const handleAddToCart = () => {
         setCount((prevState) => prevState + 1);
@@ -42,7 +39,7 @@ const Card: React.FC<Props> = ({ id, title, price, category, types, sizes, image
             <picture>
                 <Link to={`pizza/${title}`}>
                     <Image
-                        skeleton={<ImageSkeleton />}
+                        skeleton={<ImageSkeleton width={250} height={250}/>}
                         loading='lazy'
                         src={imageUrl}
                         alt={title}

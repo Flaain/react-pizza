@@ -1,7 +1,7 @@
 import React from "react";
-import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
+import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { Link } from "react-router-dom";
-import { LogoProps } from "../interfaces";
+import { LogoProps } from "../model/interfaces";
 
 const Logo: React.FC<LogoProps> = ({ title, description }) => {
     return (

@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import Container from "../Container";
-import { Props } from "./interfaces";
+import { Props } from "./model/interfaces";
 
 const Layout: React.FC<Props> = ({ headerSlot, announcementSlot, footerSlot }) => {
     return (

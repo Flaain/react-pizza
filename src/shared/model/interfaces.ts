@@ -18,3 +18,12 @@ export interface GuestGuardProps {
 export interface AuthGuardProps {
     children: React.ReactElement;
 }
+export interface EmptyCartGuardProps {
+    children: React.ReactElement;
+}
+
+export interface Address {
+    address: string;
+    rating?: number;
+    deliveryPrice?: number;
+}

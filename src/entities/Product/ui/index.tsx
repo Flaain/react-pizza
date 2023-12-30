@@ -1,7 +1,7 @@
 import React from "react";
 import productSelectorReducer from "../model/reducer";
 import AddToCartButton from "@/features/AddToCartButton/ui";
-import ImageSkeleton from "./Skeletons/ImageSkeleton";
+import ImageSkeleton from "../../../shared/ui/ImageSkeleton";
 import Image from "@/shared/ui/Image/ui";
 import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";
 import { Link } from "react-router-dom";
@@ -37,7 +37,7 @@ const Card: React.FC<Props> = ({ id, title, price, category, types, sizes, image
     return (
         <article className='flex flex-col justify-center items-center max-w-[400px] max-md:min-w-full max-md:max-w-none'>
             <picture>
-                <Link to={`pizza/${title}`}>
+                <Link to={`pizza/${id}`}>
                     <Image
                         skeleton={<ImageSkeleton width={250} height={250}/>}
                         loading='lazy'

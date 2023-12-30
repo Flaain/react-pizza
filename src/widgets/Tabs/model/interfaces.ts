@@ -1,10 +1,12 @@
 import { DeliveryInfo } from "@/pages/Cart";
 import { DeliveryMethod } from "@/pages/DeliveryMethod/model/interfaces";
+import { SetURLSearchParams } from "react-router-dom";
 
 export interface TabSelectorProps {
     items: Array<DeliveryMethod>;
     tabIndex: number;
     setTabIndex: React.Dispatch<React.SetStateAction<number>>;
+    setSearchParams: SetURLSearchParams;
 }
 
 export interface TabContentProps {

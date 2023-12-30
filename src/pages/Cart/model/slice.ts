@@ -3,8 +3,8 @@ import compareItems from "@/pages/Cart/lib/helpers/compareItems";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
 import { Item } from "@/app/redux";
-import { CartItem } from "./interfaces";
-import { localStorageKeys } from "@/shared/config/constants";
+import { CartItem, Payload } from "./interfaces";
+import { changeItemCountActions, localStorageKeys } from "@/shared/config/constants";
 import { handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
@@ -14,10 +14,10 @@ export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addToCart(state, { payload: { id, category, imageUrl, title, ...pizzaState } }: PayloadAction<Item & ProductSelectorState>) {
+        addToCart(state, { payload: { id, category, imageUrl, title, ...productState } }: PayloadAction<Item & ProductSelectorState>) {
             const cartItem = state.cart.get(id);
             const existingIds = Math.max(...(cartItem?.items.map(({ id }) => id) ?? [0]));
-            const newItem: CartItem = { id: existingIds + 1, count: 1, ...pizzaState };
+            const newItem: CartItem = { id: existingIds + 1, count: 1, ...productState };
 
             if (cartItem) {
                 const itemIndex = cartItem.items.findIndex((item) => compareItems(item, newItem));
@@ -40,18 +40,18 @@ export const cartSlice = createSlice({
 
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
-        increaseCount: (state, action: PayloadAction<{ productId: number; itemId: number }>) => {
-            const product = state.cart.get(action.payload.productId);
+        changeItemCount: (state, { payload }: PayloadAction<Payload>) => {
+            const product = state.cart.get(payload.productId);
 
-            if (!product) throw new Error(`Cannot find product with ${action.payload.productId} id`);
+            if (!product) throw new Error(`Cannot find product with ${payload.productId} id`);
 
-            state.cart.set(action.payload.productId, {
+            state.cart.set(payload.productId, {
                 ...product,
                 items: product.items.map((item) => {
-                    if (item.id === action.payload.itemId) {
+                    if (item.id === payload.itemId) {
                         return {
                             ...item,
-                            count: item.count + 1,
+                            count: payload.type === 'direct' ? payload.count : changeItemCountActions[payload.type](item.count)
                         };
                     }
                     return item;
@@ -60,40 +60,17 @@ export const cartSlice = createSlice({
 
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
-        decreaseCount: (state, action: PayloadAction<{ productId: number; itemId: number }>) => {
-            const product = state.cart.get(action.payload.productId);
 
-            if (!product) throw new Error(`Cannot find product with ${action.payload.productId} id`);
+        removeProductFromCart: (state, { payload }: PayloadAction<{ productId: number; itemId: number }>) => {
+            const product = state.cart.get(payload.productId);
 
-            state.cart.set(action.payload.productId, {
-                ...product,
-                items: product.items.map((item) => {
-                    if (item.id === action.payload.itemId) {
-                        return {
-                            ...item,
-                            count: item.count - 1,
-                        };
-                    }
-                    return item;
-                }),
-            });
+            if (!product) throw new Error(`Cannot find product in cart with ${payload.productId} id`);
 
-            cartSlice.caseReducers.updateViewAndStorage(state);
+            state.cart.set(payload.productId, { ...product, items: product.items.filter(({ id }) => id !== payload.itemId) });
+            cartSlice.caseReducers.checkItemsArr(state, { payload: payload.productId, type: "checkItemsArr" });
         },
-        removeProductFromCart: (state, action: PayloadAction<{ productId: number; itemId: number }>) => {
-            const product = state.cart.get(action.payload.productId);
-
-            if (!product) throw new Error(`Cannot find product in cart with ${action.payload.productId} id`);
-
-            state.cart.set(action.payload.productId, {
-                ...product,
-                items: product.items.filter((item) => item.id !== action.payload.itemId),
-            });
-            
-            cartSlice.caseReducers.checkItemsArr(state, { payload: action.payload.productId, type: "checkItemsArr" });
-        },
-        checkItemsArr: (state, action: PayloadAction<number>) => {
-            !state.cart.get(action.payload)?.items.length && state.cart.delete(action.payload);
+        checkItemsArr: (state, { payload }: PayloadAction<number>) => {
+            !state.cart.get(payload)?.items.length && state.cart.delete(payload);
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
         updateViewAndStorage: (state) => {
@@ -102,7 +79,7 @@ export const cartSlice = createSlice({
             saveToLocalStorage({ key: localStorageKeys.CART, data: cartArr });
         },
         clearCart(state) {
-            state.cart = new Map();
+            state.cart.clear();
             state.priceView = getPriceView([...state.cart.values()]);
             localStorage.removeItem(localStorageKeys.CART);
         },
@@ -131,5 +108,5 @@ export const cartSlice = createSlice({
     },
 });
 
-export const { addToCart, increaseCount, decreaseCount, removeProductFromCart, clearCart, clearOrder } = cartSlice.actions;
+export const { addToCart, changeItemCount, removeProductFromCart, clearCart, clearOrder } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -8,6 +8,7 @@ import { CheckoutProps } from "../model";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/shared/model/store";
 import { useNavigate } from "react-router-dom";
+import { routerList } from "@/shared/config/constants";
 
 const Checkout: React.FC<CheckoutProps> = ({ handleOrder, setPaymentInfoModalOpened }) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
@@ -16,7 +17,7 @@ const Checkout: React.FC<CheckoutProps> = ({ handleOrder, setPaymentInfoModalOpe
     const navigate = useNavigate();
 
     const handleFormFill = () => {
-        deliveryInfo ? console.log("open payment modal") : navigate("delivery-method");
+        deliveryInfo ? console.log("open payment modal") : navigate(routerList.CART.children.DELIVERY_METHOD);
     };
 
 

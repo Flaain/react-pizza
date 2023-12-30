@@ -1,8 +1,5 @@
-import { PayloadAction } from "@reduxjs/toolkit";
 import { Size } from "@/shared/api/interfaces";
-import { ProductSelectorState } from "@/entities/Product/model/interfaces";
-
-export type SegmentType = "SET_TYPE" | "SET_SIZE";
+import { Action, ProductSelectorState, ProductSelectorTypes } from "@/entities/Product/model/interfaces";
 
 export interface Segment {
     availableValueIndex: (initial: number | string, available: unknown, index: number) => boolean,
@@ -22,17 +19,17 @@ export interface OptionsSelectorProps {
     types: Array<number>;
     sizes: Array<Size>;
     price: number;
-    handleChange: ({ type, payload }: PayloadAction<ProductSelectorState>) => void;
+    handleChange: ({ type, payload }: Action, availableValueIndex: number) => void;
 }
 
 export interface OptionsListProps {
-    segmentType: SegmentType;
+    segmentType: ProductSelectorTypes;
     stateProperty: string;
     initial: Array<number | string>;
     state: ProductSelectorState;
     data: Array<number | Size>;
     classNames?: string;
-    dispatch: ({ type, payload }: PayloadAction<ProductSelectorState>) => void;
+    dispatch: ({ type, payload }: Action, availableValueIndex: number) => void;
 }
 
 export interface OptionsItemProps {

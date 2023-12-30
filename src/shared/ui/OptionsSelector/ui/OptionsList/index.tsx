@@ -10,10 +10,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ classNames = 'grid grid-cols-
     const { tabLeft, tabWidth, tabRef, setActiveTabIndex } = useTabSlider<HTMLLabelElement>(state[stateProperty as keyof ProductSelectorState]);
 
     const handleChange = (index: number, availableValueIndex: number) => {
-        dispatch({
-            type: segmentType,
-            payload: getPayloadBySegment(segmentType, state, index, availableValueIndex, data)!,
-        });
+        dispatch({ type: segmentType, payload: getPayloadBySegment(segmentType, state, index, availableValueIndex, data) }, availableValueIndex);
         setActiveTabIndex(index);
     };
 
@@ -23,7 +20,7 @@ const OptionsList: React.FC<OptionsListProps> = ({ classNames = 'grid grid-cols-
             <ul className={classNames}>
                 {initial.map((item, index) => {
                     const availableValueIndex = data.findIndex((value) => segmentSelectors[segmentType].availableValueIndex(item, value, index));
-                    const title = segmentSelectors[segmentType].title ? segmentSelectors[segmentType].title(item) : item;
+                    const title = segmentSelectors[segmentType]?.title ? segmentSelectors[segmentType].title(item) : item;
                     
                     return (
                         <OptionsItem

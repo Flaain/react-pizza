@@ -4,10 +4,14 @@ import useTabSlider from "@/shared/hooks/useTabSlider";
 import SliderTab from "@/shared/ui/SliderTab/ui";
 import { TabSelectorProps } from "../../model/interfaces";
 
-const TabSelectors: React.FC<TabSelectorProps> = ({ items, tabIndex, setTabIndex }) => {
+const TabSelectors: React.FC<TabSelectorProps> = ({ items, tabIndex, setTabIndex, setSearchParams }) => {
     const { tabRef, tabLeft, tabWidth, setActiveTabIndex } = useTabSlider<HTMLButtonElement>(tabIndex);
 
     const handleSelect = (index: number) => {
+        setSearchParams((prevState) => {
+            prevState.set('method', String(index));
+            return prevState;
+        }, { replace: true })
         setTabIndex(index);
         setActiveTabIndex(index);
     };

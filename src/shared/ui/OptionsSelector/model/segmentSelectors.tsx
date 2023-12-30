@@ -1,10 +1,11 @@
 import { Size } from "@/shared/api/interfaces";
-import { SegmentType, Segment } from "./interfaces";
+import { Segment } from "./interfaces";
+import { ProductSelectorTypes } from "@/entities/Product/model/interfaces";
 
 export const sizeSelector = (initialValue: number, { size: availableSize }: Size) => availableSize === initialValue;
 export const typeSelector = (_: string, availableType: number, index: number) => availableType === index;
 
-export const segmentSelectors: Record<SegmentType, Segment> = {
+export const segmentSelectors: Record<ProductSelectorTypes, Segment> = {
     SET_TYPE: { availableValueIndex: typeSelector },
     SET_SIZE: {
         availableValueIndex: sizeSelector,

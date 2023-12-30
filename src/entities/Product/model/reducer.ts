@@ -1,14 +1,12 @@
-import { PayloadAction } from "@reduxjs/toolkit";
-import { actionTypes } from "@/shared/config/constants";
-import { ProductSelectorState } from "./interfaces";
+import { Action, ProductSelectorState, ProductSelectorTypes } from "./interfaces";
 
-const productSelectorReducer = (state: ProductSelectorState, { type, payload }: PayloadAction<ProductSelectorState>) => {
+const productSelectorReducer = (state: ProductSelectorState, { type, payload }: Action) => {
     switch (type) {
-        case actionTypes.SET_TYPE:
+        case ProductSelectorTypes.SET_TYPE:
             return { ...state, type: payload.type };
-        case actionTypes.SET_SIZE:
+        case ProductSelectorTypes.SET_SIZE:
             return { ...state, size: payload.size, price: payload.price };
-        case actionTypes.UPDATE:
+        case ProductSelectorTypes.UPDATE:
             return { ...state, ...payload };
         default:
             return state;

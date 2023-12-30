@@ -1,31 +1,20 @@
 import { Product } from "@/shared/api/interfaces";
 
-export interface Props extends Omit<Product, 'description' | 'ingredients'> {
+export interface Props extends Omit<Product, "description" | "ingredients"> {
     oldPrice?: number;
 }
 
-export type ProductSelectorActions = TypeChangeAction | SizeChangeAction | UpdateAction;
+export enum ProductSelectorTypes {
+    SET_TYPE = "SET_TYPE",
+    SET_SIZE = "SET_SIZE",
+    UPDATE = "UPDATE",
+}
 
 export interface ProductSelectorState {
     type: number;
     price: number;
     size: number;
     initialPrice: number;
-}
-
-export interface SizeChangeAction {
-    type: "SET_SIZE";
-    payload: { size: number; price: number };
-}
-
-export interface TypeChangeAction {
-    type: "SET_TYPE";
-    payload: { type: number };
-}
-
-export interface UpdateAction {
-    type: "UPDATE";
-    payload: ProductSelectorState;
 }
 
 export interface CartItemProps {
@@ -40,7 +29,7 @@ export interface CartItemProps {
     loading: boolean;
 }
 
-export interface ImageSkeletonProps {
-    width: number;
-    height: number;
-}
+export type Action =
+    | { type: ProductSelectorTypes.SET_TYPE; payload: { type: number } }
+    | { type: ProductSelectorTypes.SET_SIZE; payload: { size: number; price: number } }
+    | { type: ProductSelectorTypes.UPDATE; payload: ProductSelectorState };

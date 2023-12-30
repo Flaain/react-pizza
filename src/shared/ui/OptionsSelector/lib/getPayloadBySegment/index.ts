@@ -20,5 +20,7 @@ export const getPayloadBySegment = (
                 size: index,
                 price: state.initialPrice + (data[availableValueIndex] as Size).additional,
             };
+        default:
+            return state;
     }
 };

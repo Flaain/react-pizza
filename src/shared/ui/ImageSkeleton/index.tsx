@@ -1,4 +1,4 @@
-import { ImageSkeletonProps } from "../../model/interfaces";
+import { ImageSkeletonProps } from "@/shared/model/interfaces";
 
 const ImageSkeleton: React.FC<ImageSkeletonProps> = ({ width, height }) => {
     return (

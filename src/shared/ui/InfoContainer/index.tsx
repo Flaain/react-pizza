@@ -6,6 +6,7 @@ import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useNavigate } from "react-router-dom";
+import { routerList } from "@/shared/config/constants";
 
 const InfoContainer: React.FC<{ disabled: boolean }> = ({ disabled }) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
@@ -21,7 +22,7 @@ const InfoContainer: React.FC<{ disabled: boolean }> = ({ disabled }) => {
                 callToActionText='заполните форму доставки'
                 disabled={disabled}
                 title='Способ доставки'
-                updater={() => navigate("delivery-method")}
+                updater={() => navigate(routerList.CART.children.DELIVERY_METHOD)}
             />
             <InfoBlock callToActionItem={<PaymentInfoList {...paymentInfo!} total={getIntlPrice(total + (deliveryInfo?.deliveryPrice ?? 0))}/>}
                 callToActionReason={!!paymentInfo}

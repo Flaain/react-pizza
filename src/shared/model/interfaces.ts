@@ -27,3 +27,8 @@ export interface Address {
     rating?: number;
     deliveryPrice?: number;
 }
+
+export interface ImageSkeletonProps {
+    width: number;
+    height: number;
+}

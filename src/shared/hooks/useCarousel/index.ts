@@ -5,10 +5,10 @@ const useCarousel = ({ items, scrollRef, options }: Props) => {
     const [position, setPosition] = React.useState(0);
     const [itemWidth, setItemWidth] = React.useState(0);
 
-    const { gap, slidesToScroll, slidesToShow } = React.useMemo(() => options ?? { slidesToShow: 1, gap: 30, slidesToScroll: 5 }, [options]);
+    const { gap, slidesToScroll, slidesToShow } = React.useMemo(() => options ?? { slidesToShow: 5, gap: 30, slidesToScroll: 1 }, [options]);
 
-    const isPrevDisabled = position <= 0;
-    const isNextDisabled = Math.abs(position) >= (items.length - slidesToShow) * (itemWidth + gap);
+    const isPrevDisabled = position === 0;
+    const isNextDisabled = Math.abs(position) >= (items.length - slidesToShow) * itemWidth;
 
     React.useEffect(() => {
         scrollRef.current && setItemWidth(scrollRef.current.getBoundingClientRect().width / slidesToShow - gap);
@@ -20,7 +20,7 @@ const useCarousel = ({ items, scrollRef, options }: Props) => {
     };
 
     const handleNext = () => {
-        const itemsLeft = Math.floor(items.length - (Math.abs(position) + slidesToShow * (itemWidth + gap)) / itemWidth + gap);
+        const itemsLeft = Math.floor(items.length - (Math.abs(position) + slidesToShow * (itemWidth + gap)) / (itemWidth + gap));
         setPosition((prevState) => prevState - (itemsLeft >= slidesToScroll ? slidesToScroll * (itemWidth + gap) : itemsLeft * (itemWidth + gap)));
     };
 
@@ -32,7 +32,7 @@ const useCarousel = ({ items, scrollRef, options }: Props) => {
      */
 
     const handleMouseEnter = (direction: "prev" | "next", additional: number, condition: boolean) => {
-        const positionAdditional = direction === "next" ? position - additional : position + additional;
+        const positionAdditional = direction === "next" ? position - (additional + gap) : position + additional + gap;
         condition && scrollRef.current && (scrollRef.current.style.transform = `translateX(${positionAdditional}px)`);
     };
 

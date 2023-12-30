@@ -1,5 +1,6 @@
 import { DeliveryInfo } from "@/pages/Cart";
 import { PaymentInfo } from "@/pages/Cart/model/interfaces";
+import { LinkProps } from "react-router-dom";
 
 export interface CheckoutProps {
     handleOrder: () => void;
@@ -25,4 +26,8 @@ export interface CheckoutControlsAuthGuardProps {
     isAgreedWithTerms: boolean;
     isOrderBtnDisabled: boolean;
     handleChangeTerms: (event: React.ChangeEvent<HTMLInputElement>) => void;
+}
+
+export interface CheckoutInfoActionLinkProps extends LinkProps {
+    deliveryInfo: DeliveryInfo;
 }

@@ -1,7 +1,7 @@
 import { Order } from "@/shared/api/interfaces";
 
-type PaymentMethod = 'card' | 'cash';
-type DeliveryMethod = 'pickup' | 'courier';
+type PaymentMethod = "card" | "cash";
+type DeliveryMethod = "pickup" | "courier";
 
 export interface CartInterface {
     id: number;
@@ -53,3 +53,24 @@ export interface CartSlice {
 export interface CartListProps {
     cart: Array<CartInterface>;
 }
+
+enum ActionTypes {
+    DIRECT = "direct",
+    INCREASE = "increase",
+    DECREASE = "decrease",
+}
+
+type DirectPayload = {
+    type: "direct";
+    productId: number;
+    itemId: number;
+    count: number;
+};
+
+type IncreaseDecreasePayload = {
+    type: "increase" | "decrease";
+    productId: number;
+    itemId: number;
+};
+
+export type Payload = DirectPayload | IncreaseDecreasePayload;

@@ -33,7 +33,7 @@ export const localStorageKeys = {
     CART: "cart",
     SORT_INDEX: "sort-index",
     JWT: "token",
-    TERMS: "agreed-with-terms"
+    TERMS: "agreed-with-terms",
 };
 
 export const routerList = {
@@ -45,8 +45,8 @@ export const routerList = {
             DELIVERY_METHOD: "delivery-method",
         },
     },
-    PRODUCT: "/:id",
-    AUTH: "/auth"
+    PRODUCT: "/pizza/:id",
+    AUTH: "/auth",
 };
 
 export const actionTypes = {
@@ -54,4 +54,9 @@ export const actionTypes = {
     SET_TYPE: "SET_TYPE",
     SET_PRICE: "SET_PRICE",
     UPDATE: "UPDATE",
+};
+
+export const changeItemCountActions = {
+    increase: (count: number) => count + 1,
+    decrease: (count: number) => count - 1,
 };

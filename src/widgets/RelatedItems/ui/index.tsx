@@ -4,8 +4,12 @@ import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import RelatedItem from "@/features/RelatedItem/ui";
 import { Props } from "../interfaces";
+import { Product } from "@/shared/api/interfaces";
+import { api } from "@/shared/api";
 
-const RelatedItems: React.FC<Props> = ({ items, title }) => {
+const RelatedItems: React.FC<Props> = ({ activeItem, title }) => {
+    const [items, setItems] = React.useState<Array<Product>>([]);
+
     const scrollRef = React.useRef<HTMLUListElement | null>(null);
     const additionalPosition = 30;
     const {
@@ -19,6 +23,23 @@ const RelatedItems: React.FC<Props> = ({ items, title }) => {
         handlePrev,
     } = useCarousel({ items, scrollRef });
 
+    React.useEffect(() => {
+        const controller = new AbortController();
+
+        (async () => {
+            try {
+                const { data } = await api.getProducts('/products?_select=-types,-sizes,-ingredients,-category,-description', controller);
+                setItems(data.filter(({ id }) => id !== activeItem.id));
+            } catch (error) {
+                console.error(error);
+            }
+        })()
+
+        return () => {
+            controller.abort();
+        }
+    }, [activeItem]);
+    
     return (
         <div className='w-full overflow-hidden'>
             <div className='flex items-center justify-between'>
@@ -65,7 +86,7 @@ const RelatedItems: React.FC<Props> = ({ items, title }) => {
             >
                 {items.map((item) => (
                     <li key={item.id} style={{ minWidth: itemWidth }}>
-                        <RelatedItem {...item} />
+                        <RelatedItem {...item} itemWidth={itemWidth}/>
                     </li>
                 ))}
             </ul>

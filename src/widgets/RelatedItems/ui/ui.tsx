@@ -2,12 +2,12 @@ import React from "react";
 import useCarousel from "@/shared/hooks/useCarousel";
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import RelatedItem from "@/features/RelatedItem/ui";
-import { Props } from "../interfaces";
+import RelatedItem from "./RelatedItem";
 import { Product } from "@/shared/api/interfaces";
 import { api } from "@/shared/api";
+import { Props } from "../model/interfaces";
 
-const RelatedItems: React.FC<Props> = ({ activeItem, title }) => {
+const RelatedItems = ({ activeItem, title }: Props) => {
     const [items, setItems] = React.useState<Array<Product>>([]);
 
     const scrollRef = React.useRef<HTMLUListElement | null>(null);
@@ -15,6 +15,7 @@ const RelatedItems: React.FC<Props> = ({ activeItem, title }) => {
     const {
         position,
         itemWidth,
+        gap,
         isPrevDisabled,
         isNextDisabled,
         handleMouseEnter,
@@ -29,7 +30,7 @@ const RelatedItems: React.FC<Props> = ({ activeItem, title }) => {
         (async () => {
             try {
                 const { data } = await api.getProducts('/products?_select=-types,-sizes,-ingredients,-category,-description', controller);
-                setItems(data.filter(({ id }) => id !== activeItem.id));
+                setItems((data as unknown as Array<Product>).filter(({ id }) => id !== activeItem.id));
             } catch (error) {
                 console.error(error);
             }
@@ -81,8 +82,8 @@ const RelatedItems: React.FC<Props> = ({ activeItem, title }) => {
 
             <ul
                 ref={scrollRef}
-                className='mt-[2rem] flex pb-[1.875rem] transition-transform duration-300 ease-in-out'
-                style={{ transform: `translateX(${position}px)`, gap: 30 }}
+                className='mt-[2rem] flex items-center justify-between pb-[1.875rem] transition-transform duration-300 ease-in-out'
+                style={{ transform: `translateX(${position}px)`, gap }}
             >
                 {items.map((item) => (
                     <li key={item.id} style={{ minWidth: itemWidth }}>

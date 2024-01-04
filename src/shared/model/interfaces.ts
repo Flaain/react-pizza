@@ -1,3 +1,5 @@
+import { Product } from "../api/interfaces";
+
 export interface PossibleParams {
     search: string;
     category: string;
@@ -31,4 +33,9 @@ export interface Address {
 export interface ImageSkeletonProps {
     width: number;
     height: number;
+}
+
+export interface BrowserTitleProps {
+    data: Product;
+    children: React.ReactElement;
 }

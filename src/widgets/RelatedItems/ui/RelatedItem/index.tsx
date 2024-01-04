@@ -1,16 +1,13 @@
-import React from "react";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import Image from "@/shared/ui/Image/ui";
 import ImageSkeleton from "@/shared/ui/ImageSkeleton";
-import { Product } from "@/shared/api/interfaces";
 import { Link } from "react-router-dom";
+import { RelatedItemProps } from "../../model/interfaces";
 
-const RelatedItem: React.FC<
-    Omit<Product, "category" | "ingredients" | "sizes" | "types" | "description"> & { itemWidth: number }
-> = ({ id, imageUrl, price, rating, title, itemWidth }) => {
+const RelatedItem = ({ id, imageUrl, price, rating, title, itemWidth }: RelatedItemProps) => {
     return (
-        <Link to={`/pizza/${id}`}>
+        <Link to={`/product/${id}`}>
             <article>
                 <Image
                     loading='lazy'
@@ -18,7 +15,7 @@ const RelatedItem: React.FC<
                     src={imageUrl}
                     width={itemWidth}
                     height={200}
-                    skeleton={<ImageSkeleton width={itemWidth} height={200} />}
+                    skeleton={<ImageSkeleton width={200} height={200} />}
                 />
                 <div className='flex flex-col gap-1'>
                     <h4 className='font-bold text-xl text-primary-black'>{getIntlPrice(price)}</h4>

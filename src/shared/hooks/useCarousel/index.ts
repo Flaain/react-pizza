@@ -4,18 +4,18 @@ import { Props } from "./interfaces";
 const useCarousel = ({ items, scrollRef, options }: Props) => {
     const [position, setPosition] = React.useState(0);
     const [itemWidth, setItemWidth] = React.useState(0);
-
+    
     const { gap, slidesToScroll, slidesToShow } = React.useMemo(() => options ?? { slidesToShow: 5, gap: 30, slidesToScroll: 1 }, [options]);
 
     const isPrevDisabled = position === 0;
     const isNextDisabled = Math.abs(position) >= (items.length - slidesToShow) * itemWidth;
 
     React.useEffect(() => {
-        scrollRef.current && setItemWidth(scrollRef.current.getBoundingClientRect().width / slidesToShow - gap);
+        scrollRef.current && setItemWidth(Math.round(scrollRef.current.getBoundingClientRect().width / slidesToShow - gap));
     }, []);
 
     const handlePrev = () => {
-        const itemsLeft = Math.abs(position) / (itemWidth + gap);
+        const itemsLeft = Math.floor(Math.abs(position) / (itemWidth + gap));
         setPosition((prevState) => prevState + (itemsLeft >= slidesToScroll ? slidesToScroll * (itemWidth + gap) : itemsLeft * (itemWidth + gap)));
     };
 
@@ -45,6 +45,7 @@ const useCarousel = ({ items, scrollRef, options }: Props) => {
         itemWidth,
         isPrevDisabled,
         isNextDisabled,
+        gap,
         handlePrev,
         handleNext,
         handleMouseEnter,

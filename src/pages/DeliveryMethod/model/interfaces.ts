@@ -2,6 +2,8 @@ import { Address } from "@/shared/model/interfaces";
 import { TabContentProps } from "@/widgets/Tabs/model/interfaces";
 import { NavigateFunction } from "react-router-dom";
 
+export type DeliveryMethodType = "pickup" | "courier";
+
 export interface Props {
     title: string;
 }
@@ -9,7 +11,7 @@ export interface Props {
 export interface DeliveryMethod {
     name: string;
     addresses: Array<Address>;
-    method: string;
+    method: DeliveryMethodType;
     component: React.ComponentType<TabContentProps>;
 }
 
@@ -28,4 +30,11 @@ export interface DeliveryMethodModalContentProps {
 export interface LazyErrorElementProps {
     error: unknown;
     navigate: NavigateFunction;
+}
+
+export interface DeliveryInfo {
+    address: string;
+    rating?: number;
+    deliveryPrice?: number;
+    method: DeliveryMethod;
 }

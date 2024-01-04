@@ -1,7 +1,7 @@
 import getDataFromLocalStorage from "@/shared/lib/helpers/getDataFromLocalStorage";
 import { localStorageKeys } from "@/shared/config/constants";
 import { UserSliceState } from "../../model/interfaces";
-import { Address } from "cluster";
+import { Address } from "@/shared/model/interfaces";
 
 export const userInitialState: UserSliceState = {
     jwt: null,

@@ -4,8 +4,9 @@ import CheckoutInfoActionLink from "../CheckoutInfoActionLink";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { routerList } from "@/shared/config/constants";
+import { CheckoutSummaryProps } from "../../model";
 
-const CheckoutSummary = () => {
+const CheckoutSummary = ({ setPaymentModalOpened }: CheckoutSummaryProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
     const { priceView: { intl } } = useAppSelector(cartSelector);
 
@@ -13,7 +14,7 @@ const CheckoutSummary = () => {
         <div className='flex flex-col gap-5'>
             <CheckoutInfoActionLink deliveryInfo={deliveryInfo!} to={routerList.CART.children.DELIVERY_METHOD} />
             <div className='flex flex-col'>
-                <button className='flex items-center justify-between group'>
+                <button className='flex items-center justify-between group' onClick={() => setPaymentModalOpened(true)}>
                     <span className='text-base font-medium text-primary-black group-hover:text-primary-orange'>
                         Оплата {paymentInfo?.method === "card" ? "картой" : "наличными"}
                     </span>

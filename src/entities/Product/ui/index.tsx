@@ -37,7 +37,7 @@ const Card: React.FC<Props> = ({ id, title, price, category, types, sizes, image
     return (
         <article className='flex flex-col justify-center items-center max-w-[400px] max-md:min-w-full max-md:max-w-none'>
             <picture>
-                <Link to={`pizza/${id}`}>
+                <Link to={`product/${id}`}>
                     <Image
                         skeleton={<ImageSkeleton width={250} height={250}/>}
                         loading='lazy'
@@ -49,7 +49,7 @@ const Card: React.FC<Props> = ({ id, title, price, category, types, sizes, image
             </picture>
             <div className='flex flex-col justify-center items-center gap-2 w-full'>
                 <h2 className='text-primary-black font-bold text-lg cursor-pointer'>
-                    <Link to={`pizza/${title}`}>{title}</Link>
+                    <Link to={`product/${id}`}>{title}</Link>
                 </h2>
                 <OptionsSelector {...{ types, sizes, state: productState, handleChange: productDispatch, price }} />
                 <div className='flex items-center justify-between w-full mt-[5px]'>

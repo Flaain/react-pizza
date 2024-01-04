@@ -45,7 +45,7 @@ export const routerList = {
             DELIVERY_METHOD: "delivery-method",
         },
     },
-    PRODUCT: "/pizza/:id",
+    PRODUCT: "/product/:id",
     AUTH: "/auth",
 };
 
@@ -54,9 +54,4 @@ export const actionTypes = {
     SET_TYPE: "SET_TYPE",
     SET_PRICE: "SET_PRICE",
     UPDATE: "UPDATE",
-};
-
-export const changeItemCountActions = {
-    increase: (count: number) => count + 1,
-    decrease: (count: number) => count - 1,
 };

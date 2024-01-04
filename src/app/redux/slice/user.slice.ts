@@ -1,8 +1,9 @@
+import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { localStorageKeys } from "@/shared/config/constants";
 import { userInitialState } from "./user.initialState";
 import { DeliveryInfo } from "@/pages/Cart";
-import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
+import { Address } from "@/shared/model/interfaces";
 
 export const userSlice = createSlice({
     name: "user",
@@ -12,12 +13,16 @@ export const userSlice = createSlice({
             state.jwt = null;
             localStorage.removeItem(localStorageKeys.JWT);
         },
-        setDeliveryInfo: (state, action: PayloadAction<DeliveryInfo>) => {
-            state.deliveryInfo = action.payload;
-            saveToLocalStorage({ key: localStorageKeys.DELIVERY_INFO, data: action.payload });
+        setDeliveryInfo: (state, { payload }: PayloadAction<DeliveryInfo>) => {
+            state.deliveryInfo = payload;
+            saveToLocalStorage({ key: localStorageKeys.DELIVERY_INFO, data: payload });
+        },
+        setNewAddress: (state, { payload }: PayloadAction<Address>) => {
+            state.addresses.set(payload.address, payload);
+            saveToLocalStorage({ key: localStorageKeys.USER_ADDRESSES, data: [...state.addresses.values()] });
         },
     },
 });
 
-export const { logout, setDeliveryInfo } = userSlice.actions;
+export const { logout, setDeliveryInfo, setNewAddress } = userSlice.actions;
 export default userSlice.reducer;

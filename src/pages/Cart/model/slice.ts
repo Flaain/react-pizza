@@ -4,11 +4,12 @@ import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
 import { Item } from "@/app/redux";
 import { CartItem, Payload } from "./interfaces";
-import { changeItemCountActions, localStorageKeys } from "@/shared/config/constants";
+import { localStorageKeys } from "@/shared/config/constants";
 import { handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { ProductSelectorState } from "@/entities/Product/model/interfaces";
+import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
 
 export const cartSlice = createSlice({
     name: "cart",

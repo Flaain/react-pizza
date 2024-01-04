@@ -10,14 +10,14 @@ import { useAppSelector } from "@/shared/model/store";
 import { useNavigate } from "react-router-dom";
 import { routerList } from "@/shared/config/constants";
 
-const Checkout: React.FC<CheckoutProps> = ({ handleOrder, setPaymentInfoModalOpened }) => {
+const Checkout: React.FC<CheckoutProps> = ({ handleOrder, setPaymentModalOpened }) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleFormFill = () => {
-        deliveryInfo ? console.log("open payment modal") : navigate(routerList.CART.children.DELIVERY_METHOD);
+        deliveryInfo ? setPaymentModalOpened(true) : navigate(routerList.CART.children.DELIVERY_METHOD);
     };
 
 
@@ -28,7 +28,7 @@ const Checkout: React.FC<CheckoutProps> = ({ handleOrder, setPaymentInfoModalOpe
             )}
         >
             {deliveryInfo && paymentInfo ? (
-                <CheckoutSummary />
+                <CheckoutSummary setPaymentModalOpened={setPaymentModalOpened}/>
             ) : (
                 <button className='flex items-center justify-between group' onClick={handleFormFill}>
                     <span className='text-lg text-primary-black font-medium group-hover:text-primary-orange'>

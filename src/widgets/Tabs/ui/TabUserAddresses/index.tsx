@@ -2,31 +2,21 @@ import React from "react";
 import cn from "@/shared/lib/classNames";
 import TabContentList from "../TabContentList";
 import { TabContentProps } from "../../model/interfaces";
+import { useNavigate } from "react-router-dom";
+import FormUserAddress from "@/widgets/FormUserAddress/ui/ui";
+import EmptyUserAddresses from "./EmptyUserAddresses";
 
 const TabUserAddresses: React.FC<TabContentProps> = ({ activeTab, currentInfo, isSaveBtnDisabled, handleChange, handleSave }) => {
-    const { 0: showAddForm, 1: setShowAddForm } = React.useState(false);
+    const [showAddForm, setShowAddForm] = React.useState(false);
+
+    const navigate = useNavigate();
 
     if (showAddForm) {
-        return (
-            <>
-                <p>форма добавления адреса</p>
-                <button onClick={() => setShowAddForm(false)} className='mt-auto'>
-                    отмена
-                </button>
-            </>
-        );
+        return <FormUserAddress setShowAddForm={setShowAddForm} />;
     }
 
     return !activeTab.addresses.length ? (
-        <>
-            <p className='text-gray-400'>Нет сохранненых адресов</p>
-            <button
-                onClick={() => setShowAddForm(true)}
-                className='flex items-center justify-center self-start py-2 px-5 rounded-lg bg-primary-orange text-white mt-auto'
-            >
-                Добавить адрес доставки
-            </button>
-        </>
+        <EmptyUserAddresses navigate={navigate} setShowAddForm={setShowAddForm} />
     ) : (
         <>
             <TabContentList activeTab={activeTab} currentInfo={currentInfo} handleChange={handleChange} />

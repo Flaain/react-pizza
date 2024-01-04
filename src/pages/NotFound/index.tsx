@@ -1,16 +1,16 @@
 import React from "react";
 import Spinner from "@/shared/ui/Spinner/ui";
 import { RouteObject } from "react-router-dom";
-import { currentRoute } from "./model";
-import { Props } from "./interfaces";
+import { currentRoute } from "./model/currentRoute";
+import { Props } from "./model/interfaces";
 
 export { default as Page } from "./ui/ui";
 
 export const View = React.lazy(() => import("./ui/ui"));
 
-export const ViewWithSuspense: React.FC<Props> = (props) => {
+export const ViewWithSuspense = (props: Props) => {
     return (
-        <React.Suspense fallback={<Spinner position="center"/>}>
+        <React.Suspense fallback={<Spinner position='center' />}>
             <View {...props} />
         </React.Suspense>
     );

@@ -1,6 +1,6 @@
 import { DeliveryInfo } from "@/pages/Cart";
 import { DeliveryMethod } from "@/pages/DeliveryMethod/model/interfaces";
-import { SetURLSearchParams } from "react-router-dom";
+import { NavigateFunction, SetURLSearchParams } from "react-router-dom";
 
 export interface TabSelectorProps {
     items: Array<DeliveryMethod>;
@@ -31,4 +31,9 @@ export interface TabContentListProps {
     activeTab: DeliveryMethod;
     currentInfo: DeliveryInfo | null;
     handleChange: ({ address, deliveryPrice, method, rating }: DeliveryInfo) => void;
+}
+
+export interface EmptyUserAddressesProps {
+    navigate: NavigateFunction;
+    setShowAddForm: React.Dispatch<React.SetStateAction<boolean>>;
 }

@@ -1,7 +1,8 @@
 import { Meta, Product } from "@/shared/api/interfaces";
 import { CartInterface } from "@/pages/Cart";
-import { DeliveryInfo, PaymentInfo } from "@/pages/Cart/model/interfaces";
 import { Address } from "@/shared/model/interfaces";
+import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
+import { PaymentInfo } from "@/widgets/PaymentModal/model/interfaces";
 
 export interface ViewportState {
     width: number;

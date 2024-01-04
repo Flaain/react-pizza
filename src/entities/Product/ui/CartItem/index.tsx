@@ -12,7 +12,7 @@ import { changeItemCount, removeProductFromCart } from "@/pages/Cart/model/slice
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 
-const CartItem: React.FC<CartItemProps> = ({ productId, itemId, count, img, size, title, type, price, loading }) => {
+const CartItem = ({ productId, itemId, count, img, size, title, type, price, loading }: CartItemProps) => {
     const { lang } = useAppSelector(userSelector);
     const [itemCount, setItemCount] = React.useState(count ?? 1);
 
@@ -51,7 +51,7 @@ const CartItem: React.FC<CartItemProps> = ({ productId, itemId, count, img, size
                 />
                 <div className='flex flex-col'>
                     <Link
-                        to={`/pizza/${productId}`}
+                        to={`/product/${productId}?size=${size}&type=${type}`}
                         className='text-primary-black text-lg font-medium hover:text-primary-orange transition-colors duration-200 ease-in-out'
                     >
                         {title}

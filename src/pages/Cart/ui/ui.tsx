@@ -7,19 +7,21 @@ import MinimazeCartInfo from "@/features/MinimizeCartInfo/ui/ui";
 import CartItemsList from "./CartItemsList";
 import Checkout from "@/features/Checkout/ui/ui";
 import InfoContainer from "@/shared/ui/InfoContainer";
+import PaymentModal from "@/widgets/PaymentModal/ui/ui";
 
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { clearCart } from "../model/slice";
 import { useDispatch } from "react-redux";
+import { AnimatePresence } from "framer-motion";
 
 const Cart = () => {
     const { cart, ordered, orderLoading, priceView: { totalItems } } = useAppSelector(cartSelector);
     const { jwt, deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
     const [minimizeCartItems, setMinimizeCartItems] = React.useState(false);
-    const [paymentInfoModalOpened, setPaymentInfoModalOpened] = React.useState(false);
+    const [paymentModalOpened, setPaymentModalOpened] = React.useState(false);
 
     const cartArr = React.useMemo(() => [...cart.values()], [cart]);
     const isMinimizable = React.useMemo(() => cartArr.reduce((acc, { items }) => (acc += items.length), 0) > 1, [cartArr]);
@@ -45,9 +47,9 @@ const Cart = () => {
         <section>
             <Container classNames='grid grid-cols-7 max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border py-5'>
                 <Outlet />
-                {/* <AnimatePresence>
-                    {paymentInfoModalOpened && (<PaymentInfoModal key='paymentModal' closeHandler={() => setPaymentInfoModalOpened(false)} />)}
-                </AnimatePresence> */}
+                <AnimatePresence>
+                    {paymentModalOpened && (<PaymentModal closeHandler={() => setPaymentModalOpened(false)} />)}
+                </AnimatePresence>
                 <div className='col-span-5'>
                     <div
                         className={cn(
@@ -79,11 +81,11 @@ const Cart = () => {
                         </div>
                         {minimizeCartItems ? <MinimazeCartInfo /> : <CartItemsList cart={cartArr} />}
                     </div>
-                    <InfoContainer disabled={orderLoading}/>
+                    <InfoContainer disabled={orderLoading} setPaymentModalOpened={setPaymentModalOpened}/>
                 </div>
                 <Checkout
                     handleOrder={handleOrder}
-                    setPaymentInfoModalOpened={setPaymentInfoModalOpened}
+                    setPaymentModalOpened={setPaymentModalOpened}
                 />
             </Container>
         </section>

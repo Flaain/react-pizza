@@ -9,7 +9,7 @@ const TabStaticAddresses: React.FC<TabContentProps> = ({ activeTab, currentInfo,
     return (
         <>
             {!activeTab.addresses.length ? (
-                <p className="text-gray-400">Не удалось загрузить пункты самовывоза</p>
+                <p className='text-gray-400'>Не удалось загрузить пункты самовывоза</p>
             ) : (
                 <TabContentList activeTab={activeTab} currentInfo={currentInfo} handleChange={handleChange} />
             )}

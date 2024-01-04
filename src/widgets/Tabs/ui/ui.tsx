@@ -2,6 +2,7 @@ import React from "react";
 import TabStaticAddresses from "./TabStaticAddresses";
 import TabUserAddresses from "./TabUserAddresses";
 import TabSelectors from "./TabSelectors";
+import isSaveDisabled from "../lib/isSaveDisabled";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import { useAsyncValue, useNavigate, useSearchParams } from "react-router-dom";
@@ -25,25 +26,21 @@ const Tabs = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentInfo, setCurrentInfo] = React.useState<DeliveryInfo | null>(deliveryInfo);
-    const [tabIndex, setTabIndex] = React.useState(() => {
+    const [selectedDeliveryMethod, setSelectedDeliveryMethod] = React.useState(() => {
         const tab = Number(searchParams.get("method")) || 0;
         return deliveryMethods[tab] ? tab : 0;
     });
 
-    const isSaveBtnDisabled =
-        !deliveryMethods[tabIndex].addresses.length ||
-        !currentInfo ||
-        currentInfo.address === deliveryInfo?.address ||
-        deliveryMethods[tabIndex].method !== currentInfo?.method;
+    const isSaveBtnDisabled = isSaveDisabled(deliveryMethods, selectedDeliveryMethod, currentInfo, deliveryInfo);
 
-    const ActiveTabComponent = deliveryMethods[tabIndex].component;
+    const ActiveTabComponent = deliveryMethods[selectedDeliveryMethod].component;
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleChange = React.useCallback((info: DeliveryInfo) => {
         setCurrentInfo(info);
-    }, [deliveryMethods, tabIndex]);
+    }, [deliveryMethods, selectedDeliveryMethod]);
 
     const handleSave = () => {
         dispatch(setDeliveryInfo(currentInfo!));
@@ -54,15 +51,15 @@ const Tabs = () => {
         <>
             <TabSelectors
                 items={deliveryMethods}
-                setTabIndex={setTabIndex}
-                tabIndex={tabIndex}
+                setTabIndex={setSelectedDeliveryMethod}
+                tabIndex={selectedDeliveryMethod}
                 setSearchParams={setSearchParams}
             />
             <ActiveTabComponent
                 isSaveBtnDisabled={isSaveBtnDisabled}
                 handleChange={handleChange}
                 handleSave={handleSave}
-                activeTab={deliveryMethods[tabIndex]}
+                activeTab={deliveryMethods[selectedDeliveryMethod]}
                 currentInfo={currentInfo}
                 setCurrentInfo={setCurrentInfo}
             />

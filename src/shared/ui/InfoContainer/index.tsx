@@ -8,7 +8,7 @@ import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useNavigate } from "react-router-dom";
 import { routerList } from "@/shared/config/constants";
 
-const InfoContainer: React.FC<{ disabled: boolean }> = ({ disabled }) => {
+const InfoContainer: React.FC<{ disabled: boolean, setPaymentModalOpened: React.Dispatch<React.SetStateAction<boolean>> }> = ({ disabled, setPaymentModalOpened }) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
     const { priceView: { total } } = useAppSelector(cartSelector);
 
@@ -29,7 +29,7 @@ const InfoContainer: React.FC<{ disabled: boolean }> = ({ disabled }) => {
                 callToActionText='заполните форму оплаты'
                 disabled={disabled}
                 title='Способ оплаты'
-                updater={() => console.log("payment modal opened")}
+                updater={() => setPaymentModalOpened(true)}
             />
         </div>
     );

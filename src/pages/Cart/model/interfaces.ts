@@ -1,8 +1,5 @@
 import { Order } from "@/shared/api/interfaces";
 
-type PaymentMethod = "card" | "cash";
-type DeliveryMethod = "pickup" | "courier";
-
 export interface CartInterface {
     id: number;
     category: number;
@@ -17,24 +14,6 @@ export interface CartItem {
     type: number;
     price: number;
     count: number;
-}
-
-export interface DeliveryInfo {
-    address: string;
-    rating?: number;
-    deliveryPrice?: number;
-    method: DeliveryMethod;
-}
-
-export interface CreditCard {
-    address: number;
-    cvv: number;
-    expiry: Date;
-}
-
-export interface PaymentInfo {
-    method: PaymentMethod;
-    card?: CreditCard;
 }
 
 export interface CartSlice {

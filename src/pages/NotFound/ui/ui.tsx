@@ -2,20 +2,20 @@ import React from "react";
 import cn from "@/shared/lib/classNames";
 import Container from "@/shared/ui/Container";
 import Title from "@/shared/ui/Title/ui";
-import { Props } from "../interfaces";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { Props } from "../model/interfaces";
 
-const NotFound: React.FC<Props> = ({
+const NotFound = ({
     title,
     description,
     backLink,
     backLinkText = "Вернуться назад",
     reloadButton,
-    reloadButtonText = 'Обновить страницу',
+    reloadButtonText = "Обновить страницу",
     screen,
     error,
-}) => {
+}: Props) => {
     const [showError, setShowError] = React.useState(false);
 
     const convertedError = JSON.stringify(error, null, 2);

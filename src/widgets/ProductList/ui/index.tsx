@@ -1,4 +1,4 @@
-import Card from "@/entities/Product/ui";
+import Card from "@/entities/Product/ui/ui";
 import ProductSkeleton from "@/entities/Product/ui/Skeletons/ProductSkeleton";
 import useInfiniteScroll from "@/pages/Home/lib/useInfiniteScroll";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";

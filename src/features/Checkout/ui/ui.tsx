@@ -1,8 +1,8 @@
-import React from "react";
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import CheckoutSummary from "./CheckoutSummary";
 import CheckoutTotal from "./CheckoutTotal";
+
 import { userSelector } from "@/shared/model/selectors";
 import { CheckoutProps } from "../model";
 import { useDispatch } from "react-redux";
@@ -10,7 +10,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { useNavigate } from "react-router-dom";
 import { routerList } from "@/shared/config/constants";
 
-const Checkout: React.FC<CheckoutProps> = ({ handleOrder, setPaymentModalOpened }) => {
+const Checkout = ({ handleOrder, setPaymentModalOpened }: CheckoutProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
     const dispatch = useDispatch();

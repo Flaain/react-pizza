@@ -1,10 +1,9 @@
-import React from "react";
 import OptionsList from "./OptionsList";
 import { OptionsSelectorProps } from "../model/interfaces";
 import { initialSizes, initialTypes } from "@/shared/config/constants";
 import { ProductSelectorTypes } from "@/entities/Product/model/interfaces";
 
-const OptionsSelector: React.FC<OptionsSelectorProps> = (props) => {
+const OptionsSelector = (props: OptionsSelectorProps) => {
     return (
         <div className='flex flex-col bg-primary-gray rounded-lg max-md:w-full'>
             <OptionsList
@@ -14,7 +13,7 @@ const OptionsSelector: React.FC<OptionsSelectorProps> = (props) => {
                 segmentType={ProductSelectorTypes.SET_TYPE}
                 stateProperty='type'
                 state={props.state}
-                />
+            />
             <OptionsList
                 classNames='grid grid-cols-3 gap-2 p-1'
                 data={props.sizes}

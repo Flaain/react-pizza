@@ -1,9 +1,8 @@
-import React from "react";
-import getImageUrl from "../../../../shared/lib/helpers/getImageUrl";
-import Title from "../../../../shared/ui/Title/ui";
+import getImageUrl from "@/shared/lib/helpers/getImageUrl";
+import Title from "@/shared/ui/Title/ui";
 import { DetailsHeaderProps } from "../../model/interfaces";
 
-const DetailsHeader: React.FC<DetailsHeaderProps> = ({ title, rating }) => {
+const DetailsHeader = ({ title, rating }: DetailsHeaderProps) => {
     return (
         <div className='flex flex-col gap-3'>
             <div className='flex items-center justify-start gap-5'>

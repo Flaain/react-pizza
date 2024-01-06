@@ -5,7 +5,7 @@ import Tools from "@/widgets/Tools/ui";
 import Title from "@/shared/ui/Title/ui";
 import Spinner from "@/shared/ui/Spinner/ui";
 import getNotFoundTitle from "../lib/helpers/getNotFoundTitle";
-import { Page as NotFound } from "@/pages/NotFound";
+import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
 import { useSearchParams } from "react-router-dom";
 import { appSelector } from "@/shared/model/selectors";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
@@ -18,7 +18,6 @@ const Home = () => {
     const [searchParams, setSearchParams] = useSearchParams();
 
     const activeCategory = searchParams.get("category");
-
     const title = activeCategory !== null ? initialCategories.get(Number(activeCategory))?.name : "Все";
 
     const dispatch = useAsyncThunkDispatch();

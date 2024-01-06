@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import FormUserAddress from "@/widgets/FormUserAddress/ui/ui";
 import EmptyUserAddresses from "./EmptyUserAddresses";
 
-const TabUserAddresses: React.FC<TabContentProps> = ({ activeTab, currentInfo, isSaveBtnDisabled, handleChange, handleSave }) => {
+const TabUserAddresses = ({ activeTab, currentInfo, isSaveBtnDisabled, handleChange, handleSave }: TabContentProps) => {
     const [showAddForm, setShowAddForm] = React.useState(false);
 
     const navigate = useNavigate();

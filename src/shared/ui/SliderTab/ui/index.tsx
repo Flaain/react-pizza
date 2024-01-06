@@ -1,7 +1,7 @@
 import cn from "@/shared/lib/classNames";
 import { Props } from "../model/interfaces";
 
-const SliderTab: React.FC<Props> = ({ tabLeft, tabWidth, shadow = true }) => {
+const SliderTab = ({ tabLeft, tabWidth, shadow = true }: Props) => {
     return (
         <span
             className='absolute bottom-0 top-0 flex transition-all duration-300 py-1'

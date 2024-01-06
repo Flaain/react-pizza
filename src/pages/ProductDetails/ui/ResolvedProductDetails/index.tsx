@@ -1,9 +1,9 @@
 import React from "react";
 import DetailsHeader from "../DetailsHeader";
-import Image from "@/shared/ui/Image/ui";
-import CollapseInfo from "@/features/CollapseInfo/ui";
+import Image from "@/shared/ui/Image/ui/ui";
+import CollapseInfo from "@/features/CollapseInfo/ui/ui";
 import PriceBlock from "@/widgets/PriceBlock/ui/ui";
-import ImageSkeleton from "@/shared/ui/ImageSkeleton";
+import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import BrowserTitle from "@/shared/ui/BrowserTitle";
 import RelatedItems from "@/widgets/RelatedItems/ui/ui";
 import { Data, Product } from "@/shared/api/interfaces";

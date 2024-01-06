@@ -1,10 +1,9 @@
-import React from "react";
 import CartItem from "@/entities/Product/ui/CartItem";
 import { cartSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { CartListProps } from "../../model/interfaces";
 
-const CartItemsList: React.FC<CartListProps> = ({ cart }) => {
+const CartItemsList = ({ cart }: CartListProps) => {
     const { orderLoading } = useAppSelector(cartSelector);
 
     return (

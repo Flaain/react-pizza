@@ -6,11 +6,24 @@ import { segmentSelectors } from "../../model/segmentSelectors";
 import { ProductSelectorState } from "@/entities/Product/model/interfaces";
 import { getPayloadBySegment } from "../../lib/getPayloadBySegment";
 
-const OptionsList: React.FC<OptionsListProps> = ({ classNames = 'grid grid-cols-2 gap-2 p-1', segmentType, initial, data, state, stateProperty, dispatch }) => {
-    const { tabLeft, tabWidth, tabRef, setActiveTabIndex } = useTabSlider<HTMLLabelElement>(state[stateProperty as keyof ProductSelectorState]);
+const OptionsList = ({
+    classNames = "grid grid-cols-2 gap-2 p-1",
+    segmentType,
+    initial,
+    data,
+    state,
+    stateProperty,
+    dispatch,
+}: OptionsListProps) => {
+    const { tabLeft, tabWidth, tabRef, setActiveTabIndex } = useTabSlider<HTMLLabelElement>(
+        state[stateProperty as keyof ProductSelectorState]
+    );
 
     const handleChange = (index: number, availableValueIndex: number) => {
-        dispatch({ type: segmentType, payload: getPayloadBySegment(segmentType, state, index, availableValueIndex, data) }, availableValueIndex);
+        dispatch(
+            { type: segmentType, payload: getPayloadBySegment(segmentType, state, index, availableValueIndex, data) },
+            availableValueIndex
+        );
         setActiveTabIndex(index);
     };
 
@@ -20,8 +33,8 @@ const OptionsList: React.FC<OptionsListProps> = ({ classNames = 'grid grid-cols-
             <ul className={classNames}>
                 {initial.map((item, index) => {
                     const availableValueIndex = data.findIndex((value) => segmentSelectors[segmentType].availableValueIndex(item, value, index));
-                    const title = segmentSelectors[segmentType]?.title ? segmentSelectors[segmentType].title(item) : item;
-                    
+                    const title = segmentSelectors[segmentType]?.title?.(item) ?? String(item);
+
                     return (
                         <OptionsItem
                             {...{

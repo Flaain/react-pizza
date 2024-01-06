@@ -2,7 +2,7 @@ import TabContentItem from "../TabContentItem";
 import { motion } from "framer-motion";
 import { TabContentListProps } from "../../model/interfaces";
 
-const TabContentList: React.FC<TabContentListProps> = ({ activeTab, currentInfo, handleChange }) => {
+const TabContentList = ({ activeTab, currentInfo, handleChange }: TabContentListProps) => {
     return (
         <motion.ul
             initial={{ opacity: 0 }}

@@ -1,10 +1,9 @@
-import React from "react";
-import { Link } from "react-router-dom";
 import OrderList from "@/widgets/OrderList/ui";
 import Container from "@/shared/ui/Container";
 import { Order } from "@/shared/api/interfaces";
+import { Link } from "react-router-dom";
 
-const Ordered: React.FC<Omit<Order, 'deliveryInfo'>> = ({ order, totalPrice }) => {
+const Ordered = ({ order, totalPrice }: Omit<Order, "deliveryInfo">) => {
     return (
         <section className='pb-5'>
             <Container classNames='max-w-[900px] gap-10 my-0 mx-auto box-border flex flex-col items-start px-10 py-5 rounded-xl bg-white shadow-xl border border-solid border-primary-gray'>

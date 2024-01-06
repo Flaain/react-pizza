@@ -1,6 +1,7 @@
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import CheckoutInfoActionLink from "../CheckoutInfoActionLink";
+
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { routerList } from "@/shared/config/constants";

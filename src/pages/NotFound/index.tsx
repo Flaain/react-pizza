@@ -4,8 +4,6 @@ import { RouteObject } from "react-router-dom";
 import { currentRoute } from "./model/currentRoute";
 import { Props } from "./model/interfaces";
 
-export { default as Page } from "./ui/ui";
-
 export const View = React.lazy(() => import("./ui/ui"));
 
 export const ViewWithSuspense = (props: Props) => {

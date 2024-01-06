@@ -1,10 +1,9 @@
-import React from "react";
-import Image from "@/shared/ui/Image/ui";
+import Image from "@/shared/ui/Image/ui/ui";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import { initialTypes } from "@/shared/config/constants";
-import { CartItemProps } from "../../model/interfaces";
+import { OrderItemProps } from "../../model/interfaces";
 
-const OrderItem: React.FC<Omit<CartItemProps, "loading" | "id" | "pizzaId">> = ({ title, price, type, size, count, img }) => {
+const OrderItem = ({ title, price, type, size, count, img }: OrderItemProps) => {
     return (
         <li>
             <div className='flex items-center gap-5 justify-between'>

@@ -1,8 +1,7 @@
-import React from "react";
 import cn from "@/shared/lib/classNames";
 import { Props } from "../interfaces";
 
-const CategorieItem: React.FC<Props> = ({ activeCategory, name, handleClick, categorie }) => {
+const CategorieItem = ({ activeCategory, name, handleClick, categorie }: Props) => {
     return (
         <li className='flex items-center justify-center'>
             <span

@@ -3,7 +3,7 @@ import TabContentList from "../TabContentList";
 import { TabContentProps } from "../../model/interfaces";
 import { useNavigate } from "react-router-dom";
 
-const TabStaticAddresses: React.FC<TabContentProps> = ({ activeTab, currentInfo, handleChange, isSaveBtnDisabled, handleSave }) => {
+const TabStaticAddresses = ({ activeTab, currentInfo, handleChange, isSaveBtnDisabled, handleSave }: TabContentProps) => {
     const navigate = useNavigate();
 
     return (

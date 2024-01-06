@@ -7,7 +7,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { localStorageKeys } from "@/shared/config/constants";
 
-const CheckoutControls: React.FC<CheckoutControlsProps> = ({ handleOrder }) => {
+const CheckoutControls = ({ handleOrder }: CheckoutControlsProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
     const { orderLoading } = useAppSelector(cartSelector);
 

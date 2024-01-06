@@ -36,5 +36,5 @@ export interface DeliveryInfo {
     address: string;
     rating?: number;
     deliveryPrice?: number;
-    method: DeliveryMethod;
+    method: DeliveryMethodType;
 }

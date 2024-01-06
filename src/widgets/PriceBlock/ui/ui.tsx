@@ -12,7 +12,7 @@ import { useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/pages/Cart";
 
-const PriceBlock: React.FC<Props> = ({ activeItem }) => {
+const PriceBlock = ({ activeItem }: Props) => {
     const { cart } = useAppSelector(cartSelector);
     const { id, category, imageUrl, title } = activeItem;
 

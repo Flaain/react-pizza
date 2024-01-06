@@ -1,7 +1,6 @@
-import React from "react";
 import { Props } from "../model/interfaces";
 
-const PaymentInfoList: React.FC<Props> = ({ card, method, total }) => {
+const PaymentInfoList = ({ card, method, total }: Props) => {
     return (
         <ul className='flex flex-col w-full items-start justify-start gap-5'>
             <li className='flex w-full items-start'>

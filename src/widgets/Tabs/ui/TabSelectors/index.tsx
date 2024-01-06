@@ -1,24 +1,26 @@
-import React from "react";
 import cn from "@/shared/lib/classNames";
 import useTabSlider from "@/shared/hooks/useTabSlider";
 import SliderTab from "@/shared/ui/SliderTab/ui";
 import { TabSelectorProps } from "../../model/interfaces";
 
-const TabSelectors: React.FC<TabSelectorProps> = ({ items, tabIndex, setTabIndex, setSearchParams }) => {
+const TabSelectors = ({ items, tabIndex, setTabIndex, setSearchParams }: TabSelectorProps) => {
     const { tabRef, tabLeft, tabWidth, setActiveTabIndex } = useTabSlider<HTMLButtonElement>(tabIndex);
 
     const handleSelect = (index: number) => {
-        setSearchParams((prevState) => {
-            prevState.set('method', String(index));
-            return prevState;
-        }, { replace: true })
+        setSearchParams(
+            (prevState) => {
+                prevState.set("method", String(index));
+                return prevState;
+            },
+            { replace: true }
+        );
         setTabIndex(index);
         setActiveTabIndex(index);
     };
 
     return (
         <div className='bg-primary-gray w-full p-1 rounded-lg grid grid-cols-2 gap-2 relative'>
-            <SliderTab tabLeft={tabLeft} tabWidth={tabWidth} shadow={false}/>
+            <SliderTab tabLeft={tabLeft} tabWidth={tabWidth} shadow={false} />
             {items.map(({ name }, index) => (
                 <button
                     ref={(element) => (tabRef.current[index] = element)}

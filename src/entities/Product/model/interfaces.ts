@@ -17,6 +17,8 @@ export interface ProductSelectorState {
     initialPrice: number;
 }
 
+export interface OrderItemProps extends Omit<CartItemProps, "productId" | "itemId" | "loading"> {}
+
 export interface CartItemProps {
     productId: number;
     itemId: number;

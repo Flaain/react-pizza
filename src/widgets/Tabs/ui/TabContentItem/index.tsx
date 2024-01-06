@@ -1,9 +1,8 @@
-import React from "react";
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { TabItemProps } from "../../model/interfaces";
 
-const TabContentItem: React.FC<TabItemProps> = ({ address, method, currentInfo, deliveryPrice, rating, handleChange }) => {
+const TabContentItem = ({ address, method, currentInfo, deliveryPrice, rating, handleChange }: TabItemProps) => {
     return (
         <li className='flex relative'>
             <label
@@ -27,7 +26,14 @@ const TabContentItem: React.FC<TabItemProps> = ({ address, method, currentInfo, 
                     name='address'
                     className='sr-only'
                     checked={currentInfo?.address === address}
-                    onChange={() => handleChange({ address, ...(rating && { rating }), ...(deliveryPrice && { deliveryPrice }), method })}
+                    onChange={() =>
+                        handleChange({
+                            address,
+                            ...(rating && { rating }),
+                            ...(deliveryPrice && { deliveryPrice }),
+                            method,
+                        })
+                    }
                 />
             </label>
         </li>

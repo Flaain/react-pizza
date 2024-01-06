@@ -1,12 +1,7 @@
 import cn from "@/shared/lib/classNames";
+import { positions } from "@/shared/config/constants";
 
-const Spinner: React.FC<{ position: "top" | "center" | "bottom" }> = ({ position }) => {
-    const positions = {
-        top: "top-0",
-        center: "top-[50%]",
-        bottom: "bottom-0",
-    };
-
+const Spinner = ({ position }: { position: "top" | "center" | "bottom" }) => {
     return (
         <span
             className={cn(

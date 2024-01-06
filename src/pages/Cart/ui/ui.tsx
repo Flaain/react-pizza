@@ -2,13 +2,12 @@ import React from "react";
 import Container from "@/shared/ui/Container";
 import EmptyCart from "./EmptyCart";
 import cn from "@/shared/lib/classNames";
-import MinimizeCartItemsButton from "@/features/MinimizeCartItemsButton/ui/ui";
-import MinimazeCartInfo from "@/features/MinimizeCartInfo/ui/ui";
 import CartItemsList from "./CartItemsList";
 import Checkout from "@/features/Checkout/ui/ui";
-import InfoContainer from "@/shared/ui/InfoContainer";
+import InfoContainer from "@/widgets/InfoContainer/ui/ui";
 import PaymentModal from "@/widgets/PaymentModal/ui/ui";
 
+import { MinimizeCartInfo, MinimizeButton } from "@/features/MinimizeCartInfo";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
@@ -70,7 +69,7 @@ const Cart = () => {
                                     Очистить корзину
                                 </button>
                                 {isMinimizable && (
-                                    <MinimizeCartItemsButton
+                                    <MinimizeButton
                                         title={minimizeCartItems ? "показать товары" : "скрыть товары"}
                                         disabled={orderLoading}
                                         minimizeCartItems={minimizeCartItems}
@@ -79,7 +78,7 @@ const Cart = () => {
                                 )}
                             </div>
                         </div>
-                        {minimizeCartItems ? <MinimazeCartInfo /> : <CartItemsList cart={cartArr} />}
+                        {minimizeCartItems ? <MinimizeCartInfo /> : <CartItemsList cart={cartArr} />}
                     </div>
                     <InfoContainer disabled={orderLoading} setPaymentModalOpened={setPaymentModalOpened}/>
                 </div>

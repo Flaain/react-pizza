@@ -5,12 +5,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { Link } from "react-router-dom";
 import { CheckoutControlsAuthGuardProps } from "../../model";
 
-const CheckoutControlsAuthGuard: React.FC<CheckoutControlsAuthGuardProps> = ({
-    isAgreedWithTerms,
-    handleChangeTerms,
-    handleOrder,
-    isOrderBtnDisabled,
-}) => {
+const CheckoutControlsAuthGuard = ({ isAgreedWithTerms, handleChangeTerms, handleOrder, isOrderBtnDisabled }: CheckoutControlsAuthGuardProps) => {
     const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
     const { orderLoading } = useAppSelector(cartSelector);
 
@@ -68,7 +63,8 @@ const CheckoutControlsAuthGuard: React.FC<CheckoutControlsAuthGuardProps> = ({
             &#32; или&#32;
             <Link to='/auth?from=cart' className='text-primary-orange'>
                 зарегистрируйтесь
-            </Link>, чтобы оформить заказ
+            </Link>
+            , чтобы оформить заказ
         </p>
     );
 };

@@ -1,8 +1,7 @@
-import React from "react";
 import OrderItem from "@/entities/Product/ui/OrderItem";
-import { Order } from "../../../shared/api/interfaces";
+import { Order } from "@/shared/api/interfaces";
 
-const OrderList: React.FC<Omit<Order, "totalPrice" | "deliveryInfo">> = ({ order }) => {
+const OrderList = ({ order }: Omit<Order, "totalPrice" | "deliveryInfo">) => {
     return (
         <ul className='flex flex-col gap-5 w-full overflow-auto max-h-[600px] pr-10'>
             {order.flatMap((product) =>

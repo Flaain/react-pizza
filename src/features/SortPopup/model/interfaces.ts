@@ -3,15 +3,15 @@ import { SetURLSearchParams } from "react-router-dom";
 
 export interface SortPopupProps {
     setSearchParams: SetURLSearchParams;
-    activeSort: string;
+    activeSort: Sort;
 }
 
 export interface SortPopupListProps {
-    activeSort: string;
+    activeSort: Sort;
     handleSort: (sort: string) => void;
 }
 
 export interface SortPopupItemProps extends Omit<Sort, "id"> {
-    activeSort: string;
+    activeSort: Sort;
     handleSort: (sort: string) => void;
 }

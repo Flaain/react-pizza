@@ -1,7 +1,7 @@
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector } from "@/shared/model/selectors";
 
-const MinimazeCartInfo = () => {
+const MinimizeCartInfo = () => {
     const { priceView: { totalItems, intl } } = useAppSelector(cartSelector);
 
     return (
@@ -13,4 +13,4 @@ const MinimazeCartInfo = () => {
     );
 };
 
-export default MinimazeCartInfo;
+export default MinimizeCartInfo;

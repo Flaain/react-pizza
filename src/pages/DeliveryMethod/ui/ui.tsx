@@ -6,7 +6,7 @@ import { Props } from "../model/interfaces";
 import { useNavigate } from "react-router-dom";
 import { DeliveryMethodContent } from "../model/lazy";
 
-const DeliveryMethod: React.FC<Props> = ({ title }) => {
+const DeliveryMethod = ({ title }: Props) => {
     const navigate = useNavigate();
 
     return (

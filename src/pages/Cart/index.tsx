@@ -6,7 +6,7 @@ import { DeliveryMethodPage } from "../DeliveryMethod";
 import Skeleton from "./ui/Skeleton";
 
 export { cartSlice, addToCart, clearCart, clearOrder } from "./model/slice";
-export { type CartInterface, type DeliveryInfo, type PaymentInfo } from "./model/interfaces";
+export { type CartInterface } from "./model/interfaces";
 
 export const View = React.lazy(() => import("./ui/ui"));
 

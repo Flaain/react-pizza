@@ -1,7 +1,7 @@
 import cn from "@/shared/lib/classNames";
+import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { Menu, PaymentMethod } from "@/widgets/PaymentModal/model/interfaces";
 import { Props, Tab } from "../model/interfaces";
-import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 

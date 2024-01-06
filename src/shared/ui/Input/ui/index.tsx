@@ -1,7 +1,6 @@
-import React from "react";
 import { Props } from "../model/interfaces";
 
-const Input: React.FC<Props> = (props) => {
+const Input = (props: Props) => {
     return <input {...props} />;
 };
 

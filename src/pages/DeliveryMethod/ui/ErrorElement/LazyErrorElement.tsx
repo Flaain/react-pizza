@@ -1,9 +1,8 @@
 import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
-import React from "react";
 import { LazyErrorElementProps } from "../../model/interfaces";
 
-const LazyErrorElement: React.FC<LazyErrorElementProps> = ({ error, navigate }) => {
+const LazyErrorElement = ({ error, navigate }: LazyErrorElementProps) => {
     return (
         <ModalBody>
             <ModalHeader title='Ошибка' closeHandler={() => navigate("/cart")} />

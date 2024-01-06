@@ -33,12 +33,6 @@ export interface CartListProps {
     cart: Array<CartInterface>;
 }
 
-enum ActionTypes {
-    DIRECT = "direct",
-    INCREASE = "increase",
-    DECREASE = "decrease",
-}
-
 type DirectPayload = {
     type: "direct";
     productId: number;

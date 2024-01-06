@@ -55,3 +55,9 @@ export const actionTypes = {
     SET_PRICE: "SET_PRICE",
     UPDATE: "UPDATE",
 };
+
+export const positions = {
+    top: "top-0",
+    center: "top-[50%]",
+    bottom: "bottom-0",
+};

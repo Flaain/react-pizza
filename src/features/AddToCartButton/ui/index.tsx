@@ -1,15 +1,13 @@
 import React from "react";
 import { Props } from "../interfaces";
 
-const AddToCartButton: React.FC<Props> = ({ title, initialCount, handleClick }) => {
+const AddToCartButton = ({ title, initialCount, handleClick }: Props) => {
     const [count, setCount] = React.useState(initialCount ?? 0);
 
     const onClick = () => {
         setCount((prevState) => prevState + 1);
         handleClick();
     };
-
-    // React.useEffect(() => setCount(initialCount ?? 0), [initialCount]);
 
     return (
         <button

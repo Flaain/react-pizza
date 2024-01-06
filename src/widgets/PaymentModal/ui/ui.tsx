@@ -4,14 +4,14 @@ import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
-import { localStorageKeys } from "@/shared/config/constants";
-import { PaymentInfo } from "@/pages/Cart";
-import { useAppSelector } from "@/shared/model/store";
-import { userSelector } from "@/shared/model/selectors";
-import { Menu, Menus, Props } from "../model/interfaces";
 import PaymentMain from "@/features/PaymentMain/ui/ui";
 
-const PaymentModal: React.FC<Props> = ({ closeHandler }) => {
+import { localStorageKeys } from "@/shared/config/constants";
+import { useAppSelector } from "@/shared/model/store";
+import { userSelector } from "@/shared/model/selectors";
+import { Menu, Menus, PaymentInfo, Props } from "../model/interfaces";
+
+const PaymentModal = ({ closeHandler }: Props) => {
     const { paymentInfo } = useAppSelector(userSelector);
 
     const [activeMenu, setActiveMenu] = React.useState<Menu>("main");

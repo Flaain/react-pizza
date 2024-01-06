@@ -1,7 +1,7 @@
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
-import Image from "@/shared/ui/Image/ui";
-import ImageSkeleton from "@/shared/ui/ImageSkeleton";
+import Image from "@/shared/ui/Image/ui/ui";
+import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import { Link } from "react-router-dom";
 import { RelatedItemProps } from "../../model/interfaces";
 

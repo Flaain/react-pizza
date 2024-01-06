@@ -30,11 +30,6 @@ export interface Address {
     deliveryPrice?: number;
 }
 
-export interface ImageSkeletonProps {
-    width: number;
-    height: number;
-}
-
 export interface BrowserTitleProps {
     data: Product;
     children: React.ReactElement;

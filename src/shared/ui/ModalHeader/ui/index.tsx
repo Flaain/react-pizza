@@ -1,8 +1,7 @@
-import React from "react";
-import getImageUrl from "../../../lib/helpers/getImageUrl";
+import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { Props } from "../model/interfaces";
 
-const ModalHeader: React.FC<Props> = ({ title, closeHandler }) => {
+const ModalHeader = ({ title, closeHandler }: Props) => {
     return (
         <div className='flex items-center justify-between w-full'>
             <h1 className='text-3xl text-primary-black font-bold'>{title}</h1>

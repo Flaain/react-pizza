@@ -8,7 +8,7 @@ import { Data } from "@/shared/api/interfaces";
 import { Address } from "@/shared/model/interfaces";
 import { DeliveryMethodModalContentProps } from "../../model/interfaces";
 
-const DeliveryMethodModalContent: React.FC<DeliveryMethodModalContentProps> = ({ title, navigate }) => {
+const DeliveryMethodModalContent = ({ title, navigate }: DeliveryMethodModalContentProps) => {
     const { data } = useLoaderData() as { data: Promise<Data<Array<Address>>> };
 
     return (

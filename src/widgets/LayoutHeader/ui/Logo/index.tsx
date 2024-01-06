@@ -2,7 +2,7 @@ import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { LogoProps } from "../../interfaces";
 import { Link } from "react-router-dom";
 
-const Logo: React.FC<LogoProps> = ({ title, description }) => {
+const Logo = ({ title, description }: LogoProps) => {
     return (
         <Link to='/' className='flex items-center gap-5 group'>
             <img

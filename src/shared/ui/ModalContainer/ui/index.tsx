@@ -2,7 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Props } from "../model/interfaces";
 
-const ModalContainer: React.FC<Props> = ({ children, closeHandler }) => {
+const ModalContainer = ({ children, closeHandler }: Props) => {
     React.useEffect(() => {
         const handleKeyUp = ({ key }: KeyboardEvent) => {
             key === "Escape" && closeHandler();
@@ -10,7 +10,7 @@ const ModalContainer: React.FC<Props> = ({ children, closeHandler }) => {
 
         document.body.classList.add("overflow-hidden");
         document.addEventListener("keyup", handleKeyUp);
-        
+
         return () => {
             document.body.classList.remove("overflow-hidden");
             document.removeEventListener("keyup", handleKeyUp);

@@ -1,9 +1,10 @@
 import React from "react";
-import { Options } from "./types";
-import { renderField } from "./utils/renderField";
+import { ErrorsState, Field, Validation } from "./types";
+import { validationRules } from "./utils/staticValidationRules";
 
-/* Just a quick remark. I provide in every change action like onChange, onBlur and etc "name" as a first parameter
-    at first i was using "name" provided by target but unfortunately user can easily change name attribute and it can costs a bugs
+/* 
+    Just a quick remark. I provide in every change action like onChange, onBlur and etc "name" as a first parameter.
+    At first i was using "name" provided by event target but unfortunately user can easily change name attribute and it can costs a bugs
     the solution i was thinking about something like this:
     
     if (!form[name]) return;
@@ -12,67 +13,77 @@ import { renderField } from "./utils/renderField";
     a pull request i will really appreciate you
 */
 
-export const useForm = (initial: Options) => {
-    const [form, setForm] = React.useState(initial);
-
-    const validationRules = {
-        required: (_: string, value: string) => !!value.trim().length,
-        minLength: (name: string, value: string) => value.trim().length >= (form[name].validation.minLength?.value as number),
-        maxLength: (name: string, value: string) => value.trim().length <= (form[name].validation.maxLength?.value as number),
-        pattern: (name: string, value: string) => (form[name].validation.pattern?.value as RegExp).test(value),
-    }; // Static validation rules
+export const useForm = () => {
+    const [form, setForm] = React.useState<Record<string, Field>>({});
+    const [errors, setErrors] = React.useState<ErrorsState>({});
 
     const isInputValid = React.useCallback((name: string, value: string) => {
         return Object.keys(form[name].validation).find((key) => {
-            return !validationRules[key as keyof typeof validationRules](name, value);
+            return !validationRules[key as keyof typeof validationRules]({ name, value, validation: form[name].validation });
         });
     }, [form]); // I don't know if useMemo is necessary cuz we change form on every onChange action
 
-    const submitHandler = (cb: (data: { [key: string]: string }) => void) => {
+    const register = (field: Field) => {
+        !form[field.name] && setForm((prevState) => ({ ...prevState, [field.name]: field }));
+        
+        return {
+            name: field.name,
+            value: form[field.name]?.value ?? field.value,
+            onBlur: handleBlur,
+            onChange: handleChange,
+            onFocus: handleFocus
+        }
+    }
+
+    const handleFocus = ({ target: { name } }: React.FocusEvent<HTMLInputElement>) => {
+        !form[name].isDirty && setForm((prevState) => ({ ...prevState, [name]: { ...form[name], isDirty: true } }));
+    }
+
+    const submitHandler = (cb: (data: Record<string, string>) => void) => {
         return (event: React.FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             
-            const errors = {};
+            const errors: ErrorsState = {};
 
             if (!isFormValid) {
                 Object.values(form).forEach(({ name, validation, value }) => {
                     const errorKey = isInputValid(name, value);
-                    errorKey && (errors[name] = { ...form[name], error: validation[errorKey].errorMessage });
+                    errorKey && (errors[name] = (validation[errorKey as keyof Validation]?.errorMessage as string));
                 });
-                
-                setForm((prevState) => ({ ...prevState, ...errors }));
+                setErrors((prevState) => ({ ...prevState, ...errors }));
                 return;
             }
             
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             cb(Object.fromEntries(Object.entries(form).map(([_, { value, name }]) => [name, value])));
         }
     };
 
-    const handleBlur = (name: string, { target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleBlur = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const errorKey = isInputValid(name, value);
 
-        setForm((prevState) => ({
-            ...prevState,
-            [name]: { ...prevState[name], error: errorKey ? prevState[name].validation[errorKey].errorMessage : null },
-        }));
+        setErrors((prevState) => ({ 
+            ...prevState, 
+            [name]: (errorKey && form[name]?.isDirty) ? form[name].validation[errorKey as keyof Validation]!.errorMessage : null
+         }))
     };
 
-    const handleChange = (name: string, { target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
-        setForm((prevState) => ({ ...prevState, [name]: { ...prevState[name], value, dirty: true } }));
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        setForm((prevState) => ({ ...prevState, [name]: { ...prevState[name], value } }));
     };
     
     const isFormValid = React.useMemo(() => {
         return Object.values(form).every(({ name, validation, value }) => {
             return Object.keys(validation).every((key) => {
-                return validationRules[key as keyof typeof validationRules](name, value);
+                return validationRules[key as keyof typeof validationRules]({ name, value, validation });
             });
         });
-    }, [form]); /* Grabbing every field from form and checking if it's valid by provided validation rules. 
-                And i don't know if useMemo is necessary cuz we change form on every onChange action */
+    }, [form]);
 
     return {
         submitHandler,
-        renderFields: () => renderField(Object.values(form), handleChange, handleBlur),
+        register,
         isFormValid,
+        errors
     };
 };

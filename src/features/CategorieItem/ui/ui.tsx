@@ -1,5 +1,5 @@
 import cn from "@/shared/lib/classNames";
-import { Props } from "../interfaces";
+import { Props } from "../model/interfaces";
 
 const CategorieItem = ({ activeCategory, name, handleClick, categorie }: Props) => {
     return (

@@ -4,7 +4,7 @@ import cn from "@/shared/lib/classNames";
 import ResolvedProductDetails from "./ResolvedProductDetails";
 import ProductDetailsSkeleton from "./Skeleton";
 import { Await, useLoaderData } from "react-router-dom";
-import { Product } from "@/shared/api/interfaces";
+import { Product } from "@/shared/model/interfaces";
 
 const ProductDetails = () => {
     const { product } = useLoaderData() as { product: Product };

@@ -29,6 +29,7 @@ const Search = () => {
             <Input
                 className='border outline-none focus:placeholder:opacity-0 placeholder:transition-opacity placeholder:duration-200 placeholder-ease-in-out focus:bg-gray-100 focus:border-primary-orange border-solid border-primary-gray py-[5px] px-[40px] box-border rounded-lg w-full transition-colors duration-200'
                 type='search'
+                name="search"
                 value={value}
                 onChange={handleChange}
                 placeholder='Поиск...'

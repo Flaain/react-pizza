@@ -25,13 +25,14 @@ const TabContentItem = ({ address, method, currentInfo, deliveryPrice, rating, h
                     type='radio'
                     name='address'
                     className='sr-only'
+                    autoComplete="off"
                     checked={currentInfo?.address === address}
                     onChange={() =>
                         handleChange({
                             address,
+                            method,
                             ...(rating && { rating }),
                             ...(deliveryPrice && { deliveryPrice }),
-                            method,
                         })
                     }
                 />

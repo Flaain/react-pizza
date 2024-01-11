@@ -1,4 +1,4 @@
-import getImageUrl from "../../../shared/lib/helpers/getImageUrl";
+import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { Link } from "react-router-dom";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector } from "@/shared/model/selectors";

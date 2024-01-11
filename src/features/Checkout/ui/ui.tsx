@@ -4,7 +4,7 @@ import CheckoutSummary from "./CheckoutSummary";
 import CheckoutTotal from "./CheckoutTotal";
 
 import { userSelector } from "@/shared/model/selectors";
-import { CheckoutProps } from "../model";
+import { CheckoutProps } from "../model/interfaces";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/shared/model/store";
 import { useNavigate } from "react-router-dom";

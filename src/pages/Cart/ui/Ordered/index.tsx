@@ -1,7 +1,7 @@
 import OrderList from "@/widgets/OrderList/ui";
 import Container from "@/shared/ui/Container";
-import { Order } from "@/shared/api/interfaces";
 import { Link } from "react-router-dom";
+import { Order } from "@/shared/model/interfaces";
 
 const Ordered = ({ order, totalPrice }: Omit<Order, "deliveryInfo">) => {
     return (

@@ -1,4 +1,4 @@
-import { DeliveryInfo } from "@/pages/Cart";
+import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { LinkProps } from "react-router-dom";
 
 export interface CheckoutProps {

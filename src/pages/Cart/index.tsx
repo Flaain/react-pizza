@@ -1,18 +1,17 @@
 import React from "react";
+import CartSkeleton from "./ui/Skeletons/CartSkeleton";
 import { currentRoute } from "./model/currentRoute";
 import { RouteObject } from "react-router-dom";
 import { ViewWithSuspense as NotFound } from "../NotFound";
 import { DeliveryMethodPage } from "../DeliveryMethod";
-import Skeleton from "./ui/Skeleton";
+import { View } from "./model/lazy";
 
 export { cartSlice, addToCart, clearCart, clearOrder } from "./model/slice";
 export { type CartInterface } from "./model/interfaces";
 
-export const View = React.lazy(() => import("./ui/ui"));
-
 export const ViewWithSuspense = () => {
     return (
-        <React.Suspense fallback={<Skeleton />}>
+        <React.Suspense fallback={<CartSkeleton />}>
             <View />
         </React.Suspense>
     );

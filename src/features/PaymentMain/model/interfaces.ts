@@ -1,5 +1,4 @@
-import { PaymentInfo } from "@/pages/Cart";
-import { Menu, PaymentMethod } from "@/widgets/PaymentModal/model/interfaces";
+import { Menu, PaymentInfo, PaymentMethod } from "@/widgets/PaymentModal";
 
 export interface Tab {
     title: string;

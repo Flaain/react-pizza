@@ -1,5 +1,5 @@
 import React from "react";
-import AddToCartButton from "@/features/AddToCartButton/ui";
+import AddToCartButton from "@/features/AddToCartButton/ui/ui";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import getInitialState from "../lib/getInitialState";
 import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";

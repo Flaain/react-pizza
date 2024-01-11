@@ -1,6 +1,6 @@
 import cn from "@/shared/lib/classNames";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
-import { DeliveryInfo } from "@/pages/Cart";
+import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 
 const DeliveryInfoList = ({ address, method, deliveryPrice }: Omit<DeliveryInfo, "rating">) => {
     return (

@@ -1,4 +1,5 @@
-import { Action, ProductSelectorState, ProductSelectorTypes } from "./interfaces";
+import { ProductSelectorState } from "@/shared/model/interfaces";
+import { ProductSelectorTypes, Action } from "./interfaces";
 
 const productSelectorReducer = (state: ProductSelectorState, { type, payload }: Action) => {
     switch (type) {

@@ -1,5 +1,5 @@
 import { getCuttedString } from "../lib/helpers/getCuttedString";
-import { Promocode, Base, Order, Data, StaticAddresses, ResWithMeta, Product } from "./interfaces";
+import { Base, Data, Order, Product, Promocode, ResWithMeta, StaticAddresses } from "../model/interfaces";
 
 export class API {
     private _baseUrl: string;

@@ -3,23 +3,25 @@ import ModalContainer from "@/shared/ui/ModalContainer/ui";
 import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 import PaymentMain from "@/features/PaymentMain/ui/ui";
 
-import { localStorageKeys } from "@/shared/config/constants";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import { Menu, Menus, PaymentInfo, Props } from "../model/interfaces";
+import { useDispatch } from "react-redux";
+import { setPaymentInfo } from "@/app/redux/slice/user.slice";
 
 const PaymentModal = ({ closeHandler }: Props) => {
     const { paymentInfo } = useAppSelector(userSelector);
 
     const [activeMenu, setActiveMenu] = React.useState<Menu>("main");
-    const [prevMenu, setPrevMenu] = React.useState<Menu | null>(null);
     const [currentInfo, setCurrentInfo] = React.useState<PaymentInfo | null>(paymentInfo);
 
+    const dispatch = useDispatch();
+
     const handleSave = () => {
-        saveToLocalStorage({ key: localStorageKeys.PAYMENT_INFO, data: currentInfo });
+        dispatch(setPaymentInfo(currentInfo as PaymentInfo));
+        closeHandler();        
     };
 
     const menus: Menus = {
@@ -43,10 +45,10 @@ const PaymentModal = ({ closeHandler }: Props) => {
         <ModalContainer closeHandler={closeHandler}>
             <ModalBody>
                 <div className='flex items-center gap-5'>
-                    {activeMenu !== "main" && prevMenu && (
+                    {activeMenu !== "main" && (
                         <button
                             className='flex items-center justify-center p-2 min-w-[30px] min-h-[30px] rounded-full bg-primary-gray'
-                            onClick={() => setActiveMenu(prevMenu)}
+                            onClick={() => setActiveMenu("main")}
                             title='Вернуться назад'
                         >
                             <img src={getImageUrl("arrow.svg")} alt='back arrow' className='mr-[2px]' />

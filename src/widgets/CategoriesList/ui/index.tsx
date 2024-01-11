@@ -1,4 +1,4 @@
-import CategorieItem from "@/features/CategorieItem/ui";
+import CategorieItem from "@/features/CategorieItem/ui/ui";
 import { Props } from "../interfaces";
 import { initialCategories } from "@/shared/config/constants";
 

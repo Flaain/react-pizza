@@ -1,4 +1,4 @@
-import { Order } from "@/shared/api/interfaces";
+import { Order } from "@/shared/model/interfaces";
 
 export interface CartInterface {
     id: number;

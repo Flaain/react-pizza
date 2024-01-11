@@ -1,5 +1,4 @@
 import { Params } from "./types";
-import { Args } from "./interfaces";
 
 export default (...args: Params) => {
     const classNames = [];
@@ -8,7 +7,7 @@ export default (...args: Params) => {
         typeof args[i] === "string" && classNames.push(args[i]);
 
         if (typeof args[i] === "object") {
-            const obj = args[i] as Args;
+            const obj = args[i] as { [key: string]: boolean };
             Object.keys(obj).forEach((className) => {
                 obj[className] && classNames.push(className);
             });

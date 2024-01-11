@@ -1,26 +1,24 @@
-import { DeliveryInfo } from "@/pages/Cart";
-import { DeliveryMethod } from "@/pages/DeliveryMethod/model/interfaces";
+import { DeliveryInfo, DeliveryMethod, DeliveryMethodType } from "@/pages/DeliveryMethod/model/interfaces";
+import { Address } from "@/shared/model/interfaces";
 import { NavigateFunction, SetURLSearchParams } from "react-router-dom";
 
 export interface TabSelectorProps {
     items: Array<DeliveryMethod>;
-    tabIndex: number;
-    setTabIndex: React.Dispatch<React.SetStateAction<number>>;
+    selectedDeliveryMethodIndex: number;
+    setSelectedDeliveryMethodIndex: React.Dispatch<React.SetStateAction<number>>;
     setSearchParams: SetURLSearchParams;
 }
 
 export interface TabContentProps {
-    activeTab: DeliveryMethod;
-    isSaveBtnDisabled: boolean;
+    method: DeliveryMethodType;
     handleChange: ({ address, method, deliveryPrice, rating }: DeliveryInfo) => void;
     handleSave: () => void;
     currentInfo: DeliveryInfo | null;
-    setCurrentInfo: React.Dispatch<React.SetStateAction<DeliveryInfo | null>>;
 }
 
 export interface TabItemProps {
     address: string;
-    method: string;
+    method: DeliveryMethodType;
     currentInfo: DeliveryInfo | null;
     rating?: number;
     deliveryPrice?: number;
@@ -28,7 +26,8 @@ export interface TabItemProps {
 }
 
 export interface TabContentListProps {
-    activeTab: DeliveryMethod;
+    elements: Array<Address>;
+    method: DeliveryMethodType;
     currentInfo: DeliveryInfo | null;
     handleChange: ({ address, deliveryPrice, method, rating }: DeliveryInfo) => void;
 }

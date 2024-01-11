@@ -1,5 +1,5 @@
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import { LogoProps } from "../../interfaces";
+import { LogoProps } from "../../model/interfaces";
 import { Link } from "react-router-dom";
 
 const Logo = ({ title, description }: LogoProps) => {

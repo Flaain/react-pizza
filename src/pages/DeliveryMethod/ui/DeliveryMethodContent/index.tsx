@@ -4,8 +4,7 @@ import ModalHeader from "@/shared/ui/ModalHeader/ui";
 import Tabs from "@/widgets/Tabs/ui/ui";
 import TabsSkeleton from "../Skeletons/TabsSkeleton";
 import { Await, useLoaderData } from "react-router-dom";
-import { Data } from "@/shared/api/interfaces";
-import { Address } from "@/shared/model/interfaces";
+import { Address, Data } from "@/shared/model/interfaces";
 import { DeliveryMethodModalContentProps } from "../../model/interfaces";
 
 const DeliveryMethodModalContent = ({ title, navigate }: DeliveryMethodModalContentProps) => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Props } from "../interfaces";
+import { Props } from "../model/interfaces";
 
 const AddToCartButton = ({ title, initialCount, handleClick }: Props) => {
     const [count, setCount] = React.useState(initialCount ?? 0);

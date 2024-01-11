@@ -1,17 +1,26 @@
 import cn from "@/shared/lib/classNames";
 import TabContentList from "../TabContentList";
+import isSaveDisabled from "../../lib/isSaveDisabled";
 import { TabContentProps } from "../../model/interfaces";
-import { useNavigate } from "react-router-dom";
+import { useAsyncValue, useNavigate } from "react-router-dom";
+import { Address } from "@/shared/model/interfaces";
+import { useAppSelector } from "@/shared/model/store";
+import { userSelector } from "@/shared/model/selectors";
 
-const TabStaticAddresses = ({ activeTab, currentInfo, handleChange, isSaveBtnDisabled, handleSave }: TabContentProps) => {
+const TabStaticAddresses = ({ method, currentInfo, handleChange, handleSave }: TabContentProps) => {
+    const { data } = useAsyncValue() as { data: Array<Address> };
+    const { deliveryInfo } = useAppSelector(userSelector);
+
+    const isSaveBtnDisabled = isSaveDisabled(method, currentInfo, deliveryInfo);
+
     const navigate = useNavigate();
 
     return (
         <>
-            {!activeTab.addresses.length ? (
+            {!data.length ? (
                 <p className='text-gray-400'>Не удалось загрузить пункты самовывоза</p>
             ) : (
-                <TabContentList activeTab={activeTab} currentInfo={currentInfo} handleChange={handleChange} />
+                <TabContentList elements={data} method={method} currentInfo={currentInfo} handleChange={handleChange} />
             )}
             <div className='self-start mt-auto flex items-center gap-5'>
                 <button
@@ -19,8 +28,7 @@ const TabStaticAddresses = ({ activeTab, currentInfo, handleChange, isSaveBtnDis
                     onClick={handleSave}
                     className={cn(
                         "flex items-center justify-center py-2 px-5 rounded-lg bg-primary-orange text-white",
-                        (!currentInfo || !activeTab.addresses.length || isSaveBtnDisabled) &&
-                            "opacity-50 cursor-default"
+                        isSaveBtnDisabled && "opacity-50 cursor-default"
                     )}
                 >
                     Сохранить

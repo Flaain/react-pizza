@@ -3,13 +3,18 @@ import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { Link } from "react-router-dom";
-import { CheckoutControlsAuthGuardProps } from "../../model";
+import { CheckoutControlsAuthGuardProps } from "../../model/interfaces";
 
-const CheckoutControlsAuthGuard = ({ isAgreedWithTerms, handleChangeTerms, handleOrder, isOrderBtnDisabled }: CheckoutControlsAuthGuardProps) => {
+const CheckoutControlsAuthGuard = ({
+    isAgreedWithTerms,
+    handleChangeTerms,
+    handleOrder,
+    isOrderBtnDisabled,
+}: CheckoutControlsAuthGuardProps) => {
     const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
     const { orderLoading } = useAppSelector(cartSelector);
 
-    return jwt ? (
+    return 1 ? (
         <>
             <button
                 onClick={handleOrder}
@@ -42,13 +47,9 @@ const CheckoutControlsAuthGuard = ({ isAgreedWithTerms, handleChangeTerms, handl
                     />
                 </div>
                 <input className='sr-only' type='checkbox' checked={isAgreedWithTerms} onChange={handleChangeTerms} />
-                <p className='text-sm text-gray-400 select-none'>
-                    Соглашаюсь с&#32;
-                    <Link to='#' className='text-primary-black hover:text-primary-orange'>
+                <p className='text-sm text-gray-400 select-none'>Соглашаюсь с&#32;<Link to='#' className='text-primary-black hover:text-primary-orange'>
                         правилами пользования торговой площадкой
-                    </Link>
-                    &#32;и&#32;
-                    <Link to='#' className='text-primary-black hover:text-primary-orange'>
+                    </Link>&#32;и&#32;<Link to='#' className='text-primary-black hover:text-primary-orange'>
                         возврата
                     </Link>
                 </p>
@@ -56,12 +57,9 @@ const CheckoutControlsAuthGuard = ({ isAgreedWithTerms, handleChangeTerms, handl
         </>
     ) : (
         <p className='text-sm text-gray-400 select-none mt-2 leading-snug break-words'>
-            Пожалуйста,&#32;
-            <Link to='/auth?from=cart' className='text-primary-orange'>
+            Пожалуйста,&#32;<Link to='/auth?from=cart' className='text-primary-orange'>
                 войдите
-            </Link>
-            &#32; или&#32;
-            <Link to='/auth?from=cart' className='text-primary-orange'>
+            </Link>&#32; или&#32;<Link to='/auth?from=cart' className='text-primary-orange'>
                 зарегистрируйтесь
             </Link>
             , чтобы оформить заказ

@@ -3,9 +3,9 @@ import useCarousel from "@/shared/hooks/useCarousel";
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import RelatedItem from "./RelatedItem";
-import { Product } from "@/shared/api/interfaces";
 import { api } from "@/shared/api";
 import { Props } from "../model/interfaces";
+import { Product } from "@/shared/model/interfaces";
 
 const RelatedItems = ({ activeItem, title }: Props) => {
     const [items, setItems] = React.useState<Array<Product>>([]);

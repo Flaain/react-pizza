@@ -1,6 +1,6 @@
 import CheckoutControls from "../CheckoutControls";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
-import { CheckoutTotalProps } from "../../model";
+import { CheckoutTotalProps } from "../../model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 

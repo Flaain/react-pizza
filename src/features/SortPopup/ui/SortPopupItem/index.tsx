@@ -12,7 +12,7 @@ const SortPopupItem = ({ sort, activeSort, handleSort, name }: SortPopupItemProp
             )}
         >
             <img
-                src={getImageUrl(activeSort.sort === sort ? "sort_inactive" : "sort_color_dark")}
+                src={getImageUrl(activeSort.sort === sort ? "sort_inactive.svg" : "sort_color_dark.svg")}
                 alt='sort'
                 className={cn(!sort.includes("-") && "rotate-180")}
             />

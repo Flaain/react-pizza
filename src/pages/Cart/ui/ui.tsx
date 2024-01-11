@@ -1,11 +1,11 @@
 import React from "react";
 import Container from "@/shared/ui/Container";
-import EmptyCart from "./EmptyCart";
 import cn from "@/shared/lib/classNames";
 import CartItemsList from "./CartItemsList";
 import Checkout from "@/features/Checkout/ui/ui";
 import InfoContainer from "@/widgets/InfoContainer/ui/ui";
 import PaymentModal from "@/widgets/PaymentModal/ui/ui";
+import Spinner from "@/shared/ui/Spinner/ui";
 
 import { MinimizeCartInfo, MinimizeButton } from "@/features/MinimizeCartInfo";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
@@ -14,6 +14,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { clearCart } from "../model/slice";
 import { useDispatch } from "react-redux";
 import { AnimatePresence } from "framer-motion";
+import { EmptyCart } from "../model/lazy";
 
 const Cart = () => {
     const { cart, ordered, orderLoading, priceView: { totalItems } } = useAppSelector(cartSelector);
@@ -30,14 +31,22 @@ const Cart = () => {
     const navigate = useNavigate();
 
     const handleOrder = () => {
-        console.log('test')
-    }
+        console.log("test");
+    };
 
     if (isCartEmpty) {
         return (
             <>
                 <Navigate to='/cart' replace />
-                <EmptyCart />
+                <React.Suspense
+                    fallback={
+                        <Container classNames='max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border flex flex-col items-center justify-center gap-10 h-[calc(100vh-132px)]'>
+                            <Spinner position='center' />
+                        </Container>
+                    }
+                >
+                    <EmptyCart />
+                </React.Suspense>
             </>
         );
     }
@@ -47,7 +56,7 @@ const Cart = () => {
             <Container classNames='grid grid-cols-7 max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border py-5'>
                 <Outlet />
                 <AnimatePresence>
-                    {paymentModalOpened && (<PaymentModal closeHandler={() => setPaymentModalOpened(false)} />)}
+                    {paymentModalOpened && <PaymentModal closeHandler={() => setPaymentModalOpened(false)} />}
                 </AnimatePresence>
                 <div className='col-span-5'>
                     <div
@@ -80,12 +89,9 @@ const Cart = () => {
                         </div>
                         {minimizeCartItems ? <MinimizeCartInfo /> : <CartItemsList cart={cartArr} />}
                     </div>
-                    <InfoContainer disabled={orderLoading} setPaymentModalOpened={setPaymentModalOpened}/>
+                    <InfoContainer disabled={orderLoading} setPaymentModalOpened={setPaymentModalOpened} />
                 </div>
-                <Checkout
-                    handleOrder={handleOrder}
-                    setPaymentModalOpened={setPaymentModalOpened}
-                />
+                <Checkout handleOrder={handleOrder} setPaymentModalOpened={setPaymentModalOpened} />
             </Container>
         </section>
     );

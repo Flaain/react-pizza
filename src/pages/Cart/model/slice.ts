@@ -8,8 +8,8 @@ import { localStorageKeys } from "@/shared/config/constants";
 import { handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { ProductSelectorState } from "@/entities/Product/model/interfaces";
 import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
+import { ProductSelectorState } from "@/shared/model/interfaces";
 
 export const cartSlice = createSlice({
     name: "cart",

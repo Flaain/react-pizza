@@ -2,9 +2,9 @@ import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { Props } from "../../model/interfaces";
 
-const MinimizeCartItemsButton = ({ minimizeCartItems, ...btn }: Props) => {
+const MinimizeCartItemsButton = ({ minimizeCartItems, ...rest }: Props) => {
     return (
-        <button {...btn}>
+        <button {...rest}>
             <img
                 className={cn("outline-none", minimizeCartItems ? "-rotate-90" : "rotate-90")}
                 src={getImageUrl("arrow.svg")}

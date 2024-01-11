@@ -1,0 +1,1 @@
+export type Params = Array<{ [key: string]: boolean } | string | boolean>;

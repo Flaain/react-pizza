@@ -1,10 +1,11 @@
-export type ValidationRules = "minLength" | "maxLength" | "required" | "pattern";
+export type ValidationRules = "minLength" | "maxLength" | "required" | "pattern" | "match";
 
 export type FormObj = Record<string, Field>;
 
 export type Validation = {
     [key in ValidationRules]?: {
         value?: unknown;
+        matchWith?: string;
         errorMessage: string;
     };
 };
@@ -24,6 +25,7 @@ export interface Options {
 
 export interface StaticValidationRulesArgs {
     name: string;
-    value: string;
-    validation?: Validation;
+    currentValue: string;
+    matchWith: string;
+    validationValue?: unknown;
 }

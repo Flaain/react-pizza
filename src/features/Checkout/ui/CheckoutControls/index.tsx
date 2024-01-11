@@ -2,7 +2,7 @@ import React from "react";
 import getDataFromLocalStorage from "@/shared/lib/helpers/getDataFromLocalStorage";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 import CheckoutControlsAuthGuard from "../CheckoutControlsAuthGuard";
-import { CheckoutControlsProps } from "../../model";
+import { CheckoutControlsProps } from "../../model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { localStorageKeys } from "@/shared/config/constants";

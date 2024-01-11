@@ -1,6 +1,5 @@
-import { Meta, Product } from "@/shared/api/interfaces";
 import { CartInterface } from "@/pages/Cart";
-import { Address } from "@/shared/model/interfaces";
+import { Address, Meta, Product } from "@/shared/model/interfaces";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { PaymentInfo } from "@/widgets/PaymentModal/model/interfaces";
 

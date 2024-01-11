@@ -1,21 +1,16 @@
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import { Menu, PaymentMethod } from "@/widgets/PaymentModal/model/interfaces";
-import { Props, Tab } from "../model/interfaces";
+import { Menu, PaymentInfo, PaymentMethod } from "@/widgets/PaymentModal/model/interfaces";
+import { Props } from "../model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
+import { tabs } from "../model/tabs";
 
 const PaymentMain = ({ currentInfo, handleSave, setActiveMenu, setCurrentInfo, closeHandler }: Props) => {
     const { paymentInfo } = useAppSelector(userSelector);
 
-    const tabs: Array<Tab> = [
-        { title: "Наличными", method: "cash", img: "cash.svg" },
-        { menu: "add-card", title: "Привязать новую карту" },
-        { menu: "choose-card", title: "Выбрать карту для оплаты" },
-    ];
-
     const handleChange = (menu: Menu | undefined, method: PaymentMethod | undefined) => {
-        menu ? setActiveMenu(menu) : setCurrentInfo({ method });
+        menu ? setActiveMenu(menu) : setCurrentInfo({ method } as PaymentInfo);
     };
 
     return (

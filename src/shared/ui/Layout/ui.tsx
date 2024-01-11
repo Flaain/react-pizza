@@ -5,10 +5,14 @@ import { Props } from "./model/interfaces";
 const Layout = ({ headerSlot, announcementSlot, footerSlot }: Props) => {
     return (
         <Container>
-            <div>
-                {announcementSlot && announcementSlot}
-                {headerSlot}
-            </div>
+            {announcementSlot ? (
+                <div className='flex flex-col gap-5'>
+                    {announcementSlot}
+                    {headerSlot}
+                </div>
+            ) : (
+                headerSlot
+            )}
             <Outlet />
             {footerSlot && footerSlot}
         </Container>

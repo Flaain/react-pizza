@@ -1,3 +1,9 @@
-import { Args } from "./interfaces";
-
-export default (...args: Array<Args>) => args.forEach(({ key, data }) => localStorage.setItem(key, JSON.stringify(data)));
+export default (...args: Array<{ key: string; data: unknown }>) => {
+    args.forEach(({ key, data }) => {
+        try {
+            localStorage.setItem(key, JSON.stringify(data));
+        } catch (error) {
+            console.error(error);
+        }
+    });
+};

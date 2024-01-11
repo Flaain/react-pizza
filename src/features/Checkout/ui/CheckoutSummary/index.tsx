@@ -5,7 +5,7 @@ import CheckoutInfoActionLink from "../CheckoutInfoActionLink";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { routerList } from "@/shared/config/constants";
-import { CheckoutSummaryProps } from "../../model";
+import { CheckoutSummaryProps } from "../../model/interfaces";
 
 const CheckoutSummary = ({ setPaymentModalOpened }: CheckoutSummaryProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
@@ -29,10 +29,10 @@ const CheckoutSummary = ({ setPaymentModalOpened }: CheckoutSummaryProps) => {
                 <span className='text-base font-medium text-primary-black'>Сумма товаров</span>
                 <p className='text-gray-400'>{intl}</p>
             </div>
-            {deliveryInfo?.method === "courier" && (
+            {deliveryInfo?.method === "courier" && deliveryInfo.deliveryPrice && (
                 <div className='flex flex-col'>
                     <span className='text-base font-medium text-primary-black'>Доставка</span>
-                    <p className='text-gray-400'>{getIntlPrice(deliveryInfo.deliveryPrice!)}</p>
+                    <p className='text-gray-400'>{getIntlPrice(deliveryInfo.deliveryPrice)}</p>
                 </div>
             )}
         </div>

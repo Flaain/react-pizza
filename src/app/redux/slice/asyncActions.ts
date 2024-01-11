@@ -5,7 +5,7 @@ import { initialSortNames } from "@/shared/config/constants";
 
 const possibleParams: PossibleParams = { search: "title", sort: "sortBy", category: "category" };
 
-export const fetchProducts = createAsyncThunk("products/fetchProducts", async (controller: AbortController, { rejectWithValue }) => {
+export const fetchProducts = createAsyncThunk("products/fetchProducts", async (controller: AbortController, {  rejectWithValue }) => {
     try {
         const params = new URLSearchParams(document.location.search);
         

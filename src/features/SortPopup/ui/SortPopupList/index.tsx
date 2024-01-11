@@ -1,5 +1,5 @@
 import React from "react";
-import SortPopupItem from "@/features/SortPopup/ui/SortItem";
+import SortPopupItem from "@/features/SortPopup/ui/SortPopupItem";
 import { motion } from "framer-motion";
 import { SortPopupListProps } from "@/features/SortPopup/model/interfaces";
 import { initialSortNames } from "@/shared/config/constants";

@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { changeItemCount, removeProductFromCart } from "@/pages/Cart/model/slice";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
+import Input from "@/shared/ui/Input/ui";
 
 const CartItem = ({ productId, itemId, count, img, size, title, type, price, loading }: CartItemProps) => {
     const { lang } = useAppSelector(userSelector);
@@ -21,15 +22,13 @@ const CartItem = ({ productId, itemId, count, img, size, title, type, price, loa
     const dispatch = useDispatch();
 
     const handleChange = ({ target: { valueAsNumber } }: React.ChangeEvent<HTMLInputElement>) => {
-        const isValueLessZero = valueAsNumber <= 0 || !valueAsNumber;
-        const count = isValueLessZero ? 1 : valueAsNumber; 
-        
+        const isValueInvalid = valueAsNumber <= 0 || !valueAsNumber;
+        const count = isValueInvalid ? 1 : valueAsNumber;
+
         setItemCount(count);
         dispatch(changeItemCount({ type: "direct", count, itemId, productId }));
     };
-    
-    // const handleBlur = ({ target: { valueAsNumber } }: React.FocusEvent<HTMLInputElement>) => {};
-    
+
     const handleIncrease = () => {
         setItemCount((prevState) => prevState + 1);
         dispatch(changeItemCount({ type: "increase", itemId, productId }));
@@ -73,9 +72,10 @@ const CartItem = ({ productId, itemId, count, img, size, title, type, price, loa
                     >
                         -
                     </button>
-                    <input
+                    <Input
                         className='text-lg font-medium appearance-none outline-none w-[30px] h-[30px] text-center'
                         type='number'
+                        name='count'
                         value={itemCount}
                         onChange={handleChange}
                         disabled={loading}

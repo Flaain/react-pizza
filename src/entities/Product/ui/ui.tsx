@@ -1,6 +1,6 @@
 import React from "react";
 import productSelectorReducer from "../model/reducer";
-import AddToCartButton from "@/features/AddToCartButton/ui";
+import AddToCartButton from "@/features/AddToCartButton/ui/ui";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import Image from "@/shared/ui/Image/ui/ui";
 import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";

@@ -1,6 +1,6 @@
 import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
 import { RouterProvider } from "react-router-dom";
-import { appRouter } from "../appRouter";
+import { appRouter } from "../model/appRouter";
 import { appSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 

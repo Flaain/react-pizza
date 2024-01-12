@@ -1,4 +1,4 @@
-import { Product } from "@/shared/api/interfaces";
+import { Product } from "@/shared/model/interfaces";
 
 export interface Props {
     activeItem: Product;

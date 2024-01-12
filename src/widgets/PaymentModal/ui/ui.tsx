@@ -37,8 +37,8 @@ const PaymentModal = ({ closeHandler }: Props) => {
             ),
             title: "Способ оплаты",
         },
-        // "add-card": { component: <PaymentAddCard />, title: "Привязка карты" },
-        // "choose-card": { component: <PaymentUserCards />, title: "Выбор карты" },
+        "add-card": { component: <div>add card</div>, title: "Привязка карты" },
+        "choose-card": { component: <div>choose card</div>, title: "Выбор карты" },
     };
 
     return (

@@ -1,5 +1,5 @@
-import { Product } from "@/shared/api/interfaces";
 import { initialSizes } from "@/shared/config/constants";
+import { Product } from "@/shared/model/interfaces";
 
 const getInitialState = (item: Product, params: URLSearchParams) => {
     const paramsSize = Number(params.get("size")) || 0;

@@ -1,9 +1,9 @@
-import { Size } from "@/shared/api/interfaces";
-import { Action, ProductSelectorState, ProductSelectorTypes } from "@/entities/Product/model/interfaces";
+import { Action, ProductSelectorTypes } from "@/entities/Product/model/interfaces";
+import { ProductSelectorState, Size } from "@/shared/model/interfaces";
 
 export interface Segment {
-    availableValueIndex: (initial: number | string, available: unknown, index: number) => boolean,
-    title?: (value: unknown) => string
+    availableValueIndex: (initial: number | string, available: unknown, index: number) => boolean;
+    title?: (value: unknown) => string;
 }
 
 export interface SegmentResult {

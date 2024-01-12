@@ -1,5 +1,5 @@
 import OrderItem from "@/entities/Product/ui/OrderItem";
-import { Order } from "@/shared/api/interfaces";
+import { Order } from "@/shared/model/interfaces";
 
 const OrderList = ({ order }: Omit<Order, "totalPrice" | "deliveryInfo">) => {
     return (

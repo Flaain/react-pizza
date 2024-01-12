@@ -8,8 +8,8 @@ import PaymentModal from "@/widgets/PaymentModal/ui/ui";
 import Spinner from "@/shared/ui/Spinner/ui";
 
 import { MinimizeCartInfo, MinimizeButton } from "@/features/MinimizeCartInfo";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { cartSelector, userSelector } from "@/shared/model/selectors";
+import { Navigate, Outlet } from "react-router-dom";
+import { cartSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { clearCart } from "../model/slice";
 import { useDispatch } from "react-redux";
@@ -18,7 +18,6 @@ import { EmptyCart } from "../model/lazy";
 
 const Cart = () => {
     const { cart, ordered, orderLoading, priceView: { totalItems } } = useAppSelector(cartSelector);
-    const { jwt, deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
     const [minimizeCartItems, setMinimizeCartItems] = React.useState(false);
     const [paymentModalOpened, setPaymentModalOpened] = React.useState(false);
@@ -28,9 +27,8 @@ const Cart = () => {
     const isCartEmpty = !cart.size && !ordered;
 
     const dispatch = useDispatch();
-    const navigate = useNavigate();
 
-    const handleOrder = () => {
+    const handleOrder = async () => {
         console.log("test");
     };
 

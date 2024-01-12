@@ -6,8 +6,8 @@ import PriceBlock from "@/widgets/PriceBlock/ui/ui";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import BrowserTitle from "@/shared/ui/BrowserTitle";
 import RelatedItems from "@/widgets/RelatedItems/ui/ui";
-import { Data, Product } from "@/shared/api/interfaces";
 import { useAsyncValue } from "react-router-dom";
+import { Data, Product } from "@/shared/model/interfaces";
 
 const ResolvedProductDetails = () => {
     const { data } = useAsyncValue() as Data<Product>;

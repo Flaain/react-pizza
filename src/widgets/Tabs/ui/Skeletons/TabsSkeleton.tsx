@@ -1,3 +1,5 @@
+import TabContentItemSkeleton from "./TabContentItemSkeleton";
+
 const TabsSkeleton = () => {
     return (
         <div className='flex flex-col overflow-auto box-border'>
@@ -7,12 +9,7 @@ const TabsSkeleton = () => {
             </div>
             <ul className='flex flex-col gap-5 mt-5 overflow-auto h-full'>
                 {[...Array(5)].map((_, index) => (
-                    <li
-                        key={index}
-                        className={`opacity-${
-                            index ? 100 - index * 10 : 100
-                        } bg-gray-100 w-full h-[80px] space-y-5 rounded-xl relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-gray-200/10 before:to-transparent overflow-hidden isolate before:border-t before:border-primary-gray/30`}
-                    ></li>
+                    <TabContentItemSkeleton key={index} index={index} />
                 ))}
             </ul>
         </div>

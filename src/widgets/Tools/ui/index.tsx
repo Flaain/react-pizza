@@ -1,19 +1,20 @@
 import CategoriesList from "@/widgets/CategoriesList/ui";
 import SortPopup from "@/features/SortPopup/ui/ui";
-import getCategoryFromSearchParams from "@/pages/Home/lib/helpers/getCategoryFromSearchParams";
-import { Props } from "../interfaces";
+import getCategoryFromSearchParams from "../lib/helpers/getCategoryFromSearchParams";
+import { Props } from "../model/interfaces";
 import { initialSortNames } from "@/shared/config/constants";
 
 const Tools = ({ searchParams, setSearchParams }: Props) => {
-    const activeSort = initialSortNames.get(searchParams.get("sort")!) ?? initialSortNames.get("-rating");
-
     return (
         <div className='flex items-center justify-between'>
             <CategoriesList
                 setSearchParams={setSearchParams}
                 activeCategory={getCategoryFromSearchParams("category", searchParams)}
             />
-            <SortPopup activeSort={activeSort!} setSearchParams={setSearchParams} />
+            <SortPopup
+                activeSort={initialSortNames.get(searchParams.get("sort")!) ?? initialSortNames.get("-rating")!}
+                setSearchParams={setSearchParams}
+            />
         </div>
     );
 };

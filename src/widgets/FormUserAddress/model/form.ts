@@ -20,6 +20,7 @@ export const form: { [key: string]: Form } = {
         validation: {
             required: { errorMessage: "Поле обязательно для заполнения" },
             minLength: { value: 5, errorMessage: "Минимальная длина поля - 5 символов" },
+            match: { errorMessage: "Поле адрес должно совпадать с полем город", matchWith: "city" }
         },
     },
     postcode: {

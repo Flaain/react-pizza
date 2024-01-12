@@ -1,10 +1,10 @@
 import Container from "@/shared/ui/Container";
 import Logo from "./Logo";
-import CartPreview from "@/widgets/CartPreview/ui";
 import Search from "@/features/Search/ui";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import { Link } from "react-router-dom";
+import { CartPreview } from "@/features/CartPreview";
 
 export const LayoutHeader = () => {
     const { jwt } = useAppSelector(userSelector);

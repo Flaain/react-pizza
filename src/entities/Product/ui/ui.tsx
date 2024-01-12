@@ -1,9 +1,8 @@
 import React from "react";
 import productSelectorReducer from "../model/reducer";
-import AddToCartButton from "@/features/AddToCartButton/ui/ui";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import Image from "@/shared/ui/Image/ui/ui";
-import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";
+import { OptionsSelector } from "@/shared/ui/OptionsSelector";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/pages/Cart";
@@ -12,6 +11,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { cartSelector } from "@/shared/model/selectors";
 import { initialSizes } from "@/shared/config/constants";
 import { useAnimatedPrice } from "../lib/useAnimatedPrice";
+import { AddToCartButton } from "@/features/AddToCartButton";
 
 const Card = ({ id, title, price, category, types, sizes, imageUrl }: Props) => {
     const { cart } = useAppSelector(cartSelector);

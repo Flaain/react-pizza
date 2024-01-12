@@ -1,6 +1,6 @@
 import React from "react";
 import { ErrorsState, Field, Validation } from "./types";
-import { validationRules } from "./utils/staticValidationRules";
+import { validationRules } from "./utils/validationRules";
 
 /* 
     Just a quick remark. It's my second version of this comment, i decided to use target: { name } anyway but it's kinda buggy.
@@ -17,7 +17,7 @@ export const useForm = () => {
                 name,
                 currentValue: value,
                 validationValue: form[name].validation[key as keyof Validation]?.value,
-                matchWith: form[form[name].validation?.match?.matchWith]?.value
+                matchWith: form[name].validation.match?.matchWith ? form[form[name].validation.match!.matchWith!].value : ''
             });
         });
     }, [form]); // I don't know if useCallback is necessary cuz we change form on every onChange action
@@ -79,7 +79,7 @@ export const useForm = () => {
                     name,
                     currentValue: value,
                     validationValue: validation[key as keyof Validation]?.value,
-                    matchWith: form[validation.match?.matchWith]?.value,
+                    matchWith: validation.match?.matchWith ? form[validation.match?.matchWith]?.value : '',
                 });
             });
         });

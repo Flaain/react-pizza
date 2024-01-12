@@ -1,16 +1,17 @@
 import React from "react";
-import AddToCartButton from "@/features/AddToCartButton/ui/ui";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import getInitialState from "../lib/getInitialState";
-import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";
 import productSelectorReducer from "@/entities/Product/model/reducer";
+import { OptionsSelector } from "@/shared/ui/OptionsSelector";
+import { AddToCartButton } from "@/features/AddToCartButton";
 import { Props } from "../model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector } from "@/shared/model/selectors";
-import { Action, ProductSelectorState, ProductSelectorTypes } from "@/entities/Product/model/interfaces";
+import { Action, ProductSelectorTypes } from "@/entities/Product/model/interfaces";
 import { useSearchParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/pages/Cart";
+import { ProductSelectorState } from "@/shared/model/interfaces";
 
 const PriceBlock = ({ activeItem }: Props) => {
     const { cart } = useAppSelector(cartSelector);

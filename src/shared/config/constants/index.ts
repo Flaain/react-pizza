@@ -1,5 +1,5 @@
 import { Sort } from "@/shared/model/interfaces";
-import { Categories } from "@/widgets/Tools/interfaces";
+import { Categories } from "@/widgets/Tools/model/interfaces";
 
 export const initialTypes = ["тонкое", "традиционное"];
 export const initialSizes = [25, 30, 40];

@@ -1,5 +1,5 @@
-import OrderList from "@/widgets/OrderList/ui";
 import Container from "@/shared/ui/Container";
+import OrderList from "./OrderList";
 import { Link } from "react-router-dom";
 import { Order } from "@/shared/model/interfaces";
 

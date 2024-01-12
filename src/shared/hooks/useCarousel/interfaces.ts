@@ -1,8 +1,6 @@
-import { Product } from "@/shared/api/interfaces";
-
 export interface Props {
     scrollRef: React.RefObject<HTMLUListElement | null>;
-    items: Array<Product>;
+    items: Array<unknown>;
     options?: Options;
 }
 

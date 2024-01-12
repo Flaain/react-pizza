@@ -1,13 +1,6 @@
-import { ProductSelectorState } from "@/entities/Product/model/interfaces";
-import { Size } from "@/shared/api/interfaces";
+import { ProductSelectorState, Size } from "@/shared/model/interfaces";
 
-export const getPayloadBySegment = (
-    segmentType: string,
-    state: ProductSelectorState,
-    index: number,
-    availableValueIndex: number,
-    data: Array<number | Size>
-) => {
+export const getPayloadBySegment = (segmentType: string, state: ProductSelectorState, index: number, availableValueIndex: number, data: Array<number | Size>) => {
     switch (segmentType) {
         case "SET_TYPE":
             return {

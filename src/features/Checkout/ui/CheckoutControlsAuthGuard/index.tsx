@@ -14,7 +14,7 @@ const CheckoutControlsAuthGuard = ({
     const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
     const { orderLoading } = useAppSelector(cartSelector);
 
-    return 1 ? (
+    return jwt ? (
         <>
             <button
                 onClick={handleOrder}

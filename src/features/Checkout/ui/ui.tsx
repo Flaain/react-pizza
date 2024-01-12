@@ -5,7 +5,6 @@ import CheckoutTotal from "./CheckoutTotal";
 
 import { userSelector } from "@/shared/model/selectors";
 import { CheckoutProps } from "../model/interfaces";
-import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/shared/model/store";
 import { useNavigate } from "react-router-dom";
 import { routerList } from "@/shared/config/constants";
@@ -13,7 +12,6 @@ import { routerList } from "@/shared/config/constants";
 const Checkout = ({ handleOrder, setPaymentModalOpened }: CheckoutProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
-    const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const handleFormFill = () => {

@@ -1,8 +1,7 @@
 import React from "react";
 import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
-import Tabs from "@/widgets/Tabs/ui/ui";
-import TabsSkeleton from "../Skeletons/TabsSkeleton";
+import { Tabs, TabsSkeleton } from "@/widgets/Tabs";
 import { Await, useLoaderData } from "react-router-dom";
 import { Address, Data } from "@/shared/model/interfaces";
 import { DeliveryMethodModalContentProps } from "../../model/interfaces";

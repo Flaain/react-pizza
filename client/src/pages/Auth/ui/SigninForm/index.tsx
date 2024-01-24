@@ -10,6 +10,7 @@ import { FormProps } from "../../model/interfaces";
 import { api } from "../../api";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
+import { ApiError } from "@/shared/api/error";
 
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm({ validateOnChange: true });
@@ -42,7 +43,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
             dispatch(signin(responseData));
         } catch (error) {
             console.error(error);
-            setError(error.message);
+            error instanceof ApiError && setError(error.message);
         } finally {
             setLoading(false);
         }

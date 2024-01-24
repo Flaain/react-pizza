@@ -9,7 +9,7 @@ export class AuthController {
 
             const candidate = await User.findOne({ email });
 
-            if (candidate) return res.status(400).json({ message: "Пользователь с такой почтой уже существует" });
+            if (candidate) return res.status(400).json({ status: 400, message: "Пользователь с такой почтой уже существует" });
 
             const hashPassword = bcrypt.hashSync(password);
             const user = new User({ name, email, password: hashPassword });

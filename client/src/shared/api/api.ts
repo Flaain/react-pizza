@@ -1,5 +1,6 @@
 import { getCuttedString } from "../lib/helpers/getCuttedString";
 import { Base, Data, Order, Product, Promocode, ResWithMeta, StaticAddresses } from "../model/interfaces";
+import { ApiError } from "./error";
 
 export class API {
     private _baseUrl: string;
@@ -12,9 +13,10 @@ export class API {
 
     private async _checkResponse<T>(response: Response, endpoint: string): Promise<Data<T>> {
         const data = await response.json();
-        return response.ok
-            ? { status: response.status, statusText: response.statusText, message: "Успех", data }
-            : Promise.reject({ ...data, endpoint: getCuttedString(endpoint, 10) });
+
+        if (!response.ok) throw new ApiError({ ...data, endpoint: getCuttedString(endpoint, 10)})
+
+        return { status: response.status, statusText: response.statusText, message: "Успех", data }
     }
 
     async getStaticAddresses(endpoint = "/addresses"): Promise<Data<Array<StaticAddresses>>> {

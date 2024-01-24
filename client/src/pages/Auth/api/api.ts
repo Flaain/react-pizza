@@ -1,3 +1,4 @@
+import { ApiError } from "@/shared/api/error";
 import { getCuttedString } from "@/shared/lib/helpers/getCuttedString";
 import { Data } from "@/shared/model/interfaces";
 
@@ -12,9 +13,10 @@ export class API {
 
     private async _checkResponse<T>(response: Response, endpoint: string): Promise<Data<T>> {
         const data = await response.json();
-        return response.ok
-            ? { status: response.status, statusText: response.statusText, message: "Успех", data }
-            : Promise.reject({ ...data, endpoint: getCuttedString(endpoint, 10) });
+        console.log(data)
+        if (!response.ok) throw new ApiError({ ...data, endpoint: getCuttedString(endpoint, 10)})
+
+        return { status: response.status, statusText: response.statusText, message: "Успех", data }
     }
 
     async signin(body: Record<string, string>, controller?: AbortController, endpoint = "/auth/signin") {

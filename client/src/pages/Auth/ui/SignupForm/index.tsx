@@ -10,6 +10,7 @@ import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
 import { api } from "../../api";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
+import { ApiError } from "@/shared/api/error";
 
 const SignupForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm({ validateOnChange: true });
@@ -17,6 +18,7 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
     const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
+    const [error, setError] = React.useState<string | null>(null);
 
     const controller = React.useRef<AbortController | null>(null);
 
@@ -25,12 +27,21 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
     const handleSubmit = async ({ name, email, password }: Record<string, string>) => {
         controller.current && controller.current.abort();
         controller.current = new AbortController();
-        
-        const { data: { data: signupData } } = await api.signup({ name, email, password }, controller.current);
 
-        dispatch(signin(signupData));
+        try {
+            setLoading(true);
+
+            const { data: { data: signupData } } = await api.signup({ name, email, password }, controller.current);
+
+            dispatch(signin(signupData));
+        } catch (error) {
+            console.error(error);
+            error instanceof ApiError && setError(error.message);
+        } finally {
+            setLoading(false);
+        }
     };
-    
+
     return (
         <div className='p-10 flex flex-col justify-center items-center max-w-[600px] w-full box-content'>
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
@@ -45,6 +56,13 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                 </p>
             </div>
             <form className='flex flex-col gap-5 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
+                <AnimatePresence>
+                    {error && (
+                        <motion.p {...errorsAnimation} className='py-2 px-5 rounded bg-red-500 text-white'>
+                            {error}
+                        </motion.p>
+                    )}
+                </AnimatePresence>
                 <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out'>
                     <span className='text-primary-black'>Введите имя</span>
                     <Input
@@ -74,7 +92,10 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                     </AnimatePresence>
                 </label>
                 <PasswordInput
-                    {...register({ ...signupform.password, type: isPasswordVisible ? "text" : "password" }, { watch: true })}
+                    {...register(
+                        { ...signupform.password, type: isPasswordVisible ? "text" : "password" },
+                        { watch: true }
+                    )}
                     label={signupform.password.label}
                     onEyeClick={() => setIsPasswordVisible((prevState) => !prevState)}
                     isPasswordVisible={isPasswordVisible}
@@ -83,7 +104,10 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                 />
                 <PasswordInput
-                    {...register({ ...signupform.confirmPassword, type: isConfirmPasswordVisible ? "text" : "password" }, { watch: true })}
+                    {...register(
+                        { ...signupform.confirmPassword, type: isConfirmPasswordVisible ? "text" : "password" },
+                        { watch: true }
+                    )}
                     label={signupform.confirmPassword.label}
                     onEyeClick={() => setIsConfirmPasswordVisible((prevState) => !prevState)}
                     isPasswordVisible={isConfirmPasswordVisible}

@@ -1,1 +1,0 @@
-export type DetailsParamKey = 'size' | 'type'

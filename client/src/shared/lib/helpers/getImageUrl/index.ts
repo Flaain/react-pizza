@@ -1,0 +1,1 @@
+export default (name: string) => new URL(`/src/shared/assets/${name}`, import.meta.url).href;

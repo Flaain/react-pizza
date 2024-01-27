@@ -13,7 +13,7 @@ import { signin } from "@/app/redux/slice/user.slice";
 import { ApiError } from "@/shared/api/error";
 
 const SigninForm = ({ setActiveForm }: FormProps) => {
-    const { errors, isFormValid, register, submitHandler } = useForm({ validateOnChange: true });
+    const { errors, isFormValid, register, submitHandler } = useForm();
 
     const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
     /*  Right here is a weird decision by me cuz this state "isPasswordVisible" should be in Password Input component. 

@@ -20,5 +20,5 @@ export const validateData = (schema) => {
 export const limit = rateLimit({
     limit: 15,
     standardHeaders: true,
-    handler: (_, res) => res.status(429).json({ message: "Слишком много попыток, пожалуйста, попробуйте позже" }),
+    handler: (_, res) => res.status(429).json({ status: 429, message: "Слишком много попыток, пожалуйста, попробуйте позже" }),
 });

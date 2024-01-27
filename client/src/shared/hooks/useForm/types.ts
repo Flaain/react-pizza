@@ -17,10 +17,13 @@ export interface Field {
     type?: string;
     isDirty: boolean;
     validation?: Validation;
+    validateOnChange?: boolean;
+    ref?: React.RefObject<HTMLInputElement>;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface Options {
-    validateOnChange?: boolean;
+    provideFormValues?: boolean;
 }
 
 export interface StaticValidationRulesArgs {
@@ -31,5 +34,14 @@ export interface StaticValidationRulesArgs {
 }
 
 export interface RegisterOptions {
-    watch?: boolean;
+    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    validateOnChange?: boolean;
+}
+
+export interface LinkedValues {
+    [key: string]: unknown; // i know it's bad need to fix it
+    
+    onChange?: ((event: React.ChangeEvent<HTMLInputElement>) => void) | undefined;
+    onBlur?: ((event: React.ChangeEvent<HTMLInputElement>) => void) | undefined;
+    onFocus?: ((event: React.ChangeEvent<FocusEvent>) => void) | undefined;
 }

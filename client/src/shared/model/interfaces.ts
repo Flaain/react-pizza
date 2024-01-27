@@ -103,7 +103,7 @@ export interface Order {
     deliveryInfo: DeliveryInfo;
 } // <-- this is bad. Im talking about dependence from "@/pages/Cart" and "@/pages/DeliveryMethod/model/interfaces" cuz of this interface
 
-export interface Form extends Omit<Field, "value" | "isDirty"> {
+export interface Form extends Omit<Field, "value" | "isDirty" | "validateOnChange" | "onChange"> {
     value?: string;
     label?: string;
 }

@@ -11,18 +11,26 @@ import { api } from "../../api";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
 import { ApiError } from "@/shared/api/error";
+import { RegisterOptions } from "@/shared/hooks/useForm/types";
 
 const SignupForm = ({ setActiveForm }: FormProps) => {
-    const { errors, isFormValid, register, submitHandler } = useForm({ validateOnChange: true });
-
     const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
+    const [errorState, setErrorState] = React.useState<{ prevForm: Record<string, string>; error: string; valid: boolean; } | null>(null);
+
+    const { errors, isFormValid, register, submitHandler, getFormValues } = useForm({ provideFormValues: true });
 
     const controller = React.useRef<AbortController | null>(null);
 
     const dispatch = useDispatch();
+
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+        const formValues = { ...getFormValues(), [name]: value }; // don't like it at all but right now can't figure how get actual values
+        errorState && setErrorState((prevState) => ({ ...prevState!, valid: Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]) && isFormValid }));
+    };
+
+    const regOptions: RegisterOptions = { onChange: handleChange, validateOnChange: true };
 
     const handleSubmit = async ({ name, email, password }: Record<string, string>) => {
         controller.current && controller.current.abort();
@@ -36,7 +44,7 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
             dispatch(signin(signupData));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError && setError(error.message);
+            error instanceof ApiError && setErrorState({ prevForm: { email }, error: error.message, valid: false });
         } finally {
             setLoading(false);
         }
@@ -57,16 +65,16 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
             </div>
             <form className='flex flex-col gap-5 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
                 <AnimatePresence>
-                    {error && (
+                    {errorState?.error && (
                         <motion.p {...errorsAnimation} className='py-2 px-5 rounded bg-red-500 text-white'>
-                            {error}
+                            {errorState.error}
                         </motion.p>
                     )}
                 </AnimatePresence>
                 <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out'>
                     <span className='text-primary-black'>Введите имя</span>
                     <Input
-                        {...register(signupform.name)}
+                        {...register(signupform.name, regOptions)}
                         className='border border-solid border-primary-gray px-5 py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                     />
                     <AnimatePresence>
@@ -80,7 +88,7 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                 <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out'>
                     <span className='text-primary-black'>Введите почту</span>
                     <Input
-                        {...register(signupform.email)}
+                        {...register(signupform.email, regOptions)}
                         className='border border-solid border-primary-gray px-5 py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                     />
                     <AnimatePresence>
@@ -92,22 +100,18 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                     </AnimatePresence>
                 </label>
                 <PasswordInput
-                    {...register(
-                        { ...signupform.password, type: isPasswordVisible ? "text" : "password" },
-                        { watch: true }
-                    )}
+                    {...register(signupform.password, regOptions)}
+                    type={isPasswordVisible ? "text" : "password"}
                     label={signupform.password.label}
                     onEyeClick={() => setIsPasswordVisible((prevState) => !prevState)}
                     isPasswordVisible={isPasswordVisible}
                     error={errors["password"]}
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
-                />
+                    />
                 <PasswordInput
-                    {...register(
-                        { ...signupform.confirmPassword, type: isConfirmPasswordVisible ? "text" : "password" },
-                        { watch: true }
-                    )}
+                    {...register(signupform.confirmPassword, regOptions)}
+                    type={isConfirmPasswordVisible ? "text" : "password"}
                     label={signupform.confirmPassword.label}
                     onEyeClick={() => setIsConfirmPasswordVisible((prevState) => !prevState)}
                     isPasswordVisible={isConfirmPasswordVisible}
@@ -115,7 +119,7 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                 />
-                <AuthButton title='Зарегистрироваться' disabled={!isFormValid || loading} />
+                <AuthButton title='Зарегистрироваться' disabled={!isFormValid || loading || (errorState ? !errorState.valid : false)} />
             </form>
         </div>
     );

@@ -13,7 +13,7 @@ export class API {
 
     private async _checkResponse<T>(response: Response, endpoint: string): Promise<Data<T>> {
         const data = await response.json();
-        console.log(data)
+
         if (!response.ok) throw new ApiError({ ...data, endpoint: getCuttedString(endpoint, 10)})
 
         return { status: response.status, statusText: response.statusText, message: "Успех", data }

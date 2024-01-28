@@ -13,10 +13,12 @@ import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import Input from "@/shared/ui/Input/ui";
 
-const CartItem = ({ productId, itemId, count, img, size, title, type, price, loading }: CartItemProps) => {
+const CartItem = ({ productId, count, img, size, title, type, price, loading }: CartItemProps) => {
     const { lang } = useAppSelector(userSelector);
+    
     const [itemCount, setItemCount] = React.useState(count ?? 1);
-
+    
+    const key = `${productId}_${size}_${type}`;
     const intlSize = new Intl.NumberFormat(lang, { style: "unit", unit: "centimeter", unitDisplay: "short" }).format(initialSizes[size]);
 
     const dispatch = useDispatch();
@@ -26,16 +28,16 @@ const CartItem = ({ productId, itemId, count, img, size, title, type, price, loa
         const count = isValueInvalid ? 1 : valueAsNumber;
 
         setItemCount(count);
-        dispatch(changeItemCount({ type: "direct", count, itemId, productId }));
+        dispatch(changeItemCount({ type: "direct", count, key }));
     };
 
     const handleIncrease = () => {
         setItemCount((prevState) => prevState + 1);
-        dispatch(changeItemCount({ type: "increase", itemId, productId }));
+        dispatch(changeItemCount({ type: "increase", key }));
     };
     const handleDecrease = () => {
         setItemCount((prevState) => prevState - 1);
-        dispatch(changeItemCount({ type: "decrease", itemId, productId }));
+        dispatch(changeItemCount({ type: "decrease", key }));
     };
 
     return (
@@ -94,7 +96,7 @@ const CartItem = ({ productId, itemId, count, img, size, title, type, price, loa
                     </span>
                     <button
                         disabled={loading}
-                        onClick={() => dispatch(removeProductFromCart({ productId, itemId }))}
+                        onClick={() => dispatch(removeProductFromCart({ key }))}
                         className='group-hover:opacity-100 group-hover:pointer-events-auto opacity-0 pointer-events-none transition-opacity durta ease-in-out'
                     >
                         <img src={getImageUrl("bucket.svg")} alt='удалить' />

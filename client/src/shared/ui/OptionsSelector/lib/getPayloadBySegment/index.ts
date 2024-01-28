@@ -11,7 +11,7 @@ export const getPayloadBySegment = (segmentType: string, state: ProductSelectorS
             return {
                 ...state,
                 size: index,
-                price: state.initialPrice + (data[availableValueIndex] as Size).additional,
+                price: (data[availableValueIndex] as Size).price, 
             };
         default:
             return state;

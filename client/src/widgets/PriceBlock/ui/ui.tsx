@@ -18,10 +18,9 @@ const PriceBlock = ({ activeItem }: Props) => {
     const { id, category, imageUrl, title } = activeItem;
 
     const [searchParams, setSearchParams] = useSearchParams();
-
-    const INITIAL_STATE = React.useMemo<ProductSelectorState>(() => getInitialState(activeItem, searchParams), [searchParams, activeItem]);
-    const cartItem = React.useMemo(() => cart.get(activeItem.id), [cart, activeItem]);
-    const initialCount = React.useMemo(() => cartItem?.items.reduce((acc, { count }) => (acc += count), 0) ?? 0, [cartItem]);
+    
+    const count = React.useMemo(() => [...cart.values()].reduce((acc, { id: _id, count }) => acc + (_id === id ? count : 0), 0), [cart]);
+    const INITIAL_STATE = React.useMemo<ProductSelectorState>(() => ({ ...getInitialState(activeItem, searchParams), count }), []);
 
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, INITIAL_STATE);
 
@@ -50,7 +49,7 @@ const PriceBlock = ({ activeItem }: Props) => {
                 handleChange={onProductOptionChange}
                 state={productState}
             />
-            <AddToCartButton title='Добавить в корзину' initialCount={initialCount} handleClick={handleAddToCart} />
+            <AddToCartButton title='Добавить в корзину' initialCount={count} handleClick={handleAddToCart} />
         </div>
     );
 };

@@ -7,6 +7,8 @@ const productSelectorReducer = (state: ProductSelectorState, { type, payload }: 
             return { ...state, type: payload.type };
         case ProductSelectorTypes.SET_SIZE:
             return { ...state, size: payload.size, price: payload.price };
+        case ProductSelectorTypes.SET_COUNT:
+            return { ...state, count: state.count + payload.count };
         case ProductSelectorTypes.UPDATE:
             return { ...state, ...payload };
         default:

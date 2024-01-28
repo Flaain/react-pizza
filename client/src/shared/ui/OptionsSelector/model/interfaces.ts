@@ -18,7 +18,6 @@ export interface OptionsSelectorProps {
     state: ProductSelectorState;
     types: Array<number>;
     sizes: Array<Size>;
-    price: number;
     handleChange: ({ type, payload }: Action, availableValueIndex: number) => void;
 }
 

@@ -6,13 +6,13 @@ import { cartSelector, userSelector } from "@/shared/model/selectors";
 
 const CheckoutTotal = ({ handleOrder }: CheckoutTotalProps) => {
     const { deliveryInfo } = useAppSelector(userSelector);
-    const { priceView: { total } } = useAppSelector(cartSelector);
+    const { priceView: { totalPrice } } = useAppSelector(cartSelector);
 
     return (
         <div className='flex flex-col gap-2'>
             <p className='flex items-center justify-between text-primary-black'>
                 <span className='text-2xl font-bold'>Итого</span>
-                <span className='text-2xl font-bold'>{getIntlPrice(total + (deliveryInfo?.deliveryPrice ?? 0))}</span>
+                <span className='text-2xl font-bold'>{getIntlPrice(totalPrice + (deliveryInfo?.deliveryPrice ?? 0))}</span>
             </p>
             <CheckoutControls handleOrder={handleOrder}/>
         </div>

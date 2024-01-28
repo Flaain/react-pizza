@@ -1,77 +1,42 @@
 import getPriceView from "../lib/helpers/getPriceView";
-import compareItems from "@/pages/Cart/lib/helpers/compareItems";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
-import { Item } from "@/app/redux";
-import { CartItem, Payload } from "./interfaces";
+import { CartInterface, Payload } from "./interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
 import { handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
-import { ProductSelectorState } from "@/shared/model/interfaces";
 
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addToCart(state, { payload: { id, category, imageUrl, title, ...productState } }: PayloadAction<Item & ProductSelectorState>) {
-            const cartItem = state.cart.get(id);
-            const existingIds = Math.max(...(cartItem?.items.map(({ id }) => id) ?? [0]));
-            const newItem: CartItem = { id: existingIds + 1, count: 1, ...productState };
+        addToCart(state, { payload }: PayloadAction<CartInterface>) {
+            const key = `${payload.id}_${payload.size}_${payload.type}`;
+            const product = state.cart.get(key);
 
-            if (cartItem) {
-                const itemIndex = cartItem.items.findIndex((item) => compareItems(item, newItem));
-
-                state.cart.set(id, {
-                    ...cartItem,
-                    items: itemIndex !== -1 ? cartItem.items.map((item, index) => {
-                        if (index === itemIndex) {
-                            return {
-                                ...item,
-                                count: item.count + 1,
-                            };
-                        }
-                        return item;
-                    }) : [...cartItem.items, newItem],
-                });
-            } else {
-                state.cart.set(id, { id, category, title, imageUrl, items: [newItem] });
-            }
-
+            state.cart.set(key, { ...payload, count: product ? product.count + 1 : 1 });
+            
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
         changeItemCount: (state, { payload }: PayloadAction<Payload>) => {
-            const product = state.cart.get(payload.productId);
+            const product = state.cart.get(payload.key);
 
-            if (!product) throw new Error(`Cannot find product with ${payload.productId} id`);
+            if (!product) throw new Error(`Cannot find product with ${payload.key} key`);
 
-            state.cart.set(payload.productId, {
-                ...product,
-                items: product.items.map((item) => {
-                    if (item.id === payload.itemId) {
-                        return {
-                            ...item,
-                            count: payload.type === 'direct' ? payload.count : changeItemCountActions[payload.type](item.count)
-                        };
-                    }
-                    return item;
-                }),
-            });
+            state.cart.set(payload.key, { ...product, count: payload.type === "direct" ? payload.count : changeItemCountActions[payload.type](product.count) });
 
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
-
-        removeProductFromCart: (state, { payload }: PayloadAction<{ productId: number; itemId: number }>) => {
-            const product = state.cart.get(payload.productId);
-
-            if (!product) throw new Error(`Cannot find product in cart with ${payload.productId} id`);
-
-            state.cart.set(payload.productId, { ...product, items: product.items.filter(({ id }) => id !== payload.itemId) });
-            cartSlice.caseReducers.checkItemsArr(state, { payload: payload.productId, type: "checkItemsArr" });
-        },
-        checkItemsArr: (state, { payload }: PayloadAction<number>) => {
-            !state.cart.get(payload)?.items.length && state.cart.delete(payload);
+        
+        removeProductFromCart: (state, { payload }: PayloadAction<{ key: string }>) => {
+            const product = state.cart.get(payload.key);
+            
+            if (!product) throw new Error(`Cannot find product with ${payload.key} key`);
+            
+            state.cart.delete(payload.key);
+            
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
         updateViewAndStorage: (state) => {

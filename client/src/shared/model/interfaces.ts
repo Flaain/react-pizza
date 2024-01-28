@@ -41,7 +41,7 @@ export interface ProductSelectorState {
     type: number;
     price: number;
     size: number;
-    initialPrice: number;
+    count: number;
 }
 
 export interface Promocode {
@@ -64,7 +64,7 @@ export interface ResWithMeta {
 
 export interface Size {
     size: number;
-    additional: number;
+    price: number;
 }
 
 export interface Product {
@@ -75,7 +75,6 @@ export interface Product {
     ingredients: string;
     types: Array<number>;
     sizes: Array<Size>;
-    price: number;
     category: number;
     rating: number;
 }

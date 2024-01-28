@@ -29,18 +29,18 @@ const RelatedItems = ({ activeItem, title }: Props) => {
 
         (async () => {
             try {
-                const { data } = await api.getProducts('/products?_select=-types,-sizes,-ingredients,-category,-description', controller);
+                const { data } = await api.getProducts("/products?_select=-types,-ingredients,-category,-description", controller);
                 setItems((data as unknown as Array<Product>).filter(({ id }) => id !== activeItem.id));
             } catch (error) {
                 console.error(error);
             }
-        })()
+        })();
 
         return () => {
             controller.abort();
-        }
+        };
     }, [activeItem]);
-    
+
     return (
         <div className='w-full overflow-hidden'>
             <div className='flex items-center justify-between'>
@@ -79,7 +79,6 @@ const RelatedItems = ({ activeItem, title }: Props) => {
                     </button>
                 </div>
             </div>
-
             <ul
                 ref={scrollRef}
                 className='mt-[2rem] flex items-center justify-between pb-[1.875rem] transition-transform duration-300 ease-in-out'
@@ -87,7 +86,7 @@ const RelatedItems = ({ activeItem, title }: Props) => {
             >
                 {items.map((item) => (
                     <li key={item.id} style={{ minWidth: itemWidth }}>
-                        <RelatedItem {...item} itemWidth={itemWidth}/>
+                        <RelatedItem {...item} price={item.sizes[0].price} itemWidth={itemWidth} />
                     </li>
                 ))}
             </ul>

@@ -11,7 +11,7 @@ const CategoriesList = ({ setSearchParams, activeCategory }: CategorieListProps)
     };
 
     return (
-        <ul className='flex items-center justify-start gap-[30px] ove'>
+        <ul className='flex items-center justify-start gap-[30px] overflow-x-auto'>
             {[...initialCategories.values()].map(({ name, categorie }) => (
                 <CategorieItem {...{ key: name, activeCategory, categorie, handleClick, name }} />
             ))}

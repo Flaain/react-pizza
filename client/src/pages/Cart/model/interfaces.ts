@@ -5,7 +5,10 @@ export interface CartInterface {
     category: number;
     title: string;
     imageUrl: string;
-    items: CartItem[];
+    count: number;
+    type: number;
+    size: number;
+    price: number;
 }
 
 export interface CartItem {
@@ -17,14 +20,14 @@ export interface CartItem {
 }
 
 export interface CartSlice {
-    cart: Map<number, CartInterface>;
+    cart: Map<string, CartInterface>;
     orderLoading: boolean;
     order: Order | null;
     ordered: boolean;
     priceView: {
-        total: number;
-        intl: string;
+        totalPrice: number;
         totalItems: number;
+        intl: string;
     };
     error: unknown;
 }
@@ -35,15 +38,13 @@ export interface CartListProps {
 
 type DirectPayload = {
     type: "direct";
-    productId: number;
-    itemId: number;
+    key: string;
     count: number;
 };
 
 type IncreaseDecreasePayload = {
     type: "increase" | "decrease";
-    productId: number;
-    itemId: number;
+    key: string;
 };
 
 export type Payload = DirectPayload | IncreaseDecreasePayload;

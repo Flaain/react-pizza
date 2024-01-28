@@ -14,8 +14,6 @@ import { ApiError } from "@/shared/api/error";
 import { RegisterOptions } from "@/shared/hooks/useForm/types";
 
 const SignupForm = ({ setActiveForm }: FormProps) => {
-    const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = React.useState(false);
     const [loading, setLoading] = React.useState(false);
     const [errorState, setErrorState] = React.useState<{ prevForm: Record<string, string>; error: string; valid: boolean; } | null>(null);
 
@@ -27,7 +25,11 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
 
     const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         const formValues = { ...getFormValues(), [name]: value }; // don't like it at all but right now can't figure how get actual values
-        errorState && setErrorState((prevState) => ({ ...prevState!, valid: Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]) && isFormValid }));
+
+        errorState && setErrorState((prevState) => {
+            const valid = Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]);
+            return { ...prevState!, valid };
+        });
     };
 
     const regOptions: RegisterOptions = { onChange: handleChange, validateOnChange: true };
@@ -101,20 +103,14 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                 </label>
                 <PasswordInput
                     {...register(signupform.password, regOptions)}
-                    type={isPasswordVisible ? "text" : "password"}
                     label={signupform.password.label}
-                    onEyeClick={() => setIsPasswordVisible((prevState) => !prevState)}
-                    isPasswordVisible={isPasswordVisible}
                     error={errors["password"]}
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                     />
                 <PasswordInput
                     {...register(signupform.confirmPassword, regOptions)}
-                    type={isConfirmPasswordVisible ? "text" : "password"}
                     label={signupform.confirmPassword.label}
-                    onEyeClick={() => setIsConfirmPasswordVisible((prevState) => !prevState)}
-                    isPasswordVisible={isConfirmPasswordVisible}
                     error={errors["confirmPassword"]}
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'

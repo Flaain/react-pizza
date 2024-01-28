@@ -15,15 +15,6 @@ import { ApiError } from "@/shared/api/error";
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
 
-    const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
-    /*  Right here is a weird decision by me cuz this state "isPasswordVisible" should be in Password Input component. 
-        But if i put this state in password component it cannot notify userform hook about password visible is changed. 
-        So if password visible was changed it will work correctly and display whole password instead of dots but in 
-        useForm it will be still input type "password" cuz like i said before useForm doen't know about changes and 
-        i doesn't like this out of sync so i decided put state in parent component. 
-
-        P.S. The same thing u can see in SignupForm component.
-    */
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
 
@@ -73,7 +64,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                 <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out'>
                     <span className='text-primary-black'>Введите почту</span>
                     <Input
-                        {...register(signinform.email)}
+                        {...register(signinform.email, { validateOnChange: true })}
                         className='border border-solid border-primary-gray px-5 py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                     />
                     <AnimatePresence>
@@ -85,10 +76,8 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                     </AnimatePresence>
                 </label>
                 <PasswordInput
-                    {...register({ ...signinform.password, type: isPasswordVisible ? "text" : "password" }, { watch: true })}
+                    {...register(signinform.password, { validateOnChange: true })}
                     label={signinform.password.label}
-                    onEyeClick={() => setIsPasswordVisible((prevState) => !prevState)}
-                    isPasswordVisible={isPasswordVisible}
                     error={errors["password"]}
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'

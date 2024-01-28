@@ -7,6 +7,7 @@ export interface Props extends Omit<Product, "description" | "ingredients"> {
 export enum ProductSelectorTypes {
     SET_TYPE = "SET_TYPE",
     SET_SIZE = "SET_SIZE",
+    SET_COUNT = "SET_COUNT",
     UPDATE = "UPDATE",
 }
 
@@ -14,7 +15,6 @@ export interface OrderItemProps extends Omit<CartItemProps, "productId" | "itemI
 
 export interface CartItemProps {
     productId: number;
-    itemId: number;
     count: number;
     type: number;
     size: number;
@@ -27,4 +27,5 @@ export interface CartItemProps {
 export type Action =
     | { type: ProductSelectorTypes.SET_TYPE; payload: { type: number } }
     | { type: ProductSelectorTypes.SET_SIZE; payload: { size: number; price: number } }
+    | { type: ProductSelectorTypes.SET_COUNT; payload: { count: number } }
     | { type: ProductSelectorTypes.UPDATE; payload: ProductSelectorState };

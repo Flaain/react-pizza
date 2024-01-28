@@ -6,7 +6,7 @@ import { initialSortNames } from "@/shared/config/constants";
 
 const Tools = ({ searchParams, setSearchParams }: Props) => {
     return (
-        <div className='flex items-center justify-between overflow-x-auto'>
+        <div className='flex items-center justify-between gap-5'>
             <CategoriesList
                 setSearchParams={setSearchParams}
                 activeCategory={getCategoryFromSearchParams("category", searchParams)}

@@ -7,4 +7,5 @@ export interface Props {
 
 export interface RelatedItemProps extends Omit<Product, "category" | "ingredients" | "sizes" | "types" | "description">{
     itemWidth: number;
+    price: number;
 }

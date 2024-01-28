@@ -12,7 +12,7 @@ import ProfileInfoList from "@/widgets/ProfileInfoList/ui/ui";
 
 const InfoContainer = ({ disabled, setPaymentModalOpened }: Props) => {
     const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
-    const { priceView: { total } } = useAppSelector(cartSelector);
+    const { priceView: { totalPrice } } = useAppSelector(cartSelector);
 
     const navigate = useNavigate();
 
@@ -27,7 +27,7 @@ const InfoContainer = ({ disabled, setPaymentModalOpened }: Props) => {
                 updater={() => navigate(routerList.CART.children.DELIVERY_METHOD)}
             />
             <InfoBlock
-                item={<PaymentInfoList {...paymentInfo!} total={getIntlPrice(total + (deliveryInfo?.deliveryPrice ?? 0))} />}
+                item={<PaymentInfoList {...paymentInfo!} total={getIntlPrice(totalPrice + (deliveryInfo?.deliveryPrice ?? 0))} />}
                 callToActionReason={!!paymentInfo}
                 callToActionText='заполните форму оплаты'
                 disabled={disabled}

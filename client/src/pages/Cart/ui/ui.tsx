@@ -23,7 +23,7 @@ const Cart = () => {
     const [paymentModalOpened, setPaymentModalOpened] = React.useState(false);
 
     const cartArr = React.useMemo(() => [...cart.values()], [cart]);
-    const isMinimizable = React.useMemo(() => cartArr.reduce((acc, { items }) => (acc += items.length), 0) > 1, [cartArr]);
+    const isCartMinimizable = cartArr.length > 1;
     const isCartEmpty = !cart.size && !ordered;
 
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const Cart = () => {
                                 >
                                     Очистить корзину
                                 </button>
-                                {isMinimizable && (
+                                {isCartMinimizable && (
                                     <MinimizeButton
                                         title={minimizeCartItems ? "показать товары" : "скрыть товары"}
                                         disabled={orderLoading}

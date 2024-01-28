@@ -6,7 +6,7 @@ import { CartInterface, CartSlice } from "./interfaces";
 const cart = getDataFromLocalStorage<Array<CartInterface>>(localStorageKeys.CART, []);
 
 export const initialState: CartSlice = {
-    cart: new Map(cart.map((product) => [product.id, product])),
+    cart: new Map(cart.map((product) => [`${product.id}_${product.size}_${product.type}`, product])),
     priceView: getPriceView(cart),
     order: null,
     ordered: false,

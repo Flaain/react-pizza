@@ -8,20 +8,15 @@ const CartItemsList = ({ cart }: CartListProps) => {
 
     return (
         <ul className='flex flex-col gap-5'>
-            {cart.flatMap((pizza) =>
-                pizza.items.map((item) => (
-                    <li key={`${pizza.id} - ${item.id}`}>
-                        <CartItem
-                            {...item}
-                            itemId={item.id}
-                            productId={pizza.id}
-                            img={pizza.imageUrl}
-                            title={pizza.title}
-                            loading={orderLoading}
-                        />
-                    </li>
-                ))
-            )}
+            {cart.map((product) => (
+                <CartItem
+                    {...product}
+                    key={`${product.id}_${product.size}_${product.type}`}
+                    productId={product.id}
+                    img={product.imageUrl}
+                    loading={orderLoading}
+                />
+            ))}
         </ul>
     );
 };

@@ -1,7 +1,7 @@
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
-import { CartInterface } from "@/pages/Cart";
+import { CartItemLocal } from "@/shared/model/interfaces";
 
-const getPriceView = (cart: Array<CartInterface>) => {
+const getPriceView = (cart: Array<CartItemLocal>) => {
     const totalPrice = cart?.reduce((acc, { count, price }) => acc += count * price, 0);
     const totalItems = cart.reduce((acc, { count }) => acc + count, 0);
     const intl = getIntlPrice(totalPrice);

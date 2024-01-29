@@ -10,11 +10,12 @@ import Spinner from "@/shared/ui/Spinner/ui";
 import { MinimizeCartInfo, MinimizeButton } from "@/features/MinimizeCartInfo";
 import { Navigate, Outlet } from "react-router-dom";
 import { cartSelector } from "@/shared/model/selectors";
-import { useAppSelector } from "@/shared/model/store";
+import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { clearCart } from "../model/slice";
 import { useDispatch } from "react-redux";
 import { AnimatePresence } from "framer-motion";
 import { EmptyCart } from "../model/lazy";
+import { getDetailedInfo } from "../model/asyncActions";
 
 const Cart = () => {
     const { cart, ordered, orderLoading, priceView: { totalItems } } = useAppSelector(cartSelector);
@@ -27,6 +28,12 @@ const Cart = () => {
     const isCartEmpty = !cart.size && !ordered;
 
     const dispatch = useDispatch();
+    const asyncDispatch = useAsyncThunkDispatch();
+
+    React.useEffect(() => {
+        asyncDispatch(getDetailedInfo());
+    }, [])
+
 
     const handleOrder = async () => {
         console.log("test");

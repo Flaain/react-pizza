@@ -1,4 +1,4 @@
-import { Order } from "@/shared/model/interfaces";
+import { CartItemLocal, Order } from "@/shared/model/interfaces";
 
 export interface CartInterface {
     id: number;
@@ -20,7 +20,7 @@ export interface CartItem {
 }
 
 export interface CartSlice {
-    cart: Map<string, CartInterface>;
+    cart: Map<string, CartItemLocal>;
     orderLoading: boolean;
     order: Order | null;
     ordered: boolean;

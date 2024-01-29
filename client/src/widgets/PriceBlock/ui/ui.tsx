@@ -15,11 +15,10 @@ import { ProductSelectorState } from "@/shared/model/interfaces";
 
 const PriceBlock = ({ activeItem }: Props) => {
     const { cart } = useAppSelector(cartSelector);
-    const { id, category, imageUrl, title } = activeItem;
 
     const [searchParams, setSearchParams] = useSearchParams();
     
-    const count = React.useMemo(() => [...cart.values()].reduce((acc, { id: _id, count }) => acc + (_id === id ? count : 0), 0), [cart]);
+    const count = React.useMemo(() => [...cart.values()].reduce((acc, { id: _id, count }) => acc + (_id === activeItem.id ? count : 0), 0), [cart]);
     const INITIAL_STATE = React.useMemo<ProductSelectorState>(() => ({ ...getInitialState(activeItem, searchParams), count }), []);
 
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, INITIAL_STATE);
@@ -37,7 +36,7 @@ const PriceBlock = ({ activeItem }: Props) => {
     };
 
     const handleAddToCart = () => {
-        dispatch(addToCart({ id, category, imageUrl, title, ...productState }));
+        dispatch(addToCart({ ...activeItem, ...productState }));
     };
 
     return (

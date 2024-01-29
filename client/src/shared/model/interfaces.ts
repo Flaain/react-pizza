@@ -106,3 +106,9 @@ export interface Form extends Omit<Field, "value" | "isDirty" | "validateOnChang
     value?: string;
     label?: string;
 }
+
+export interface CartItemLocal extends ProductSelectorState {
+    id: number;
+    title: string;
+    imageUrl: string;
+}

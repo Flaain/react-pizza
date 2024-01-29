@@ -3,16 +3,17 @@ import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
 import { CartInterface, Payload } from "./interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
-import { handleOrder } from "./asyncActions";
+import { getDetailedInfo, handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
+import { CartItemLocal, Product } from "@/shared/model/interfaces";
 
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addToCart(state, { payload }: PayloadAction<CartInterface>) {
+        addToCart(state, { payload }: PayloadAction<CartItemLocal>) {
             const key = `${payload.id}_${payload.size}_${payload.type}`;
             const product = state.cart.get(key);
 

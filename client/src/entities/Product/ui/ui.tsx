@@ -13,7 +13,7 @@ import { initialSizes } from "@/shared/config/constants";
 import { useAnimatedPrice } from "../lib/useAnimatedPrice";
 import { AddToCartButton } from "@/features/AddToCartButton";
 
-const Card = ({ id, title, category, types, sizes, imageUrl }: Props) => {
+const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
     const { cart } = useAppSelector(cartSelector);
     
     const count = React.useMemo(() => [...cart.values()].reduce((acc, { id: _id, count }) => acc + (_id === id ? count : 0), 0), [cart]);
@@ -28,7 +28,7 @@ const Card = ({ id, title, category, types, sizes, imageUrl }: Props) => {
 
     const handleAddToCart = () => {
         productDispatch({ type: ProductSelectorTypes.SET_COUNT, payload: { count: 1 } }); // maybe payload is unnecessary
-        dispatch(addToCart({ id, category, imageUrl, title, ...productState }));
+        dispatch(addToCart({ id, title, imageUrl, ...productState }));
     };
 
     return (

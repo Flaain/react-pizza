@@ -5,6 +5,10 @@ import { appRouter } from "../model/appRouter";
 import { appSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { getProfile } from "../redux/slice/asyncActions";
+import { getCart } from "@/pages/Cart/model/asyncActions";
+import getDataFromLocalStorage from "@/shared/lib/helpers/getDataFromLocalStorage";
+import { CartItem } from "@/pages/Cart/model/interfaces";
+import { localStorageKeys } from "@/shared/config/constants";
 
 const App = () => {
     const { error } = useAppSelector(appSelector);
@@ -14,7 +18,8 @@ const App = () => {
 
     React.useEffect(() => {
         jwt && dispatch(getProfile(jwt));
-    }, [])
+        !jwt && dispatch(getCart(getDataFromLocalStorage<Array<CartItem>>(localStorageKeys.CART, [])));
+    }, []);
 
     return error ? (
         <NotFound

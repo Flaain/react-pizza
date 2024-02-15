@@ -13,7 +13,7 @@ export const userSlice = createSlice({
     initialState: userInitialState,
     reducers: {
         signin: (state, { payload }: PayloadAction<IAuthData>) => {
-            state.__id = payload._id;
+            state._id = payload._id;
             state.jwt = payload.token;
             state.name = payload.name;
             state.email = payload.email;
@@ -22,7 +22,7 @@ export const userSlice = createSlice({
         },
         logout: (state) => {
             state.jwt = null;
-            state.__id = null;
+            state._id = null;
             state.email = null;
             state.name = null;
             
@@ -44,12 +44,12 @@ export const userSlice = createSlice({
     extraReducers(builder) {
         builder
         .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<IAuthData, "token">>) => {
-            state.__id = payload._id;
+            state._id = payload._id;
             state.name = payload.name;
             state.email = payload.email;
         })
         .addCase(getProfile.rejected, (state) => {
-            state.__id = null;
+            state._id = null;
             state.email = null;
             state.jwt = null;
             state.name = null;

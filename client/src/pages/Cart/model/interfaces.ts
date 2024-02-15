@@ -20,7 +20,7 @@ export interface CartItem {
 }
 
 export interface CartSlice {
-    cart: Map<string, CartItemLocal>;
+    cart: Map<string, CartItem>;
     orderLoading: boolean;
     order: Order | null;
     ordered: boolean;

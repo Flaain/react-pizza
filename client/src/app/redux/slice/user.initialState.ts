@@ -5,7 +5,7 @@ import { Address } from "@/shared/model/interfaces";
 import { CreditCard } from "@/widgets/PaymentModal/model/interfaces";
 
 export const userInitialState: UserSliceState = {
-    __id: null,
+    _id: null,
     email: null,
     jwt: getDataFromLocalStorage(localStorageKeys.JWT, null),
     name: null,

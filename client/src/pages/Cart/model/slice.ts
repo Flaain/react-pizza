@@ -1,13 +1,13 @@
 import getPriceView from "../lib/helpers/getPriceView";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
-import { CartInterface, Payload } from "./interfaces";
+import { Payload } from "./interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
-import { getDetailedInfo, handleOrder } from "./asyncActions";
+import { getCart, handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
-import { CartItemLocal, Product } from "@/shared/model/interfaces";
+import { CartItemLocal } from "@/shared/model/interfaces";
 
 export const cartSlice = createSlice({
     name: "cart",
@@ -71,7 +71,14 @@ export const cartSlice = createSlice({
                 state.orderLoading = false;
                 state.ordered = false;
                 state.error = action.error;
-            });
+            })
+            .addCase(getCart.fulfilled, (state, { payload }) => {
+                state.cart = new Map(payload.map((product) => [`${product.id}_${product.size}_${product.type}`, product]));
+                cartSlice.caseReducers.updateViewAndStorage(state);
+            })
+            .addCase(getCart.rejected, (state, { error }) => {
+                console.log(error)
+            })
     },
 });
 

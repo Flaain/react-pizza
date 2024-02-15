@@ -38,7 +38,7 @@ export interface OrderHandler {
 }
 
 export interface UserSliceState {
-    __id: string | null;
+    _id: string | null;
     jwt: string | null;
     email: string | null;
     name: string | null;

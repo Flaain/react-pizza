@@ -1,0 +1,1 @@
+export const initialTypes = ["тонкое", "традиционное"];

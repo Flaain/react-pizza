@@ -18,7 +18,7 @@ export interface OptionsSelectorProps {
     state: ProductSelectorState;
     types: Array<number>;
     sizes: Array<Size>;
-    handleChange: ({ type, payload }: Action, availableValueIndex: number) => void;
+    handleChange: ({ type, payload }: Action) => void;
 }
 
 export interface OptionsListProps {
@@ -28,7 +28,7 @@ export interface OptionsListProps {
     state: ProductSelectorState;
     data: Array<number | Size>;
     classNames?: string;
-    dispatch: ({ type, payload }: Action, availableValueIndex: number) => void;
+    dispatch: ({ type, payload }: Action) => void;
 }
 
 export interface OptionsItemProps {

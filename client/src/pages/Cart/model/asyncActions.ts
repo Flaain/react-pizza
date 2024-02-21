@@ -18,6 +18,16 @@ export const handleOrder = createAsyncThunk(
 );
 
 export const getCart = createAsyncThunk("cart/getCart", async (cart: Array<CartItem>) => {
-    const { data: { cart: revalidatedCart } } = await api.getCart(cart);
+    const {
+        data: { cart: revalidatedCart },
+    } = await api.getCart(cart);
     return revalidatedCart;
 });
+
+export const addToCartThunk = createAsyncThunk(
+    "cart/addToCart",
+    async ({ product, token }: { product: Omit<CartItem, "price" | "count">; token: string }) => {
+        const { data: { cart } } = await api.addToCart(product, token);
+        return cart;
+    }
+);

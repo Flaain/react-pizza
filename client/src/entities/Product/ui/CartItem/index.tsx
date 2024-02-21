@@ -12,12 +12,13 @@ import { changeItemCount, removeProductFromCart } from "@/pages/Cart/model/slice
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import Input from "@/shared/ui/Input/ui";
+import { api } from "@/shared/api";
 
-const CartItem = ({ productId, count, img, size, title, type, price, loading }: CartItemProps) => {
-    const { lang } = useAppSelector(userSelector);
+const CartItem = ({ _id, productId, count, img, size, title, type, price, loading }: CartItemProps) => {
+    const { lang, jwt } = useAppSelector(userSelector);
     
     const [itemCount, setItemCount] = React.useState(count ?? 1);
-    
+console.log(`${title} - ${size} - ${type}`);
     const key = `${productId}_${size}_${type}`;
     const intlSize = new Intl.NumberFormat(lang, { style: "unit", unit: "centimeter", unitDisplay: "short" }).format(initialSizes[size]);
 
@@ -39,6 +40,15 @@ const CartItem = ({ productId, count, img, size, title, type, price, loading }: 
         setItemCount((prevState) => prevState - 1);
         dispatch(changeItemCount({ type: "decrease", key }));
     };
+
+    const handleRemoveItemFromCart = async () => {
+        try {
+            jwt && _id && await api.removeItemFromCart(_id, jwt);
+            dispatch(removeProductFromCart({ key }));
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     return (
         <div className='flex items-center justify-between group'>
@@ -96,7 +106,7 @@ const CartItem = ({ productId, count, img, size, title, type, price, loading }: 
                     </span>
                     <button
                         disabled={loading}
-                        onClick={() => dispatch(removeProductFromCart({ key }))}
+                        onClick={handleRemoveItemFromCart}
                         className='group-hover:opacity-100 group-hover:pointer-events-auto opacity-0 pointer-events-none transition-opacity durta ease-in-out'
                     >
                         <img src={getImageUrl("bucket.svg")} alt='удалить' />

@@ -47,6 +47,7 @@ export interface UserSliceState {
     lang: string;
     addresses: Map<string, Address>;
     cards: Map<number, CreditCard>;
+    isAuthInProgress: boolean;
 }
 
 export interface IAuthData {

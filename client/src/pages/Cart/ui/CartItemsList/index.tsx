@@ -5,7 +5,7 @@ import { CartListProps } from "../../model/interfaces";
 
 const CartItemsList = ({ cart }: CartListProps) => {
     const { orderLoading } = useAppSelector(cartSelector);
-
+console.log(cart)
     return (
         <ul className='flex flex-col gap-5'>
             {cart.map((product) => (

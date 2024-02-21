@@ -11,7 +11,15 @@ export const userInitialState: UserSliceState = {
     name: null,
     deliveryInfo: getDataFromLocalStorage(localStorageKeys.DELIVERY_INFO, null),
     paymentInfo: getDataFromLocalStorage(localStorageKeys.PAYMENT_INFO, null),
-    addresses: new Map(getDataFromLocalStorage<Array<Address>>(localStorageKeys.USER_ADDRESSES, []).map((address) => [address.address, address])),
-    cards: new Map(getDataFromLocalStorage<Array<CreditCard>>(localStorageKeys.USER_CARDS, []).map((card) => [card.address, card])),
+    addresses: new Map(
+        getDataFromLocalStorage<Array<Address>>(localStorageKeys.USER_ADDRESSES, []).map((address) => [
+            address.address,
+            address,
+        ])
+    ),
+    cards: new Map(
+        getDataFromLocalStorage<Array<CreditCard>>(localStorageKeys.USER_CARDS, []).map((card) => [card.address, card])
+    ),
     lang: navigator.language,
+    isAuthInProgress: false,
 };

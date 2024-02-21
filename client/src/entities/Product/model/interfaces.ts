@@ -14,6 +14,7 @@ export enum ProductSelectorTypes {
 export interface OrderItemProps extends Omit<CartItemProps, "productId" | "itemId" | "loading"> {}
 
 export interface CartItemProps {
+    _id?: string;
     productId: number;
     count: number;
     type: number;

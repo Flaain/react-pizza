@@ -7,13 +7,18 @@ import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
 import { useForm } from "@/shared/hooks/useForm";
 import { signinform } from "../../model/form";
 import { FormProps } from "../../model/interfaces";
-import { api } from "../../api";
+import { api as authAPI } from "../../api";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
 import { ApiError } from "@/shared/api/error";
+import { cartSelector } from "@/shared/model/selectors";
+import { useAppSelector } from "@/shared/model/store";
+import { api } from "@/shared/api";
+import { setCart } from "@/pages/Cart/model/slice";
 
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
+    const { cart } = useAppSelector(cartSelector);
 
     const [loading, setLoading] = React.useState(false);
     const [error, setError] = React.useState<string | null>(null);
@@ -22,6 +27,16 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     const dispatch = useDispatch();
 
+    const updateCartOnSignin = async (token: string) => {
+        try {
+            const { data: { cart: updatedCart } } = await api.updateCart([...cart.values()], token);
+            dispatch(setCart(updatedCart));
+        } catch (error) {
+            console.error(error);
+            // dispatch(clearCart());
+        }
+    }
+
     const handleSubmit = async (data: Record<string, string>) => {
         abortControllerRef.current && abortControllerRef.current.abort();
         abortControllerRef.current = new AbortController();
@@ -29,8 +44,10 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { data: { data: responseData } } = await api.signin(data, abortControllerRef.current);
-
+            const { data: { data: responseData } } = await authAPI.signin(data, abortControllerRef.current);
+            
+            cart.size ? updateCartOnSignin(responseData.token) : dispatch(setCart(responseData.cart));
+            
             dispatch(signin(responseData));
         } catch (error) {
             console.error(error);

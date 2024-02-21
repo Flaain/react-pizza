@@ -1,6 +1,12 @@
 import { ProductSelectorState, Size } from "@/shared/model/interfaces";
 
-export const getPayloadBySegment = (segmentType: string, state: ProductSelectorState, index: number, availableValueIndex: number, data: Array<number | Size>) => {
+export const getPayloadBySegment = (
+    segmentType: string,
+    state: ProductSelectorState,
+    index: number,
+    availableValueIndex: number,
+    data: Array<number | Size>
+) => {
     switch (segmentType) {
         case "SET_TYPE":
             return {
@@ -11,7 +17,7 @@ export const getPayloadBySegment = (segmentType: string, state: ProductSelectorS
             return {
                 ...state,
                 size: index,
-                price: (data[availableValueIndex] as Size).price, 
+                price: (data[availableValueIndex] as Size).price,
             };
         default:
             return state;

@@ -25,7 +25,7 @@ export const userSlice = createSlice({
             state._id = null;
             state.email = null;
             state.name = null;
-            
+
             localStorage.removeItem(localStorageKeys.JWT);
         },
         setDeliveryInfo: (state, { payload }: PayloadAction<DeliveryInfo>) => {
@@ -39,21 +39,29 @@ export const userSlice = createSlice({
         setPaymentInfo: (state, { payload }: PayloadAction<PaymentInfo>) => {
             state.paymentInfo = payload;
             saveToLocalStorage({ key: localStorageKeys.PAYMENT_INFO, data: payload });
-        }
+        },
     },
     extraReducers(builder) {
         builder
-        .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<IAuthData, "token">>) => {
-            state._id = payload._id;
-            state.name = payload.name;
-            state.email = payload.email;
-        })
-        .addCase(getProfile.rejected, (state) => {
-            state._id = null;
-            state.email = null;
-            state.jwt = null;
-            state.name = null;
-        })
+            .addCase(getProfile.pending, (state) => {
+                state.isAuthInProgress = true;
+            })
+            .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<IAuthData, "token">>) => {
+                state._id = payload._id;
+                state.name = payload.name;
+                state.email = payload.email;
+                state.isAuthInProgress = false;
+            })
+            .addCase(getProfile.rejected, (state) => {
+                state._id = null;
+                state.email = null;
+                state.jwt = null;
+                state.name = null;
+
+                state.isAuthInProgress = false;
+
+                localStorage.removeItem(localStorageKeys.JWT);
+            });
     },
 });
 

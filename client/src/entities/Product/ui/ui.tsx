@@ -4,31 +4,37 @@ import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import Image from "@/shared/ui/Image/ui/ui";
 import { OptionsSelector } from "@/shared/ui/OptionsSelector";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
 import { addToCart } from "@/pages/Cart";
 import { ProductSelectorTypes, Props } from "../model/interfaces";
-import { useAppSelector } from "@/shared/model/store";
-import { cartSelector } from "@/shared/model/selectors";
+import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
+import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { initialSizes } from "@/shared/config/constants";
 import { useAnimatedPrice } from "../lib/useAnimatedPrice";
 import { AddToCartButton } from "@/features/AddToCartButton";
+import { addToCartThunk } from "@/pages/Cart/model/asyncActions";
 
 const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
     const { cart } = useAppSelector(cartSelector);
+    const { jwt } = useAppSelector(userSelector);
     
     const count = React.useMemo(() => [...cart.values()].reduce((acc, { id: _id, count }) => acc + (_id === id ? count : 0), 0), [cart]);
     const sizeIndex = React.useMemo(() => initialSizes.findIndex((size) => size === sizes[0].size), []);
-    const initialState = React.useMemo(() => ({ type: types[0], size: sizeIndex, price: sizes[0].price, count }), []);
+    
+    const initialState = { type: types[0], size: sizeIndex, price: sizes[0].price, count }
     
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, initialState);
-    
+
     const { priceRef } = useAnimatedPrice(initialState.price, productState.price);
 
-    const dispatch = useDispatch();    
+    const dispatch = useAsyncThunkDispatch();
 
-    const handleAddToCart = () => {
-        productDispatch({ type: ProductSelectorTypes.SET_COUNT, payload: { count: 1 } }); // maybe payload is unnecessary
-        dispatch(addToCart({ id, title, imageUrl, ...productState }));
+    const handleAddToCart = async () => {
+        try {
+            productDispatch({ type: ProductSelectorTypes.SET_COUNT, payload: { count: 1 } });
+            dispatch(jwt ? addToCartThunk({ product: { ...productState, id }, token: jwt }) : addToCart({ ...productState, id, count: 1 }));
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     return (
@@ -59,7 +65,7 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                         className='text-xl font-bold text-primary-black flex items-center gap-2'
                         ref={priceRef}
                     ></span>
-                    <AddToCartButton title='Добавить' handleClick={handleAddToCart} initialCount={productState.count} />
+                    <AddToCartButton title='Добавить' handleClick={handleAddToCart} quantity={productState.count} />
                 </div>
             </div>
         </article>

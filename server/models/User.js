@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Schema, model } from "mongoose";
+import { CartSchema } from "./Cart.js";
 
 export const UserSchema = new Schema(
     {
@@ -34,24 +35,26 @@ export const UserSchema = new Schema(
             },
         },
         "user-addresses": {
-            type: Map,
-            of: {
-                city: String,
-                address: {
-                    type: String,
-                    unique: true,
+            type: [
+                {
+                    city: String,
+                    address: {
+                        type: String,
+                        unique: true,
+                    },
+                    postcode: Number,
+                    deliveryPrice: Number,
                 },
-                postcode: Number,
-                deliveryPrice: Number,
-            },
+            ],
         },
+        cart: [CartSchema],
     },
     { timestamps: true }
 );
 
 export const User = model("user", UserSchema);
 
-export const userSignupSchema = z.object({
+export const userSignupSchema = z.strictObject({
     name: z
         .string({ invalid_type_error: "Неверно переданы данные, имя должно быть строкой" })
         .min(1, { message: "Пожалуйста, введите имя" }),
@@ -62,7 +65,7 @@ export const userSignupSchema = z.object({
     password: z.string().min(4, { message: "Минимальная длина пароля - 5 символов" }),
 });
 
-export const userSigninSchema = z.object({
+export const userSigninSchema = z.strictObject({
     email: z
         .string({ invalid_type_error: "Неверно переданы данные, электронная почта должна быть строкой" })
         .email({ message: "Пожалуйста, введите корректный адрес электронной почты" }),

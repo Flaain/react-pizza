@@ -1,8 +1,7 @@
-import { CartInterface } from "@/pages/Cart";
 import { getCuttedString } from "../lib/helpers/getCuttedString";
 import { Base, Data, Order, Product, Promocode, ResWithMeta, StaticAddresses } from "../model/interfaces";
 import { ApiError } from "./error";
-import { CartItem } from "@/pages/Cart/model/interfaces";
+import { CartInterface, CartItem } from "@/pages/Cart/model/interfaces";
 
 export class API {
     private _baseUrl: string;
@@ -54,8 +53,57 @@ export class API {
         const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL + "/cart", {
             headers: { "Content-Type": "application/json" },
             method: "POST",
-            body: JSON.stringify({ cart }),
+            body: JSON.stringify(cart),
         });
         return this._checkResponse(response, "/cart");
+    }
+
+    async updateCart(cart: Array<CartInterface> | CartInterface, token: string): Promise<Data<Array<CartItem>>> {
+        const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL + "/cart/update", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify(cart),
+        });
+
+        return this._checkResponse(response, "/cart/update");
+    }
+
+    async removeItemFromCart(_id: string, token: string): Promise<Data<Array<CartInterface>>> {
+        const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL + `/cart/remove/${_id}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        });
+
+        return this._checkResponse(response, `/cart/remove/${_id}`);
+    }
+
+    async changeQuantity({
+        action,
+        value,
+        _id,
+        token,
+    }: {
+        action: "increase" | "decrease";
+        value: number;
+        _id: string;
+        token: string;
+    }): Promise<Data<Array<CartInterface>>> {
+        const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL + `/cart/update/${_id}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify({ action, value }),
+        });
+
+        return this._checkResponse(response, `/cart/update/${_id}`);
+    }
+
+    addToCart = async (product: Omit<CartItem, "price" | "count">, token: string): Promise<Data<Array<CartInterface>>> => {
+        const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL + "/cart/add", {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+            body: JSON.stringify(product),
+        });
+
+        return this._checkResponse(response, "/cart/add");
     }
 }

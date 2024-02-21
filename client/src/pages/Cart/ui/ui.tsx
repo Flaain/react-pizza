@@ -17,14 +17,14 @@ import { AnimatePresence } from "framer-motion";
 import { EmptyCart } from "../model/lazy";
 
 const Cart = () => {
-    const { cart, ordered, orderLoading, priceView: { totalItems } } = useAppSelector(cartSelector);
+    const { cart, ordered, orderLoading, priceView: { totalItems }, cartLoading } = useAppSelector(cartSelector);
 
     const [minimizeCartItems, setMinimizeCartItems] = React.useState(false);
     const [paymentModalOpened, setPaymentModalOpened] = React.useState(false);
 
     const cartArr = React.useMemo(() => [...cart.values()], [cart]);
     const isCartMinimizable = cartArr.length > 1;
-    const isCartEmpty = !cart.size && !ordered;
+    const isCartEmpty = !cart.size && !ordered && !cartLoading;
 
     const dispatch = useDispatch();
 

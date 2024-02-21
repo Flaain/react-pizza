@@ -1,9 +1,10 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
+import { ConfigController } from "./ConfigController.js";
 
-export class AuthController {
-    static signup = async (req, res) => {
+export class AuthController extends ConfigController {
+    signup = async (req, res) => {
         try {
             const { email, name, password } = req.body;
 
@@ -28,7 +29,7 @@ export class AuthController {
         }
     };
 
-    static signin = async (req, res) => {
+    signin = async (req, res) => {
         try {
             const { email, password } = req.body;
 
@@ -40,8 +41,10 @@ export class AuthController {
             const { password: hashedPassword, __v, ...rest } = user;
 
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
-
-            return res.json({ data: { ...rest, token }, message: "Авторизация прошла успешно" });
+            
+            const updateCart = await this._revalidateCart(user.cart);
+            
+            return res.json({ data: { ...rest, ...updateCart, token }, message: "Авторизация прошла успешно" });
         } catch (error) {
             console.log(error);
             res.status(500).json({
@@ -50,7 +53,7 @@ export class AuthController {
         }
     };
 
-    static profile = async (req, res) => {
+    profile = async (req, res) => {
         try {
             const token = req.headers.authorization.split(" ")[1];
 
@@ -64,7 +67,9 @@ export class AuthController {
 
             const { password: hashedPassword, __v, ...rest } = user;
 
-            return res.json({ data: { ...rest } })
+            const updateCart = await this._revalidateCart(user.cart);
+            
+            return res.json({ data: { ...rest, ...updateCart } })
         } catch (error) {
             console.log(error);
             res.status(500).json({
@@ -72,4 +77,6 @@ export class AuthController {
             });
         }
     };
-}
+};
+
+export const authController = new AuthController();

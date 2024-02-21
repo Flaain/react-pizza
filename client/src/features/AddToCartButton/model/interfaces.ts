@@ -1,5 +1,5 @@
 export interface Props {
     title: string;
-    initialCount: number | null;
+    quantity: number | null;
     handleClick: () => void;
 }

@@ -49,6 +49,7 @@ export const useForm = ({ provideFormValues }: Options = {}) => {
                 return;
             }
             
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             cb(Object.fromEntries(Object.entries(form).map(([_, { name, value }]) => [name, value])));
             /*
             Maybe do filter ".filter(([_, { name }]) => name)" before map cuz user can easily change name of input 
@@ -122,6 +123,7 @@ export const useForm = ({ provideFormValues }: Options = {}) => {
     return {
         submitHandler,
         register,
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         getFormValues: () => provideFormValues && Object.fromEntries(Object.entries(form).map(([_, { name, value }]) => [name, value])),
         isFormValid, 
         errors,

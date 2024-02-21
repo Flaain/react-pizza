@@ -1,24 +1,27 @@
 import getPriceView from "../lib/helpers/getPriceView";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
-import { Payload } from "./interfaces";
+import { CartInterface, CartItem, Payload } from "./interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
-import { getCart, handleOrder } from "./asyncActions";
+import { addToCartThunk, getCart, handleOrder } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
-import { CartItemLocal } from "@/shared/model/interfaces";
 
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        addToCart(state, { payload }: PayloadAction<CartItemLocal>) {
+        setCart: (state, { payload }: PayloadAction<{ items: Array<CartInterface>, totalPrice: number }>) => {
+            state.cart = new Map(payload.items.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
+            cartSlice.caseReducers.updateViewAndStorage(state);
+        },
+        addToCart(state, { payload }: PayloadAction<CartItem>) {
             const key = `${payload.id}_${payload.size}_${payload.type}`;
             const product = state.cart.get(key);
 
             state.cart.set(key, { ...payload, count: product ? product.count + 1 : 1 });
-            
+
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
         changeItemCount: (state, { payload }: PayloadAction<Payload>) => {
@@ -26,18 +29,21 @@ export const cartSlice = createSlice({
 
             if (!product) throw new Error(`Cannot find product with ${payload.key} key`);
 
-            state.cart.set(payload.key, { ...product, count: payload.type === "direct" ? payload.count : changeItemCountActions[payload.type](product.count) });
+            state.cart.set(payload.key, {
+                ...product,
+                count: payload.type === "direct" ? payload.count : changeItemCountActions[payload.type](product.count),
+            });
 
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
-        
+
         removeProductFromCart: (state, { payload }: PayloadAction<{ key: string }>) => {
             const product = state.cart.get(payload.key);
-            
+
             if (!product) throw new Error(`Cannot find product with ${payload.key} key`);
-            
+
             state.cart.delete(payload.key);
-            
+
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
         updateViewAndStorage: (state) => {
@@ -47,7 +53,7 @@ export const cartSlice = createSlice({
         },
         clearCart(state) {
             state.cart.clear();
-            state.priceView = getPriceView([...state.cart.values()]);
+            state.priceView = getPriceView([]);
             localStorage.removeItem(localStorageKeys.CART);
         },
         clearOrder(state) {
@@ -72,15 +78,23 @@ export const cartSlice = createSlice({
                 state.ordered = false;
                 state.error = action.error;
             })
-            .addCase(getCart.fulfilled, (state, { payload }) => {
-                state.cart = new Map(payload.map((product) => [`${product.id}_${product.size}_${product.type}`, product]));
+            .addCase(getCart.pending, (state) => {
+                state.cartLoading = true;
+            })
+            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<{ items: Array<CartInterface>, totalPrice: number }>) => {
+                state.cart = new Map(payload.items.map((product) => [`${product.id}_${product.size}_${product.type}`, product]));
+                state.cartLoading = false;
                 cartSlice.caseReducers.updateViewAndStorage(state);
             })
             .addCase(getCart.rejected, (state, { error }) => {
-                console.log(error)
+                state.cartLoading = false;
+                console.log(error);
+            })
+            .addCase(addToCartThunk.fulfilled, (state, { payload }: PayloadAction<{ items: Array<CartInterface>, totalPrice: number }>) => {
+                state.cart = new Map(payload.items.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
             })
     },
 });
 
-export const { addToCart, changeItemCount, removeProductFromCart, clearCart, clearOrder } = cartSlice.actions;
+export const { addToCart, changeItemCount, removeProductFromCart, clearCart, clearOrder, setCart } = cartSlice.actions;
 export default cartSlice.reducer;

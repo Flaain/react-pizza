@@ -7,11 +7,17 @@ import { Link } from "react-router-dom";
 import { CartPreview } from "@/features/CartPreview";
 import { useDispatch } from "react-redux";
 import { logout } from "@/app/redux/slice/user.slice";
+import { clearCart } from "@/pages/Cart";
 
 export const LayoutHeader = () => {
     const { jwt } = useAppSelector(userSelector);
 
     const dispatch = useDispatch();
+
+    const handleLogout = () => {
+        dispatch(logout());
+        dispatch(clearCart());
+    }
 
     return (
         <header className='py-[25px] box-border'>
@@ -20,7 +26,7 @@ export const LayoutHeader = () => {
                 <Search />
                 <div className='flex items-center gap-5'>
                     {jwt ? (
-                        <button onClick={() => dispatch(logout())} className='text-primary-black border-b border-dashed hover:text-primary-orange hover:border-primary-orange'>
+                        <button onClick={handleLogout} className='text-primary-black border-b border-dashed hover:text-primary-orange hover:border-primary-orange'>
                             выйти
                         </button>
                     ) : (

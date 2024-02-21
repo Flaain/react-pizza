@@ -25,17 +25,18 @@ const PriceBlock = ({ activeItem }: Props) => {
 
     const dispatch = useDispatch();
 
-    const onProductOptionChange = (action: Action, availableValueIndex: number) => {
+    const onProductOptionChange = (action: Action) => {
         const params = { [ProductSelectorTypes.SET_SIZE]: "size", [ProductSelectorTypes.SET_TYPE]: "type" };
 
         setSearchParams((prevState) => {
-            prevState.set(params[action.type as keyof typeof params], String(availableValueIndex));
+            prevState.set(params[action.type as keyof typeof params], String(action.payload[params[action.type as keyof typeof params]]));
             return prevState;
         }, { replace: true });
         productDispatch(action);
     };
 
     const handleAddToCart = () => {
+        productDispatch({ type: ProductSelectorTypes.SET_COUNT, payload: { count: 1 } });
         dispatch(addToCart({ ...activeItem, ...productState }));
     };
 
@@ -48,7 +49,7 @@ const PriceBlock = ({ activeItem }: Props) => {
                 handleChange={onProductOptionChange}
                 state={productState}
             />
-            <AddToCartButton title='Добавить в корзину' initialCount={count} handleClick={handleAddToCart} />
+            <AddToCartButton title='Добавить в корзину' quantity={productState.count} handleClick={handleAddToCart} />
         </div>
     );
 };

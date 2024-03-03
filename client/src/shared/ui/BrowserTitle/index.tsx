@@ -5,7 +5,7 @@ const BrowserTitle = ({ data, children }: BrowserTitleProps) => {
     React.useEffect(() => {
         document.title = `Пицца ${data.title} - ${data.description}`;
         return () => {
-            document.title = `React Pizza - лучшая пицца в мире`;
+            document.title = "React Pizza - лучшая пицца в мире";
         };
     }, [data]);
 

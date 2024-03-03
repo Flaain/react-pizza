@@ -1,10 +1,9 @@
 import CheckoutControls from "../CheckoutControls";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
-import { CheckoutTotalProps } from "../../model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 
-const CheckoutTotal = ({ handleOrder }: CheckoutTotalProps) => {
+const CheckoutTotal = () => {
     const { deliveryInfo } = useAppSelector(userSelector);
     const { priceView: { totalPrice } } = useAppSelector(cartSelector);
 
@@ -14,7 +13,7 @@ const CheckoutTotal = ({ handleOrder }: CheckoutTotalProps) => {
                 <span className='text-2xl font-bold'>Итого</span>
                 <span className='text-2xl font-bold'>{getIntlPrice(totalPrice + (deliveryInfo?.deliveryPrice ?? 0))}</span>
             </p>
-            <CheckoutControls handleOrder={handleOrder}/>
+            <CheckoutControls />
         </div>
     );
 };

@@ -8,7 +8,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 
 const TabStaticAddresses = ({ method, currentInfo, handleChange, handleSave }: TabContentProps) => {
-    const { data } = useAsyncValue() as { data: Array<Address> };
+    const addresses = useAsyncValue() as Array<Address>;
     const { deliveryInfo } = useAppSelector(userSelector);
 
     const isSaveBtnDisabled = isSaveDisabled(method, currentInfo, deliveryInfo);
@@ -17,10 +17,15 @@ const TabStaticAddresses = ({ method, currentInfo, handleChange, handleSave }: T
 
     return (
         <>
-            {!data.length ? (
+            {!addresses.length ? (
                 <p className='text-gray-400'>Не удалось загрузить пункты самовывоза</p>
             ) : (
-                <TabContentList elements={data} method={method} currentInfo={currentInfo} handleChange={handleChange} />
+                <TabContentList
+                    elements={addresses}
+                    method={method}
+                    currentInfo={currentInfo}
+                    handleChange={handleChange}
+                />
             )}
             <div className='self-start mt-auto flex items-center gap-5'>
                 <button

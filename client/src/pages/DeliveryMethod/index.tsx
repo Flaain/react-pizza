@@ -11,6 +11,6 @@ export const DeliveryMethodPage: RouteObject = {
     path: currentRoute,
     element: <DeliveryMethod title='Способ доставки' />,
     errorElement: <ErrorElement />,
-    loader: () => ({ data: api.getStaticAddresses() }),
+    loader: () => api.base.getStaticAddresses(),
     shouldRevalidate: () => false,
 };

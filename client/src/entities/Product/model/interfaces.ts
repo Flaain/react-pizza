@@ -1,3 +1,4 @@
+import { CartInterface } from "@/pages/Cart";
 import { Product, ProductSelectorState } from "@/shared/model/interfaces";
 
 export interface Props extends Omit<Product, "description" | "ingredients"> {
@@ -13,15 +14,7 @@ export enum ProductSelectorTypes {
 
 export interface OrderItemProps extends Omit<CartItemProps, "productId" | "itemId" | "loading"> {}
 
-export interface CartItemProps {
-    _id?: string;
-    productId: number;
-    count: number;
-    type: number;
-    size: number;
-    price: number;
-    img: string;
-    title: string;
+export interface CartItemProps extends Omit<CartInterface, "category"> {
     loading: boolean;
 }
 

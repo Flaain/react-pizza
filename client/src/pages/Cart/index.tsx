@@ -6,7 +6,7 @@ import { ViewWithSuspense as NotFound } from "../NotFound";
 import { DeliveryMethodPage } from "../DeliveryMethod";
 import { View } from "./model/lazy";
 
-export { cartSlice, addToCart, clearCart, clearOrder } from "./model/slice";
+export { cartSlice, addToCart, clearCart } from "./model/slice";
 export type { CartInterface } from "./model/interfaces";
 
 export const ViewWithSuspense = () => {

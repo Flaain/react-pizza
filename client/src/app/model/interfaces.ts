@@ -46,6 +46,7 @@ export interface UserSliceState {
     paymentInfo: PaymentInfo | null;
     lang: string;
     addresses: Map<string, Address>;
+    orders: Array<CartInterface>;
     cards: Map<number, CreditCard>;
     isAuthInProgress: boolean;
 }

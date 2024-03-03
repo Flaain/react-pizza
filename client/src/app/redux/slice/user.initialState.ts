@@ -22,4 +22,5 @@ export const userInitialState: UserSliceState = {
     ),
     lang: navigator.language,
     isAuthInProgress: false,
+    orders: [],
 };

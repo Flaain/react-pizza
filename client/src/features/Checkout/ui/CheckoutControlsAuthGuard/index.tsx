@@ -1,18 +1,26 @@
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import { cartSelector, userSelector } from "@/shared/model/selectors";
+import { userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { Link } from "react-router-dom";
-import { CheckoutControlsAuthGuardProps } from "../../model/interfaces";
+import { useCart } from "@/pages/Cart/lib/hooks/useCart";
+import getDataFromLocalStorage from "@/shared/lib/helpers/getDataFromLocalStorage";
+import React from "react";
+import { localStorageKeys } from "@/shared/config/constants";
+import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
-const CheckoutControlsAuthGuard = ({
-    isAgreedWithTerms,
-    handleChangeTerms,
-    handleOrder,
-    isOrderBtnDisabled,
-}: CheckoutControlsAuthGuardProps) => {
+const CheckoutControlsAuthGuard = () => {
+    const [isAgreedWithTerms, setIsAgreedWithTerms] = React.useState(getDataFromLocalStorage(localStorageKeys.TERMS, false));
+
     const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
-    const { orderLoading } = useAppSelector(cartSelector);
+    const { handleOrder, orderLoading } = useCart();
+
+    const isOrderBtnDisabled = !deliveryInfo || !paymentInfo || !isAgreedWithTerms || orderLoading;
+
+    const handleChangeTerms = ({ target: { checked } }: React.ChangeEvent<HTMLInputElement>) => {
+        setIsAgreedWithTerms(checked);
+        saveToLocalStorage({ key: localStorageKeys.TERMS, data: checked });
+    };
 
     return jwt ? (
         <>
@@ -47,9 +55,13 @@ const CheckoutControlsAuthGuard = ({
                     />
                 </div>
                 <input className='sr-only' type='checkbox' checked={isAgreedWithTerms} onChange={handleChangeTerms} />
-                <p className='text-sm text-gray-400 select-none'>Соглашаюсь с&#32;<Link to='#' className='text-primary-black hover:text-primary-orange'>
+                <p className='text-sm text-gray-400 select-none'>
+                    Соглашаюсь с&#32;
+                    <Link to='#' className='text-primary-black hover:text-primary-orange'>
                         правилами пользования торговой площадкой
-                    </Link>&#32;и&#32;<Link to='#' className='text-primary-black hover:text-primary-orange'>
+                    </Link>
+                    &#32;и&#32;
+                    <Link to='#' className='text-primary-black hover:text-primary-orange'>
                         возврата
                     </Link>
                 </p>
@@ -57,9 +69,12 @@ const CheckoutControlsAuthGuard = ({
         </>
     ) : (
         <p className='text-sm text-gray-400 select-none mt-2 leading-snug break-words'>
-            Пожалуйста,&#32;<Link to='/auth?from=cart' className='text-primary-orange'>
+            Пожалуйста,&#32;
+            <Link to='/auth?from=cart' className='text-primary-orange'>
                 войдите
-            </Link>&#32; или&#32;<Link to='/auth?from=cart' className='text-primary-orange'>
+            </Link>
+            &#32; или&#32;
+            <Link to='/auth?from=cart' className='text-primary-orange'>
                 зарегистрируйтесь
             </Link>
             , чтобы оформить заказ

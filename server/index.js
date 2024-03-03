@@ -6,6 +6,7 @@ import { routes } from "./routes/index.js";
 const PORT = process.env.PORT ?? 3000;
 const app = express();
 
+app.use("/order/checkout/webhook", express.raw({ type: "*/*" }));
 app.use(express.json(), cors(), ...routes);
 
 (async () => {
@@ -18,3 +19,4 @@ app.use(express.json(), cors(), ...routes);
         console.log(error);
     }
 })();
+

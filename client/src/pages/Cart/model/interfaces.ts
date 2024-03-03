@@ -1,7 +1,5 @@
-import { Order } from "@/shared/model/interfaces";
-
 export interface CartInterface {
-    id: number;
+    productId: number;
     category: number;
     title: string;
     imageUrl: string;
@@ -13,7 +11,8 @@ export interface CartInterface {
 }
 
 export interface CartItem {
-    id: number;
+    _id?: string;
+    productId: number;
     size: number;
     type: number;
     price: number;
@@ -21,11 +20,8 @@ export interface CartItem {
 }
 
 export interface CartSlice {
-    cart: Map<string, CartItem>;
+    cart: Map<string, Omit<CartInterface, "category">>;
     cartLoading: boolean;
-    orderLoading: boolean;
-    order: Order | null;
-    ordered: boolean;
     priceView: {
         totalPrice: number;
         totalItems: number;
@@ -35,7 +31,7 @@ export interface CartSlice {
 }
 
 export interface CartListProps {
-    cart: Array<CartInterface>;
+    cart: Array<Omit<CartInterface, "category">>;
 }
 
 type DirectPayload = {
@@ -50,3 +46,8 @@ type IncreaseDecreasePayload = {
 };
 
 export type Payload = DirectPayload | IncreaseDecreasePayload;
+
+export interface IAddToCartThunk {
+    product: Omit<CartItem, "price" | "count">;
+    token: string;
+}

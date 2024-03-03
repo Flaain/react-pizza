@@ -10,7 +10,7 @@ import { routerList } from "@/shared/config/constants";
 import { Props } from "../model/interfaces";
 import ProfileInfoList from "@/widgets/ProfileInfoList/ui/ui";
 
-const InfoContainer = ({ disabled, setPaymentModalOpened }: Props) => {
+const InfoContainer = ({ setPaymentModalOpened }: Props) => {
     const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
     const { priceView: { totalPrice } } = useAppSelector(cartSelector);
 
@@ -22,7 +22,6 @@ const InfoContainer = ({ disabled, setPaymentModalOpened }: Props) => {
                 item={<DeliveryInfoList {...deliveryInfo!} />}
                 callToActionReason={!!deliveryInfo}
                 callToActionText='заполните форму доставки'
-                disabled={disabled}
                 title='Способ доставки'
                 updater={() => navigate(routerList.CART.children.DELIVERY_METHOD)}
             />
@@ -30,7 +29,6 @@ const InfoContainer = ({ disabled, setPaymentModalOpened }: Props) => {
                 item={<PaymentInfoList {...paymentInfo!} total={getIntlPrice(totalPrice + (deliveryInfo?.deliveryPrice ?? 0))} />}
                 callToActionReason={!!paymentInfo}
                 callToActionText='заполните форму оплаты'
-                disabled={disabled}
                 title='Способ оплаты'
                 updater={() => setPaymentModalOpened(true)}
             />
@@ -38,7 +36,6 @@ const InfoContainer = ({ disabled, setPaymentModalOpened }: Props) => {
                 item={<ProfileInfoList />}
                 callToActionReason={!!jwt}
                 callToActionText='Пожалуйста, войдите или зарегистрируйтесь'
-                disabled={disabled}
                 title='Мой профиль'
             />
         </div>

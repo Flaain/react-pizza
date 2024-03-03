@@ -1,33 +1,13 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import { api } from "@/shared/api";
-import { OrderHandler } from "@/app/model/interfaces";
-import { Order } from "@/shared/model/interfaces";
-import { CartItem } from "./interfaces";
+import { CartInterface, IAddToCartThunk } from "./interfaces";
 
-export const handleOrder = createAsyncThunk(
-    "cart/handleOrder",
-    async ({ cart, pizzas, deliveryInfo, total }: OrderHandler) => {
-        const order = cart.map((cartItem) => ({
-            ...cartItem,
-            ...pizzas.find((pizzaItem) => pizzaItem.id === cartItem.id),
-        }));
-        const { data } = await api.postOrder("/orders", { deliveryInfo, order, totalPrice: total } as Order);
-
-        return data;
-    }
-);
-
-export const getCart = createAsyncThunk("cart/getCart", async (cart: Array<CartItem>) => {
-    const {
-        data: { cart: revalidatedCart },
-    } = await api.getCart(cart);
-    return revalidatedCart;
+export const getCart = createAsyncThunk("cart/getCart", async (cart: Array<Omit<CartInterface, "category">>) => {
+    const { cart: updatedCart } = await api.cart.getCart({ body: JSON.stringify(cart) });
+    return updatedCart;
 });
 
-export const addToCartThunk = createAsyncThunk(
-    "cart/addToCart",
-    async ({ product, token }: { product: Omit<CartItem, "price" | "count">; token: string }) => {
-        const { data: { cart } } = await api.addToCart(product, token);
-        return cart;
-    }
-);
+export const addToCartThunk = createAsyncThunk("cart/addToCart", async ({ product, token }: IAddToCartThunk) => {
+    const { cart } = await api.cart.addToCart({ body: JSON.stringify(product), token });
+    return cart;
+});

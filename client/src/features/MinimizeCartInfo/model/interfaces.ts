@@ -1,6 +1,3 @@
-export interface Props {
+export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     minimizeCartItems: boolean;
-    onClick: () => void;
-    disabled: boolean;
-    title: string;
 }

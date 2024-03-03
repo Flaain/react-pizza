@@ -14,11 +14,11 @@ import { userSelector } from "@/shared/model/selectors";
 import Input from "@/shared/ui/Input/ui";
 import { api } from "@/shared/api";
 
-const CartItem = ({ _id, productId, count, img, size, title, type, price, loading }: CartItemProps) => {
+const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price, loading }: CartItemProps) => {
     const { lang, jwt } = useAppSelector(userSelector);
     
     const [itemCount, setItemCount] = React.useState(count ?? 1);
-console.log(`${title} - ${size} - ${type}`);
+
     const key = `${productId}_${size}_${type}`;
     const intlSize = new Intl.NumberFormat(lang, { style: "unit", unit: "centimeter", unitDisplay: "short" }).format(initialSizes[size]);
 
@@ -43,7 +43,7 @@ console.log(`${title} - ${size} - ${type}`);
 
     const handleRemoveItemFromCart = async () => {
         try {
-            jwt && _id && await api.removeItemFromCart(_id, jwt);
+            jwt && _id && await api.cart.removeItemFromCart({ _id, token: jwt })
             dispatch(removeProductFromCart({ key }));
         } catch (error) {
             console.error(error);
@@ -54,7 +54,7 @@ console.log(`${title} - ${size} - ${type}`);
         <div className='flex items-center justify-between group'>
             <div className='flex items-center gap-5'>
                 <Image
-                    src={img}
+                    src={imageUrl}
                     width={80}
                     height={80}
                     skeleton={<ImageSkeleton height={80} width={80} />}

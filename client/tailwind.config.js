@@ -22,6 +22,9 @@ export default {
                     },
                 },
             },
+            transitionProperty: {
+                height: 'height'
+            },
             animation: {
                 loading: "loading .5s linear infinite",
             },

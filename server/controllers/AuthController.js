@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { ConfigController } from "./ConfigController.js";
+import { Order } from "../models/Order.js";
 
 export class AuthController extends ConfigController {
     signup = async (req, res) => {
@@ -15,12 +16,14 @@ export class AuthController extends ConfigController {
             const hashPassword = bcrypt.hashSync(password);
             const user = new User({ name, email, password: hashPassword });
 
-            const savedUserObj = (await user.save()).toObject();
-            const token = jwt.sign({ id: savedUserObj._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
+            const savedUser = await user.save();
+            const userObj = savedUser.toObject();
 
-            const { password: hashedPassword, __v, ...rest } = savedUserObj;
+            const token = jwt.sign({ id: userObj._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 
-            return res.json({ data: { ...rest, token }, message: "Пользователь успешно зарегистрирован" });
+            const { password: hashedPassword, __v, ...rest } = userObj;
+
+            return res.json({ user: { ...rest, cart: { items: [], total_price: 0 }, orders: [], token }, message: "Пользователь успешно зарегистрирован" });
         } catch (error) {
             console.log(error);
             res.status(500).json({
@@ -39,12 +42,12 @@ export class AuthController extends ConfigController {
             if (!isPasswordValid) return res.status(400).json({ message: "Неверный логин или пароль" });
 
             const { password: hashedPassword, __v, ...rest } = user;
-
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
             
             const updateCart = await this._revalidateCart(user.cart);
+            const orders = await Order.find({ user: user._id }).lean();
             
-            return res.json({ data: { ...rest, ...updateCart, token }, message: "Авторизация прошла успешно" });
+            return res.json({ user: { ...rest, ...updateCart, orders, token }, message: "Авторизация прошла успешно" });
         } catch (error) {
             console.log(error);
             res.status(500).json({
@@ -58,18 +61,14 @@ export class AuthController extends ConfigController {
             const token = req.headers.authorization.split(" ")[1];
 
             if (!token) return res.status(403).json({ message: "Доступ запрещен" });
-            
-            const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
-            const user = await User.findById(id).lean();
+            const user = await this._getUser(token);
+            const updateCart = await this._revalidateCart(user.cart.toObject());
+            const orders = await Order.find({ user: user._id }).lean();
 
-            if (!user) return res.status(403).json({ message: "Доступ запрещен" });
+            const { password, ...rest } = user.toObject();
 
-            const { password: hashedPassword, __v, ...rest } = user;
-
-            const updateCart = await this._revalidateCart(user.cart);
-            
-            return res.json({ data: { ...rest, ...updateCart } })
+            return res.json({ user: { ...rest, ...updateCart, orders }, message: "Профиль успешно получен" });
         } catch (error) {
             console.log(error);
             res.status(500).json({

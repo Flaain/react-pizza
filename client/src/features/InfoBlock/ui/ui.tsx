@@ -2,11 +2,10 @@ import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import cn from "@/shared/lib/classNames";
 import { Props } from "../model/interfaces";
 
-const InfoBlock = ({ item, callToActionReason, callToActionText, updater, disabled, title }: Props) => {
+const InfoBlock = ({ item, callToActionReason, callToActionText, updater, title }: Props) => {
     return (
         <div className='flex flex-col col-span-full items-start self-start mr-10 mb-10 py-5 px-10 rounded-xl box-border bg-white shadow-lg border border-solid border-primary-gray'>
             <button
-                disabled={disabled}
                 className={cn(
                     "flex items-center outline-none justify-between w-full mb-5 group",
                     !updater && "cursor-default"

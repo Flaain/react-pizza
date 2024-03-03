@@ -5,11 +5,9 @@ import { defineConfig } from "vite";
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [react()],
-    define: {
-        "process.env": process.env,
-        VITE_BASE_URL: process.env.VITE_BASE_URL,
-    },
     resolve: {
-        alias: [{ find: "@", replacement: path.resolve(__dirname, "src") }],
+        alias: {
+            "@": path.resolve(__dirname, "./src"),
+        },
     },
 });

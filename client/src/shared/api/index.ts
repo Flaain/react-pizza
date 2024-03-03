@@ -1,3 +1,5 @@
-import { API } from "./api";
+import { BaseAPI } from "./baseAPI";
+import { CartAPI } from "./cartAPI";
+import { UserAPI } from "./userAPI";
 
-export const api = new API({ baseUrl: import.meta.env.VITE_BASE_URL, headers: { "Content-Type": "application/json" } });
+export const api = { base: new BaseAPI(), cart: new CartAPI(), user: new UserAPI() };

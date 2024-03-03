@@ -29,8 +29,8 @@ const RelatedItems = ({ activeItem, title }: Props) => {
 
         (async () => {
             try {
-                const { data } = await api.getProducts("/products?_select=-types,-ingredients,-category,-description", controller);
-                setItems((data as unknown as Array<Product>).filter(({ id }) => id !== activeItem.id));
+                const products = await api.base.getProducts({ endpoint: "/products?_select=-types,-ingredients,-category,-description", signal: controller.signal });
+                setItems(products.filter(({ id }) => id !== activeItem.id));
             } catch (error) {
                 console.error(error);
             }

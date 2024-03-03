@@ -7,7 +7,7 @@ import { appSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { getProfile } from "../redux/slice/asyncActions";
 import { getCart } from "@/pages/Cart/model/asyncActions";
-import { CartItem } from "@/pages/Cart/model/interfaces";
+import { CartInterface } from "@/pages/Cart/model/interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
 
 const App = () => {
@@ -17,7 +17,9 @@ const App = () => {
     const dispatch = useAsyncThunkDispatch();
 
     React.useEffect(() => {
-        jwt ? dispatch(getProfile(jwt)) : dispatch(getCart(getDataFromLocalStorage<Array<CartItem>>(localStorageKeys.CART, [])));
+        jwt
+            ? dispatch(getProfile(jwt))
+            : dispatch(getCart(getDataFromLocalStorage<Array<Omit<CartInterface, "category">>>(localStorageKeys.CART, [])));
     }, []);
 
     return error ? (

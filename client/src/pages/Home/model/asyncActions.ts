@@ -15,8 +15,8 @@ export const getProductPerPage = createAsyncThunk("products/getProductPerPage",
             
             !tempParams.has('sortBy') && tempParams.set('sortBy', '-rating');
             
-            const { data } = await api.getProducts(`/products?_select=-description,-ingredients&page=${page}&limit=6&${tempParams.toString()}`);
-            return data;
+            const products = await api.base.getProducts({ endpoint: `/products?_select=-description,-ingredients&page=${page}&limit=6&${tempParams.toString()}` });
+            return products;
         } catch (error) {
             console.error(error);
             return rejectWithValue(error);

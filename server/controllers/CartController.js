@@ -1,7 +1,8 @@
+import jwt from "jsonwebtoken";
 import { isValidObjectId } from "mongoose";
 import { ConfigController } from "./ConfigController.js";
 import { User } from "../models/User.js";
-import { initialSizes, initialTypes } from "../utils/constants/initial.js";
+import { initialSizes } from "../utils/constants/initial.js";
 
 export class CartController extends ConfigController {
     getCart = async (req, res) => {
@@ -10,7 +11,7 @@ export class CartController extends ConfigController {
             res.json({ ...revalidatedCart, message: "Корзина успешно обновлена" });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: "Во время обновления корзины произошла ошибка" });
+            res.status(500).json({ message: (error instanceof Error && error.message) || "Во время обновления корзины произошла ошибка" });
         }
     };
 
@@ -19,16 +20,15 @@ export class CartController extends ConfigController {
         const cart = req.body;
 
         try {
-            const user = await this._getUser(token, res);
-            const { cart: revalidatedCart, total_price } = await this._revalidateCart([...cart, ...user.cart]);
+            const user = await this._getUser(token);
+            const { cart: { items: revalidatedCart, total_price } } = await this._revalidateCart([...cart, ...user.cart.toObject()]);
 
-            const cartMap = new Map(revalidatedCart.items.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
+            const cartMap = new Map(revalidatedCart.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
 
             user.cart = [...cartMap.values()].map(({ title, imageUrl, price, ...rest }) => rest);
 
-            const savedCart = await user.save();
-
-            const { cart: updatedCart } = savedCart.toObject();
+            const savedUser = await user.save();
+            const { cart: updatedCart } = savedUser.toObject();
 
             updatedCart.forEach((product) => {
                 const key = `${product.id}_${product.size}_${product.type}`;
@@ -49,13 +49,14 @@ export class CartController extends ConfigController {
         if (!token || !isValidObjectId(paramId)) return res.status(403).json({ message: "Доступ запрещен" });
 
         try {
-            const user = await this._getUser(token, res);
+            const user = await this._getUser(token);
 
             user.cart = user.cart.filter(({ _id }) => _id.toString() !== paramId);
 
-            const { cart } = await user.save();
+            const savedUser = await user.save();
+            const { cart } = savedUser.toObject();
 
-            res.json({ data: cart, message: "Продукт успешно удален из корзины" });
+            res.json({ cart, message: "Продукт успешно удален из корзины" });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "Во время удаления продукта из корзины произошла ошибка" });
@@ -76,7 +77,7 @@ export class CartController extends ConfigController {
                 decrement: (count) => count - 1,
             };
 
-            const user = await this._getUser(token, res);
+            const user = await this._getUser(token);
 
             user.cart = user.cart.map((product) => {
                 if (product._id.toString() === paramId) {
@@ -89,12 +90,13 @@ export class CartController extends ConfigController {
                 return product;
             });
 
-            const { cart } = await user.save();
-
-            res.json({ data: cart, message: "Количество успешно изменено" });
+            const savedUser = await user.save();
+            const { cart } = savedUser.toObject();
+            
+            res.json({ cart, message: "Количество успешно изменено" });
         } catch (error) {
             console.log(error);
-            res.status(500).json({ message: "Во время изменения количества произошла ошибка" });
+            res.status(500).json({ message: error instanceof Error && error.message || "Во время изменения количества произошла ошибка" });
         }
     };
 
@@ -105,19 +107,19 @@ export class CartController extends ConfigController {
         if (!token) return res.status(403).json({ message: "Доступ запрещен" });
 
         try {
-            const response = await fetch(process.env.MOKKY + `/products?id=${product.id}`);
+            const response = await fetch(process.env.MOKKY + `/products?id=${product.productId}`);
             const { 0: actualProduct } = await response.json();
 
-            if (!actualProduct) return res.status(404).json({ message: `Продукт с указанным (${product.id}) id не найден` });
+            if (!actualProduct) return res.status(404).json({ message: `Продукт с указанным (${product.productId}) id не найден` });
 
             if (!actualProduct.sizes.some(({ size }) => size === initialSizes[product.size]) || !actualProduct.types.some((type) => type === product.type)) {
-                return res.status(404).json({ message: `Продукт с указанными параметрами не найден`, params: product}) 
+                return res.status(404).json({ message: "Продукт с указанными параметрами не найден", params: product}) 
             };
 
-            const user = await this._getUser(token, res);
+            const user = await this._getUser(token);
             
-            const cartMap = new Map(user.cart.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
-            const candidateKey = `${product.id}_${product.size}_${product.type}`;
+            const cartMap = new Map(user.cart.toObject().map((item) => [`${item.productId}_${item.size}_${item.type}`, item]));
+            const candidateKey = `${product.productId}_${product.size}_${product.type}`;
             const candidate = cartMap.get(candidateKey);
 
             cartMap.set(candidateKey, candidate ? { ...candidate, count: candidate.count + 1 } : { ...product, count: 1 });
@@ -125,9 +127,26 @@ export class CartController extends ConfigController {
             user.cart = [...cartMap.values()];
 
             const savedUser = await user.save();
-            const { cart: updatedCart } = savedUser.toObject();
+            const { cart } = savedUser.toObject();
 
-            res.json({ cart: updatedCart, message: "Продукт успешно добавлен в корзину" });
+            const cartRes = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.productId).join("&id[]=")}`);
+            const actualProducts = await cartRes.json();
+
+            const updatedCart = cart.reduce((acc, product) => {
+                const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
+                const price = cartItem.sizes.find(({ size }) => size === initialSizes[product.size]).price;
+
+                return {
+                    ...acc,
+                    cart: {
+                        ...acc.cart,
+                        items: [ ...acc.cart.items, { ...product, imageUrl: cartItem.imageUrl, title: cartItem.title, price } ],
+                        total_price: acc.cart.total_price + price * product.count,
+                    },
+                };
+            }, { cart: { items: [], total_price: 0 } });
+
+            res.json({ ...updatedCart, message: "Продукт успешно добавлен в корзину" });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: "Во время добавления продукта в корзину произошла ошибка" });

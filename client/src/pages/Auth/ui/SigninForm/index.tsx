@@ -7,7 +7,6 @@ import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
 import { useForm } from "@/shared/hooks/useForm";
 import { signinform } from "../../model/form";
 import { FormProps } from "../../model/interfaces";
-import { api as authAPI } from "../../api";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
 import { ApiError } from "@/shared/api/error";
@@ -15,13 +14,15 @@ import { cartSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { api } from "@/shared/api";
 import { setCart } from "@/pages/Cart/model/slice";
+import { useToast } from "@/shared/hooks/useToast";
+import Toaster from "@/shared/ui/Toaster/ui/ui";
 
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
     const { cart } = useAppSelector(cartSelector);
+    const { toast, toasts, heights, actions: { setHeights, removeToast } } = useToast();
 
     const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState<string | null>(null);
 
     const abortControllerRef = React.useRef<AbortController | null>(null);
 
@@ -29,7 +30,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     const updateCartOnSignin = async (token: string) => {
         try {
-            const { data: { cart: updatedCart } } = await api.updateCart([...cart.values()], token);
+            const { cart: updatedCart } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
             dispatch(setCart(updatedCart));
         } catch (error) {
             console.error(error);
@@ -44,14 +45,15 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { data: { data: responseData } } = await authAPI.signin(data, abortControllerRef.current);
+            const { user } = await api.user.signin({ body: JSON.stringify(data), signal: abortControllerRef.current.signal });
             
-            cart.size ? updateCartOnSignin(responseData.token) : dispatch(setCart(responseData.cart));
+            cart.size ? updateCartOnSignin(user.token) : dispatch(setCart(user.cart));
             
-            dispatch(signin(responseData));
+            dispatch(signin(user));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError && setError(error.message);
+            error instanceof ApiError && toast.error(error.message, { closeButton: true,  description: "Проверьте правильность введенных данных" });
+            
         } finally {
             setLoading(false);
         }
@@ -59,6 +61,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     return (
         <div className='p-10 flex flex-col justify-center items-center max-w-[600px] w-full box-content'>
+            <Toaster toasts={toasts} heights={heights} setHeights={setHeights} removeToast={removeToast} />
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
                 <h1 className='text-5xl font-bold text-primary-black'>Вход</h1>
                 <p className='text-primary-black'>
@@ -71,13 +74,6 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                 </p>
             </div>
             <form className='flex flex-col gap-5 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
-                <AnimatePresence>
-                    {error && (
-                        <motion.p {...errorsAnimation} className='py-2 px-5 rounded bg-red-500 text-white'>
-                            {error}
-                        </motion.p>
-                    )}
-                </AnimatePresence>
                 <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out'>
                     <span className='text-primary-black'>Введите почту</span>
                     <Input

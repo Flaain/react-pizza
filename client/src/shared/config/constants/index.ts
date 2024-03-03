@@ -1,6 +1,7 @@
 import { Sort } from "@/shared/model/interfaces";
 import { Categories } from "@/widgets/Tools/model/interfaces";
 
+// eslint-disable-next-line no-useless-escape
 export const EMAIL_REGEXP = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const initialTypes = ["тонкое", "традиционное"];
@@ -49,6 +50,8 @@ export const routerList = {
     },
     PRODUCT: "/product/:id",
     AUTH: "/auth",
+    ORDERS: "/orders",
+    ORDER: "/orders/:id",
 };
 
 export const actionTypes = {

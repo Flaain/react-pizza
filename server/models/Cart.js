@@ -2,7 +2,7 @@ import { Schema } from "mongoose";
 import { z } from "zod";
 
 export const CartSchema = new Schema({
-    id: {
+    productId: {
         type: Number,
         required: true,
     },
@@ -22,7 +22,7 @@ export const CartSchema = new Schema({
 
 export const zodCartSchema = z.strictObject({
     _id: z.string().optional(),
-    id: z.number(),
+    productId: z.number(),
     size: z.number(),
     title: z.string(),
     imageUrl: z.string(),
@@ -35,7 +35,7 @@ export const zodCartSchemaAsArray = z.array(zodCartSchema);
 
 export const zodQuantitySchema = z
     .strictObject({
-        action: z.string(),
+        action: z.enum(["increment", "decrement", "direct"]),
         value: z.number().min(1).max(10).optional(),
     })
     .refine(({ action, value }) => action === "direct" ? !!value : true, { message: "Value is required for 'direct' action" });

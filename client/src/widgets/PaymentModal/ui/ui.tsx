@@ -4,7 +4,6 @@ import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import PaymentMain from "./PaymentMain/ui";
-import ChooseCard from "./ChooseCard";
 
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
@@ -24,25 +23,17 @@ const PaymentModal = ({ closeHandler }: Props) => {
         dispatch(setPaymentInfo(currentInfo as PaymentInfo));
         closeHandler();
     };
-    
-    const props = {
-        closeHandler,
-        currentInfo,
-        handleSave,
-        setActiveMenu,
-        setCurrentInfo,
-    }; // not sure if this is a good practice
 
     const menus: Menus = {
         main: {
-            component: <PaymentMain {...props} />,
+            component: <PaymentMain {...{ currentInfo, handleSave, setActiveMenu, setCurrentInfo, closeHandler }} />,
             title: "Способ оплаты",
         },
-        "add-card": { component: <div>add card</div>, title: "Привязка карты" },
-        "choose-card": {
-            component: <ChooseCard {...props} />,
-            title: "Выбор карты",
-        },
+        // "add-card": { component: <div>add card</div>, title: "Привязка карты" },
+        // "choose-card": {
+        //     component: <ChooseCard {...props} />,
+        //     title: "Выбор карты",
+        // },
     };
 
     return (

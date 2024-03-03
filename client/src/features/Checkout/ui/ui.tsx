@@ -9,7 +9,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { useNavigate } from "react-router-dom";
 import { routerList } from "@/shared/config/constants";
 
-const Checkout = ({ handleOrder, setPaymentModalOpened }: CheckoutProps) => {
+const Checkout = ({ setPaymentModalOpened }: CheckoutProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
 
     const navigate = useNavigate();
@@ -18,7 +18,6 @@ const Checkout = ({ handleOrder, setPaymentModalOpened }: CheckoutProps) => {
         deliveryInfo ? setPaymentModalOpened(true) : navigate(routerList.CART.children.DELIVERY_METHOD);
     };
 
-
     return (
         <div
             className={cn(
@@ -26,16 +25,19 @@ const Checkout = ({ handleOrder, setPaymentModalOpened }: CheckoutProps) => {
             )}
         >
             {deliveryInfo && paymentInfo ? (
-                <CheckoutSummary setPaymentModalOpened={setPaymentModalOpened}/>
+                <CheckoutSummary setPaymentModalOpened={setPaymentModalOpened} />
             ) : (
                 <button className='flex items-center justify-between group' onClick={handleFormFill}>
                     <span className='text-lg text-primary-black font-medium group-hover:text-primary-orange'>
-                        Заполните форму {deliveryInfo ? 'оплаты' : 'доставки'}
+                        Заполните форму {deliveryInfo ? "оплаты" : "доставки"}
                     </span>
-                    <img src={getImageUrl("pen.svg")} alt={deliveryInfo ? "Заполните форму оплаты" : "Заполните форму доставки"} />
+                    <img
+                        src={getImageUrl("pen.svg")}
+                        alt={deliveryInfo ? "Заполните форму оплаты" : "Заполните форму доставки"}
+                    />
                 </button>
             )}
-            <CheckoutTotal handleOrder={handleOrder} />
+            <CheckoutTotal />
         </div>
     );
 };

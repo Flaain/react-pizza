@@ -1,23 +1,24 @@
 import getPriceView from "../lib/helpers/getPriceView";
 import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 
-import { CartInterface, CartItem, Payload } from "./interfaces";
+import { CartInterface, Payload } from "./interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
-import { addToCartThunk, getCart, handleOrder } from "./asyncActions";
+import { addToCartThunk, getCart } from "./asyncActions";
 import { initialState } from "./initialState";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { changeItemCountActions } from "../lib/utils/changeItemCountActions";
+import { IApiCart } from "@/shared/model/interfaces";
 
 export const cartSlice = createSlice({
     name: "cart",
     initialState,
     reducers: {
-        setCart: (state, { payload }: PayloadAction<{ items: Array<CartInterface>, totalPrice: number }>) => {
-            state.cart = new Map(payload.items.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
+        setCart: (state, { payload }: PayloadAction<IApiCart>) => {
+            state.cart = new Map(payload.items.map((item) => [`${item.productId}_${item.size}_${item.type}`, item]));
             cartSlice.caseReducers.updateViewAndStorage(state);
         },
-        addToCart(state, { payload }: PayloadAction<CartItem>) {
-            const key = `${payload.id}_${payload.size}_${payload.type}`;
+        addToCart(state, { payload }: PayloadAction<Omit<CartInterface, "category">>) {
+            const key = `${payload.productId}_${payload.size}_${payload.type}`;
             const product = state.cart.get(key);
 
             state.cart.set(key, { ...payload, count: product ? product.count + 1 : 1 });
@@ -56,33 +57,14 @@ export const cartSlice = createSlice({
             state.priceView = getPriceView([]);
             localStorage.removeItem(localStorageKeys.CART);
         },
-        clearOrder(state) {
-            state.ordered = false;
-            state.order = null;
-        },
     },
     extraReducers(builder) {
         builder
-            .addCase(handleOrder.pending, (state) => {
-                state.orderLoading = true;
-            })
-            .addCase(handleOrder.fulfilled, (state, action) => {
-                state.orderLoading = false;
-                state.ordered = true;
-                state.cart = new Map();
-                state.priceView = getPriceView([...state.cart.values()]);
-                state.order = action.payload;
-            })
-            .addCase(handleOrder.rejected, (state, action) => {
-                state.orderLoading = false;
-                state.ordered = false;
-                state.error = action.error;
-            })
             .addCase(getCart.pending, (state) => {
                 state.cartLoading = true;
             })
-            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<{ items: Array<CartInterface>, totalPrice: number }>) => {
-                state.cart = new Map(payload.items.map((product) => [`${product.id}_${product.size}_${product.type}`, product]));
+            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<IApiCart>) => {
+                state.cart = new Map(payload.items.map((product) => [`${product.productId}_${product.size}_${product.type}`, product]));
                 state.cartLoading = false;
                 cartSlice.caseReducers.updateViewAndStorage(state);
             })
@@ -90,11 +72,12 @@ export const cartSlice = createSlice({
                 state.cartLoading = false;
                 console.log(error);
             })
-            .addCase(addToCartThunk.fulfilled, (state, { payload }: PayloadAction<{ items: Array<CartInterface>, totalPrice: number }>) => {
-                state.cart = new Map(payload.items.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
-            })
+            .addCase(addToCartThunk.fulfilled, (state, { payload }: PayloadAction<IApiCart>) => {
+                payload.items.forEach((product) => state.cart.set(`${product.productId}_${product.size}_${product.type}`, product));
+                cartSlice.caseReducers.updateViewAndStorage(state);
+            });
     },
 });
 
-export const { addToCart, changeItemCount, removeProductFromCart, clearCart, clearOrder, setCart } = cartSlice.actions;
+export const { addToCart, changeItemCount, removeProductFromCart, clearCart, setCart } = cartSlice.actions;
 export default cartSlice.reducer;

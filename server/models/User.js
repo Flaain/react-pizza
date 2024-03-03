@@ -1,6 +1,9 @@
 import { z } from "zod";
-import { Schema, model } from "mongoose";
+import mongoose, { Schema, model } from "mongoose";
 import { CartSchema } from "./Cart.js";
+import { DeliveryInfoSchema } from "./DeliveryInfo.js";
+import { PaymentInfoSchema } from "./PaymentInfo.js";
+import { AddressSchema } from "./Address.js";
 
 export const UserSchema = new Schema(
     {
@@ -17,36 +20,9 @@ export const UserSchema = new Schema(
             type: String,
             required: true,
         },
-        deliveryInfo: {
-            address: String,
-            method: String,
-        },
-        paymentInfo: {
-            method: String,
-            card: {
-                address: {
-                    type: String,
-                    // partialFilterExpression: { address: { $type: "string" } },
-                    sparse: true,
-                    unique: true,
-                },
-                expired: Date,
-                ccv: Number,
-            },
-        },
-        "user-addresses": {
-            type: [
-                {
-                    city: String,
-                    address: {
-                        type: String,
-                        unique: true,
-                    },
-                    postcode: Number,
-                    deliveryPrice: Number,
-                },
-            ],
-        },
+        deliveryInfo: DeliveryInfoSchema,
+        paymentInfo: PaymentInfoSchema,
+        addresses: [AddressSchema],
         cart: [CartSchema],
     },
     { timestamps: true }

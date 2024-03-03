@@ -5,11 +5,11 @@ import { initialSizes } from "../utils/constants/initial.js";
 
 export class ConfigController {
     _revalidateCart = async (cart = []) => {
-        const response = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.id).join("&id[]=")}`);
+        const response = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.productId).join("&id[]=")}`);
         const actualProducts = await response.json();
 
-        const revalidatedCart = cart.reduce((acc, product) => {
-            const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.id);
+        const revalidatedCart = [...new Map(cart.map((item) => [`${item.productId}_${item.size}_${item.type}`, item])).values()].reduce((acc, { _id, ...product }) => {
+            const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
 
             if (!cartItem) return acc;
             // throw new Error(`Не удалось найти продукт с id - ${item.id}`);
@@ -27,7 +27,8 @@ export class ConfigController {
                         ...acc.cart.items,
                         {
                             ...product,
-                            id: cartItem.id,
+                            ...(isValidObjectId(_id) && { _id }),
+                            productId: cartItem.id,
                             imageUrl: cartItem.imageUrl,
                             title: cartItem.title,
                             type: type ?? cartItem.types[0],
@@ -44,15 +45,15 @@ export class ConfigController {
         return revalidatedCart;
     };
 
-    _getUser = async (token, res) => {
+    _getUser = async (token) => {
         const { id } = jwt.verify(token, process.env.JWT_SECRET);
 
-        if (!isValidObjectId(id)) return res.status(403).json({ message: "Доступ запрещен" });
+        if (!isValidObjectId(id)) throw new Error("Доступ запрещен");
 
-        const currentUser = await User.findById(id);
+        const user = await User.findById(id);
 
-        if (!currentUser) return res.status(404).json({ message: "Пользователь не найден" });
-        
-        return currentUser;
+        if (!user) throw new Error("Пользователь не найден");
+
+        return user;
     };
 }

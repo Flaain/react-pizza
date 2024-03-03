@@ -16,12 +16,12 @@ import { addToCartThunk } from "@/pages/Cart/model/asyncActions";
 const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
     const { cart } = useAppSelector(cartSelector);
     const { jwt } = useAppSelector(userSelector);
-    
-    const count = React.useMemo(() => [...cart.values()].reduce((acc, { id: _id, count }) => acc + (_id === id ? count : 0), 0), [cart]);
+
+    const count = React.useMemo(() => [...cart.values()].reduce((acc, { productId, count }) => acc + (productId === id ? count : 0), 0), [cart]);
     const sizeIndex = React.useMemo(() => initialSizes.findIndex((size) => size === sizes[0].size), []);
-    
-    const initialState = { type: types[0], size: sizeIndex, price: sizes[0].price, count }
-    
+
+    const initialState = { type: types[0], size: sizeIndex, price: sizes[0].price, count };
+
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, initialState);
 
     const { priceRef } = useAnimatedPrice(initialState.price, productState.price);
@@ -31,7 +31,11 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
     const handleAddToCart = async () => {
         try {
             productDispatch({ type: ProductSelectorTypes.SET_COUNT, payload: { count: 1 } });
-            dispatch(jwt ? addToCartThunk({ product: { ...productState, id }, token: jwt }) : addToCart({ ...productState, id, count: 1 }));
+            dispatch(
+                jwt
+                    ? addToCartThunk({ product: { productId: id, size: productState.size, type: productState.type }, token: jwt })
+                    : addToCart({ ...productState, productId:id, title, imageUrl })
+            );
         } catch (error) {
             console.error(error);
         }
@@ -54,18 +58,13 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                 <h2 className='text-primary-black font-bold text-lg cursor-pointer'>
                     <Link to={`product/${id}`}>{title}</Link>
                 </h2>
-                <OptionsSelector
-                    state={productState}
-                    handleChange={productDispatch}
-                    sizes={sizes}
-                    types={types}
-                />
+                <OptionsSelector state={productState} handleChange={productDispatch} sizes={sizes} types={types} />
                 <div className='flex items-center justify-between w-full mt-[5px]'>
                     <span
                         className='text-xl font-bold text-primary-black flex items-center gap-2'
                         ref={priceRef}
                     ></span>
-                    <AddToCartButton title='Добавить' handleClick={handleAddToCart} quantity={productState.count} />
+                    <AddToCartButton title='Добавить' handleClick={handleAddToCart} quantity={count} />
                 </div>
             </div>
         </article>

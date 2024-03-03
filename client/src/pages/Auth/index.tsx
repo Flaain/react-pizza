@@ -3,7 +3,7 @@ import React from "react";
 import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
 import { currentRoute } from "./model/currentRoute";
 import { RouteObject } from "react-router-dom";
-import { AuthGuard } from "@/shared/model/AuthGuard";
+import { AuthGuard } from "@/shared/ui/AuthGuard";
 
 export const View = React.lazy(() => import("./ui/ui"));
 

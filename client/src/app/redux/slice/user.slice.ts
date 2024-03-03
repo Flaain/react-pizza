@@ -2,17 +2,16 @@ import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { localStorageKeys } from "@/shared/config/constants";
 import { userInitialState } from "./user.initialState";
-import { Address } from "@/shared/model/interfaces";
+import { Address, Profile } from "@/shared/model/interfaces";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { PaymentInfo } from "@/widgets/PaymentModal";
 import { getProfile } from "./asyncActions";
-import { IAuthData } from "@/app/model/interfaces";
 
 export const userSlice = createSlice({
     name: "user",
     initialState: userInitialState,
     reducers: {
-        signin: (state, { payload }: PayloadAction<IAuthData>) => {
+        signin: (state, { payload }: PayloadAction<Profile>) => {
             state._id = payload._id;
             state.jwt = payload.token;
             state.name = payload.name;
@@ -46,7 +45,7 @@ export const userSlice = createSlice({
             .addCase(getProfile.pending, (state) => {
                 state.isAuthInProgress = true;
             })
-            .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<IAuthData, "token">>) => {
+            .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<Profile, "token">>) => {
                 state._id = payload._id;
                 state.name = payload.name;
                 state.email = payload.email;

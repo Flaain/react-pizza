@@ -7,7 +7,7 @@ import { Address, Data } from "@/shared/model/interfaces";
 import { DeliveryMethodModalContentProps } from "../../model/interfaces";
 
 const DeliveryMethodModalContent = ({ title, navigate }: DeliveryMethodModalContentProps) => {
-    const { data } = useLoaderData() as { data: Promise<Data<Array<Address>>> };
+    const data = useLoaderData() as Promise<Data<Array<Address>>> ;
 
     return (
         <ModalBody>

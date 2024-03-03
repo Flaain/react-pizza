@@ -7,6 +7,11 @@ import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { routerList } from "@/shared/config/constants";
 import { CheckoutSummaryProps } from "../../model/interfaces";
 
+const description = {
+    card: "мы используем платежную систему Stripe",
+    cash: "оплата наличными при получении",
+};
+
 const CheckoutSummary = ({ setPaymentModalOpened }: CheckoutSummaryProps) => {
     const { deliveryInfo, paymentInfo } = useAppSelector(userSelector);
     const { priceView: { intl } } = useAppSelector(cartSelector);
@@ -21,9 +26,7 @@ const CheckoutSummary = ({ setPaymentModalOpened }: CheckoutSummaryProps) => {
                     </span>
                     <img src={getImageUrl("pen.svg")} alt='edit delivery info' />
                 </button>
-                {paymentInfo?.method === "card" && (
-                    <p className='text-gray-400'>**{String(paymentInfo.card?.address).slice(-4)}</p>
-                )}
+                <p className='text-gray-400'>{description[paymentInfo!.method]}</p>
             </div>
             <div className='flex flex-col'>
                 <span className='text-base font-medium text-primary-black'>Сумма товаров</span>

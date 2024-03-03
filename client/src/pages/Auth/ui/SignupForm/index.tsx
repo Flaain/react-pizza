@@ -7,17 +7,21 @@ import { FormProps } from "../../model/interfaces";
 import { AnimatePresence, motion } from "framer-motion";
 import { signupform } from "../../model/form";
 import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
-import { api } from "../../api";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
 import { ApiError } from "@/shared/api/error";
 import { RegisterOptions } from "@/shared/hooks/useForm/types";
+import { api } from "@/shared/api";
+import { setCart } from "@/pages/Cart/model/slice";
+import { useAppSelector } from "@/shared/model/store";
+import { cartSelector } from "@/shared/model/selectors";
 
 const SignupForm = ({ setActiveForm }: FormProps) => {
     const [loading, setLoading] = React.useState(false);
     const [errorState, setErrorState] = React.useState<{ prevForm: Record<string, string>; error: string; valid: boolean; } | null>(null);
 
     const { errors, isFormValid, register, submitHandler, getFormValues } = useForm({ provideFormValues: true });
+    const { cart } = useAppSelector(cartSelector);
 
     const controller = React.useRef<AbortController | null>(null);
 
@@ -33,6 +37,17 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
     };
 
     const regOptions: RegisterOptions = { onChange: handleChange, validateOnChange: true };
+    
+    const updateCartOnSignup = async (token: string) => {
+        try {
+            const { cart: updatedCart } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
+
+            dispatch(setCart(updatedCart));
+        } catch (error) {
+            console.error(error);
+            // dispatch(clearCart());
+        }
+    }
 
     const handleSubmit = async ({ name, email, password }: Record<string, string>) => {
         controller.current && controller.current.abort();
@@ -41,9 +56,11 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { data: { data: signupData } } = await api.signup({ name, email, password }, controller.current);
+            const { user } = await api.user.signup({ body: JSON.stringify({ name, email, password }), signal: controller.current.signal });
 
-            dispatch(signin(signupData));
+            cart.size ? updateCartOnSignup(user.token) : dispatch(setCart(user.cart));
+
+            dispatch(signin(user));
         } catch (error) {
             console.error(error);
             error instanceof ApiError && setErrorState({ prevForm: { email }, error: error.message, valid: false });

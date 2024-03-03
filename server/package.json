@@ -4,16 +4,19 @@
     "version": "1.0.0",
     "type": "module",
     "scripts": {
-        "start": "nodemon --exec \"node -r dotenv/config\" ."
+        "start": "concurrently \"nodemon --exec \\\"node -r dotenv/config\\\" .\" \"npm run stripe\"",
+        "stripe": "stripe listen --forward-to localhost:3000/order/checkout/webhook"
     },
     "dependencies": {
         "bcryptjs": "^2.4.3",
+        "concurrently": "^8.2.2",
         "cors": "^2.8.5",
         "dotenv": "^16.3.1",
         "express": "^4.18.2",
         "express-rate-limit": "^7.1.5",
         "jsonwebtoken": "^9.0.2",
         "mongoose": "^8.0.4",
+        "stripe": "^14.18.0",
         "zod": "^3.22.4"
     }
 }

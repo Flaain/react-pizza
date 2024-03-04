@@ -11,6 +11,8 @@ import { getAsset } from "@/shared/hooks/useToast/assets";
 //     warning: "bg-yellow-500",
 // };
 
+const DEFAULT_GAP = 12;
+
 const Toast = ({
     id,
     closeButton,
@@ -26,9 +28,9 @@ const Toast = ({
     removeToast,
     setHeights,
     expanded,
+    gap = DEFAULT_GAP,
     autoClose = true,
     recalculateRemainingTime = false,
-    setExpanded,
 }: IToastProps) => {
     const [height, setHeight] = React.useState(0);
     const [isInteracting, setIsInteracting] = React.useState(false);
@@ -36,27 +38,17 @@ const Toast = ({
     const toastRef = React.useRef<HTMLLIElement>(null);
     const heightIndex = React.useMemo(() => heights.findIndex((height) => height.id === id) || 0, [heights, id]);
     const toastsHeightBefore = React.useMemo(() => heights.reduce((acc, { height }, reducerIndex) => (reducerIndex >= heightIndex ? acc : acc + height), 0), [heights, heightIndex])
-    const offset = React.useMemo(() => Math.floor(heightIndex * 12 + toastsHeightBefore), [heightIndex, toastsHeightBefore]);
-    const timerRef = React.useRef<{ start: number; remaining: number; id: NodeJS.Timeout | null }>({
-        start: Date.now(),
+    const offset = React.useMemo(() => Math.floor(heightIndex * gap + toastsHeightBefore), [heightIndex, toastsHeightBefore]);
+    const timerRef = React.useRef<{ start: number; end: number; remaining: number; id: NodeJS.Timeout | null }>({
+        start: 0,
+        end: 0,
         remaining: duration,
         id: null,
     });
 
-    const onHoverStart = React.useCallback(() => {
-        setIsInteracting(true);
-        toasts.length > 1 && setExpanded(true);
-    }, [toasts]);
-
-    const onHoverEnd = React.useCallback(() => {
-        setIsInteracting(false);
-        setExpanded(false);
-    }, []);
-
     const handleClose = React.useCallback(() => {
         removeToast(id);
         onClose?.({ id, description, title, type });
-        onAutoClose?.({ id, description, title, type });
     }, [])
 
     React.useEffect(() => {
@@ -84,10 +76,13 @@ const Toast = ({
         };
 
         const pauseTimer = () => {
-            timerRef.current = {
+            const end = Date.now();
+            
+            timerRef.current.end < timerRef.current.start && (timerRef.current = {
                 ...timerRef.current,
-                remaining: timerRef.current.remaining - (Date.now() - timerRef.current.start),
-            };
+                remaining: timerRef.current.remaining - (end - timerRef.current.start),
+                end,
+            });
         };
 
         (expanded || isInteracting) ? pauseTimer() : startTimer();
@@ -101,7 +96,7 @@ const Toast = ({
         <motion.li
             style={{ zIndex: toasts.length - index, height: expanded ? (heights[heightIndex]?.height ?? "auto") : (height || "auto") }}
             className={cn(
-                "bg-slate-100 absolute pointer-events-auto after:h-[12px] transition-[height] duration-200 ease-in-out after:pointer-events-auto after:left-0 after:right-0 after:absolute after:-top-3 after:block max-w-[350px] w-full bottom-0 right-0 p-4 rounded-lg box-border border border-gray-200 border-solid shadow-md"
+                `bg-slate-100 absolute pointer-events-auto after:h-[${gap}px] transition-[height] duration-200 ease-in-out after:pointer-events-auto after:left-0 after:right-0 after:absolute after:-top-3 after:block max-w-[350px] w-full bottom-0 right-0 p-4 rounded-lg box-border border border-gray-200 border-solid shadow-md`
                 // variants[type as keyof typeof variants] ?? "bg-white"
             )}
             ref={toastRef}
@@ -109,11 +104,11 @@ const Toast = ({
             transition={{ ease: "easeInOut", duration: 0.35 }}
             animate={{
                 opacity: 1,
-                y: expanded ? -offset : -(12 * index),
+                y: expanded ? -offset : -(gap * index),
                 scale: expanded ? 1 : Math.abs(index * 0.05 - 1),
             }}
-            onHoverEnd={onHoverEnd}
-            onHoverStart={onHoverStart}
+            onMouseEnter={() => setIsInteracting(true)}
+            onMouseLeave={() => setIsInteracting(false)}
         >
             <div
                 className={cn(

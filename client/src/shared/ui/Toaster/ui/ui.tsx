@@ -10,29 +10,28 @@ const Toaster = ({
     heights,
 }: {
     toasts: Array<IToast>;
-    setHeights: React.Dispatch<React.SetStateAction<IHeights[]>>;
+    setHeights: React.Dispatch<React.SetStateAction<Array<IHeights>>>;
     removeToast: (id: number | string) => void;
     duration?: number;
     heights: Array<IHeights>;
 }) => {
     const [expanded, setExpanded] = React.useState(false);
 
-    React.useEffect(() => {
-        toasts.length <= 1 && setExpanded(false);
-    }, [setExpanded, toasts]);
-
     if (!toasts.length) return null;
 
     return (
         <section className='fixed z-[9999] touch-manipulation outline-none pointer-events-none inset-5'>
-            <ul className='flex'>
+            <ul
+                className='flex'
+                onMouseEnter={() => toasts.length > 1 && setExpanded(true)}
+                onMouseLeave={() => setExpanded(false)}
+            >
                 {toasts.map((toast, index) => (
                     <Toast
                         key={toast.id}
                         {...toast}
                         heights={heights}
                         expanded={expanded}
-                        setExpanded={setExpanded}
                         setHeights={setHeights}
                         removeToast={removeToast}
                         index={index}

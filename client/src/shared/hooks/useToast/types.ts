@@ -12,6 +12,7 @@ export interface IToast {
     onClose?: (toast: Pick<IToast, "id" | "type" | "title" | "description">) => void;
     closeButton?: boolean;
     autoClose?: boolean;
+    recalculateRemainingTime?: boolean;
 }
 
 export interface IHeights {
@@ -21,12 +22,11 @@ export interface IHeights {
 
 export interface IToastProps extends IToast {
     toasts: Array<IToast>;
-    recalculateRemainingTime?: boolean;
     setHeights: React.Dispatch<React.SetStateAction<IHeights[]>>;
     removeToast: (id: number | string) => void;
     autoClose?: boolean;
     index: number;
     heights: Array<IHeights>;
     expanded: boolean;
-    setExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+    gap?: number;
 }

@@ -52,7 +52,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
             dispatch(signin(user));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError && toast.error(error.message, { closeButton: true,  description: "Проверьте правильность введенных данных" });
+            error instanceof ApiError && toast.error(error.message, { closeButton: true, recalculateRemainingTime: true, description: "Проверьте правильность введенных данных" });
             
         } finally {
             setLoading(false);

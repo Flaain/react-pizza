@@ -18,7 +18,11 @@ import { cartSelector } from "@/shared/model/selectors";
 
 const SignupForm = ({ setActiveForm }: FormProps) => {
     const [loading, setLoading] = React.useState(false);
-    const [errorState, setErrorState] = React.useState<{ prevForm: Record<string, string>; error: string; valid: boolean; } | null>(null);
+    const [errorState, setErrorState] = React.useState<{
+        prevForm: Record<string, string>;
+        error: string;
+        valid: boolean;
+    } | null>(null);
 
     const { errors, isFormValid, register, submitHandler, getFormValues } = useForm({ provideFormValues: true });
     const { cart } = useAppSelector(cartSelector);
@@ -30,24 +34,25 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
     const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         const formValues = { ...getFormValues(), [name]: value }; // don't like it at all but right now can't figure how get actual values
 
-        errorState && setErrorState((prevState) => {
-            const valid = Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]);
-            return { ...prevState!, valid };
-        });
+        errorState &&
+            setErrorState((prevState) => {
+                const valid = Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]);
+                return { ...prevState!, valid };
+            });
     };
 
     const regOptions: RegisterOptions = { onChange: handleChange, validateOnChange: true };
-    
+
     const updateCartOnSignup = async (token: string) => {
         try {
-            const { cart: updatedCart } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
+            const { data } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
 
-            dispatch(setCart(updatedCart));
+            dispatch(setCart(data));
         } catch (error) {
             console.error(error);
             // dispatch(clearCart());
         }
-    }
+    };
 
     const handleSubmit = async ({ name, email, password }: Record<string, string>) => {
         controller.current && controller.current.abort();
@@ -56,7 +61,10 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { user } = await api.user.signup({ body: JSON.stringify({ name, email, password }), signal: controller.current.signal });
+            const { data: user } = await api.user.signup({
+                body: JSON.stringify({ name, email, password }),
+                signal: controller.current.signal,
+            });
 
             cart.size ? updateCartOnSignup(user.token) : dispatch(setCart(user.cart));
 
@@ -74,7 +82,8 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
                 <h1 className='text-5xl font-bold text-primary-black'>Регистрация</h1>
                 <p className='text-primary-black'>
-                    Уже есть аккаунт?&#32;<span
+                    Уже есть аккаунт?&#32;
+                    <span
                         onClick={() => setActiveForm("signin")}
                         className='text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
                     >
@@ -124,7 +133,7 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                     error={errors["password"]}
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
-                    />
+                />
                 <PasswordInput
                     {...register(signupform.confirmPassword, regOptions)}
                     label={signupform.confirmPassword.label}
@@ -132,7 +141,10 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                 />
-                <AuthButton title='Зарегистрироваться' disabled={!isFormValid || loading || (errorState ? !errorState.valid : false)} />
+                <AuthButton
+                    title='Зарегистрироваться'
+                    disabled={!isFormValid || loading || (errorState ? !errorState.valid : false)}
+                />
             </form>
         </div>
     );

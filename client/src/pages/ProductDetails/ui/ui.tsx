@@ -4,10 +4,10 @@ import cn from "@/shared/lib/classNames";
 import ResolvedProductDetails from "./ResolvedProductDetails";
 import ProductDetailsSkeleton from "./Skeleton";
 import { Await, useLoaderData } from "react-router-dom";
-import { Product } from "@/shared/model/interfaces";
+import { IApiData, Product } from "@/shared/model/interfaces";
 
 const ProductDetails = () => {
-    const { product } = useLoaderData() as { product: Product };
+    const data = useLoaderData() as Promise<IApiData<Product>>;
 
     return (
         <section className="mt-5">
@@ -15,7 +15,7 @@ const ProductDetails = () => {
                 classNames={cn("max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border flex flex-col gap-5 relative")}
             >
                 <React.Suspense fallback={<ProductDetailsSkeleton />}>
-                    <Await resolve={product}>
+                    <Await resolve={data}>
                         <ResolvedProductDetails />
                     </Await>
                 </React.Suspense>

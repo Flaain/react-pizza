@@ -12,9 +12,9 @@ export const rootSlice = createSlice({
             .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
             })
-            .addCase(fetchProducts.fulfilled, (state, action) => {
-                state._meta = action.payload.meta ?? null;
-                state.products = action.payload.items ?? action.payload;
+            .addCase(fetchProducts.fulfilled, (state, { payload }) => {
+                state._meta = payload.meta;
+                state.products = payload.items;
                 state.loading = false;
             })
             .addCase(fetchProducts.rejected, (state, action) => {

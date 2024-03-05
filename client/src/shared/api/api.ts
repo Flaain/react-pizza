@@ -10,11 +10,17 @@ export class API {
         this._headers = headers;
     }
 
-    protected async _checkResponse<T, K>(response: Response): Promise<K extends string ? IApiData<T, K> : T> {
+    protected async _checkResponse<T>(response: Response): Promise<IApiData<T>> {
         const data = await response.json();
 
         if (!response.ok) throw new ApiError({ ...data, message: data.message ?? "Произошла непредвиденная ошибка" });
 
-        return data;
+        return {
+            data,
+            status: response.status,
+            statusText: response.statusText,
+            headers: Object.fromEntries([...response.headers.entries()]),
+            message: data.message ?? "Успех",
+        };
     }
 }

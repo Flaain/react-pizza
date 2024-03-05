@@ -63,8 +63,8 @@ export const cartSlice = createSlice({
             .addCase(getCart.pending, (state) => {
                 state.cartLoading = true;
             })
-            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<IApiCart>) => {
-                state.cart = new Map(payload.items.map((product) => [`${product.productId}_${product.size}_${product.type}`, product]));
+            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<{ cart: IApiCart }>) => {
+                state.cart = new Map(payload.cart.items.map((product) => [`${product.productId}_${product.size}_${product.type}`, product]));
                 state.cartLoading = false;
                 cartSlice.caseReducers.updateViewAndStorage(state);
             })

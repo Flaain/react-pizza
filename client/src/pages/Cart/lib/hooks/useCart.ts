@@ -21,12 +21,12 @@ export const useCart = () => {
 
     const actions = React.useMemo(() => ({
         card: async () => {
-            const { url } = await api.cart.createCheckoutSesstion({ token: jwt as string });
+            const { data: url } = await api.cart.createCheckoutSesstion({ token: jwt as string });
             window.location.href = url;
         },
         cash: async () => {
-            const { orderId } = await api.cart.createOrder({ token: jwt as string });
-            navigate(`/orders/${orderId}`);
+            const { data: { _id } } = await api.cart.createOrder({ token: jwt as string });
+            navigate(`/orders/${_id}`);
         },
     }), [jwt, navigate]);
 

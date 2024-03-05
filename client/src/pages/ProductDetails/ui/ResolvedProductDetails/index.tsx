@@ -7,14 +7,13 @@ import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import BrowserTitle from "@/shared/ui/BrowserTitle";
 import RelatedItems from "@/widgets/RelatedItems/ui/ui";
 import { useAsyncValue } from "react-router-dom";
-import { Product } from "@/shared/model/interfaces";
+import { IApiData, Product } from "@/shared/model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { OptionsSelectorSkeleton } from "@/shared/ui/OptionsSelector";
 
 const ResolvedProductDetails = () => {
-    const product = useAsyncValue() as Product;
-
+    const { data: product } = useAsyncValue() as IApiData<Product>;
     const { cartLoading } = useAppSelector(cartSelector);
     const { isAuthInProgress } = useAppSelector(userSelector);
 

@@ -111,7 +111,6 @@ export interface CartItemLocal extends ProductSelectorState {
     imageUrl: string;
 }
 
-
 export type OnlySignal = Pick<IApiMethodParams, "signal">;
 export type SignalWithBody = WithRequired<Pick<IApiMethodParams, "body" | "signal">, "body">;
 
@@ -123,11 +122,13 @@ export interface IBase {
     };
 }
 
-export type IApiData<T, K extends string> = {
-    [key in K]: T;
-} & {
+export type IApiData<T> = {
+    data: T;
+    status: Response["status"];
+    statusText: Response["statusText"];
+    headers: Record<string, string>;
     message: string;
-};
+}
 
 export interface IProductDetailsParams extends OnlySignal {
     id: number;
@@ -147,7 +148,8 @@ export interface IApiCart {
     total_price: number;
 }
 
-export interface IApiCartChangeQuantity extends WithRequired<Pick<IApiMethodParams, "body" | "signal" | "token">, "body" | "token"> {
+export interface IApiCartChangeQuantity
+    extends WithRequired<Pick<IApiMethodParams, "body" | "signal" | "token">, "body" | "token"> {
     _id: string;
 }
 
@@ -161,6 +163,6 @@ export interface Profile {
     paymentInfo?: PaymentInfo;
     createdAt: string;
     updatedAt: string;
-    orders: Array<Order>
+    orders: Array<Order>;
     token: string;
 }

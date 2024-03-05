@@ -20,7 +20,12 @@ import Toaster from "@/shared/ui/Toaster/ui/ui";
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
     const { cart } = useAppSelector(cartSelector);
-    const { toast, toasts, heights, actions: { setHeights, removeToast } } = useToast();
+    const {
+        toast,
+        toasts,
+        heights,
+        actions: { setHeights, removeToast },
+    } = useToast();
 
     const [loading, setLoading] = React.useState(false);
 
@@ -30,13 +35,13 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     const updateCartOnSignin = async (token: string) => {
         try {
-            const { cart: updatedCart } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
-            dispatch(setCart(updatedCart));
+            const { data } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
+            dispatch(setCart(data));
         } catch (error) {
             console.error(error);
             // dispatch(clearCart());
         }
-    }
+    };
 
     const handleSubmit = async (data: Record<string, string>) => {
         abortControllerRef.current && abortControllerRef.current.abort();
@@ -45,15 +50,22 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { user } = await api.user.signin({ body: JSON.stringify(data), signal: abortControllerRef.current.signal });
-            
+            const { data: user } = await api.user.signin({
+                body: JSON.stringify(data),
+                signal: abortControllerRef.current.signal,
+            });
+
             cart.size ? updateCartOnSignin(user.token) : dispatch(setCart(user.cart));
-            
+
             dispatch(signin(user));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError && toast.error(error.message, { closeButton: true, recalculateRemainingTime: true, description: "Проверьте правильность введенных данных" });
-            
+            error instanceof ApiError &&
+                toast.error(error.message, {
+                    closeButton: true,
+                    recalculateRemainingTime: true,
+                    description: "Проверьте правильность введенных данных",
+                });
         } finally {
             setLoading(false);
         }
@@ -65,7 +77,8 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
                 <h1 className='text-5xl font-bold text-primary-black'>Вход</h1>
                 <p className='text-primary-black'>
-                    Нет аккаунта?&#32;<span
+                    Нет аккаунта?&#32;
+                    <span
                         onClick={() => setActiveForm("signup")}
                         className='text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
                     >
@@ -96,7 +109,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                 />
                 <span className='text-primary-orange font-medium'>Забыли пароль?</span>
-                <AuthButton title="Войти" disabled={!isFormValid || loading} />
+                <AuthButton title='Войти' disabled={!isFormValid || loading} />
             </form>
         </div>
     );

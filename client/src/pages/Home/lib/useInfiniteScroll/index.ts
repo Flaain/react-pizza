@@ -9,11 +9,11 @@ const useInfiniteScroll = <T extends HTMLElement>({ callback, root, rootMargin, 
     const observer = React.useRef<IntersectionObserver | null>(null);
 
     const ref = React.useCallback((node: T) => {
-        if (deps.every(Boolean)) {
+        if (deps.every(Boolean) && _meta) {
             observer.current?.disconnect();
             observer.current = new IntersectionObserver((entries) => {
-                if (entries[0].isIntersecting && _meta!.total_pages > _meta!.current_page && _meta!.total_items > products.length) {
-                    callback(_meta!.current_page + 1, new URLSearchParams(document.location.search));
+                if (entries[0].isIntersecting && _meta.total_pages > _meta.current_page && _meta.total_items > products.length) {
+                    callback(_meta.current_page + 1, new URLSearchParams(document.location.search));
                 }
             }, { root, rootMargin, threshold });
             node && observer.current.observe(node);

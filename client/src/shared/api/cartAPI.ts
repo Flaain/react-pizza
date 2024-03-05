@@ -14,7 +14,7 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<string, "url">(response);
+        return this._checkResponse<string>(response);
     };
 
     getCart = async (params?: IApiMethodParams) => {
@@ -23,7 +23,7 @@ export class CartAPI extends API {
             headers: this._headers,
             method: "POST",
         });
-        return this._checkResponse<IApiCart, "cart">(response);
+        return this._checkResponse<{ cart: IApiCart }>(response);
     };
 
     updateCart = async ({ token, ...params }: WithRequired<IApiMethodParams, "token">) => {
@@ -33,7 +33,7 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<IApiCart, "cart">(response);
+        return this._checkResponse<IApiCart>(response);
     };
 
     removeItemFromCart = async ({ _id, token, ...params }: IRemoveFromCartParams) => {
@@ -43,7 +43,7 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<Array<Omit<CartItem, "price">>, "cart">(response);
+        return this._checkResponse<Array<Omit<CartItem, "price">>>(response);
     };
 
     changeQuantity = async ({ _id, token, ...params }: IApiCartChangeQuantity) => {
@@ -53,7 +53,7 @@ export class CartAPI extends API {
             headers: { ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<Array<Omit<CartItem, "price">>, "cart">(response);
+        return this._checkResponse<Array<Omit<CartItem, "price">>>(response);
     };
 
     addToCart = async ({ token, ...params }: WithRequired<IApiMethodParams, "token">) => {
@@ -63,10 +63,10 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<IApiCart, "cart">(response);
+        return this._checkResponse<IApiCart>(response);
     };
 
-    clearCart = async ({ token, ...params }: WithRequired<IApiMethodParams, "token">): Promise<{ message: string }> => {
+    clearCart = async ({ token, ...params }: WithRequired<IApiMethodParams, "token">) => {
         const response = await fetch(import.meta.env.VITE_SERVER_BASE_URL + "/cart/clear", {
             method: "PUT",
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
@@ -81,6 +81,6 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<{ _id: string }, "orderId">(response);
+        return this._checkResponse<{ _id: string }>(response);
     };
 }

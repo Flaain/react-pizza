@@ -26,9 +26,7 @@ export class AuthController extends ConfigController {
             return res.json({ user: { ...rest, cart: { items: [], total_price: 0 }, orders: [], token }, message: "Пользователь успешно зарегистрирован" });
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                message: "Во время регистрации произошла непредвиденная ошибка",
-            });
+            res.status(500).json({ message: error.message || "Во время регистрации произошла непредвиденная ошибка" });
         }
     };
 
@@ -36,23 +34,30 @@ export class AuthController extends ConfigController {
         try {
             const { email, password } = req.body;
 
-            const user = await User.findOne({ email }).lean();
+            const user = await User.findOne({ email });
             const isPasswordValid = user && bcrypt.compareSync(password, user.password);
 
             if (!isPasswordValid) return res.status(400).json({ message: "Неверный логин или пароль" });
 
-            const { password: hashedPassword, __v, ...rest } = user;
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
-            
-            const updateCart = await this._revalidateCart(user.cart);
-            const orders = await Order.find({ user: user._id }).lean();
-            
-            return res.json({ user: { ...rest, ...updateCart, orders, token }, message: "Авторизация прошла успешно" });
+
+            const updateCart = await this._revalidateCart(user.cart.toObject());
+            const deliveryInfo = user.deliveryInfo && (await this._getDeliveryInfo({
+                id: user.deliveryInfo.id,
+                method: user.deliveryInfo.method,
+                throwError: false,
+                user
+            }));
+
+            !deliveryInfo && user.deliveryInfo && (user.deliveryInfo = undefined);
+
+            const savedUser = await user.save();
+            const { password: hashedPassword, __v, ...rest } = savedUser.toObject();
+
+            return res.json({ user: { ...rest, ...updateCart, deliveryInfo, token }, message: "Авторизация прошла успешно" });
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                message: "Во время авторизации произошла непредвиденная ошибка",
-            });
+            res.status(500).json({ message: error.message || "Во время авторизации произошла непредвиденная ошибка" });
         }
     };
 
@@ -64,18 +69,47 @@ export class AuthController extends ConfigController {
 
             const user = await this._getUser(token);
             const updateCart = await this._revalidateCart(user.cart.toObject());
+            const deliveryInfo = user.deliveryInfo && (await this._getDeliveryInfo({
+                id: user.deliveryInfo.id,
+                method: user.deliveryInfo.method,
+                throwError: false,
+                user
+            }));
             const orders = await Order.find({ user: user._id }).lean();
 
-            const { password, ...rest } = user.toObject();
+            !deliveryInfo && user.deliveryInfo && (user.deliveryInfo = undefined);
 
-            return res.json({ user: { ...rest, ...updateCart, orders }, message: "Профиль успешно получен" });
+            const savedUser = await user.save();
+            const { password, ...rest } = savedUser.toObject();
+
+            const extraInfo = orders.reduce((acc, order) => {
+                return {
+                    ...acc,
+                    totalItemsCount: acc.totalItemsCount + order.cart.items.length,
+                    totalOrdersPrice: acc.totalOrdersPrice + order.cart.total_price
+                }
+            }, { totalItemsCount: 0, totalOrdersPrice: 0 });
+
+            return res.json({
+                user: {
+                    ...rest,
+                    ...updateCart,
+                    extraInfo: {
+                        ordersGoods: orders
+                            .flatMap((order) => order.cart.items.map((item) => ({ id: item._id, src: item.imageUrl })))
+                            .reverse()
+                            .slice(0, 5),
+                        ordersCount: orders.length,
+                        ...extraInfo
+                    },
+                },
+                message: "Профиль успешно получен",
+            });
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                message: "При запросе профиля произошла ошибка",
-            });
+            res.status(500).json({ message: error.message || "При запросе профиля произошла ошибка" });
         }
     };
-};
+}
 
 export const authController = new AuthController();

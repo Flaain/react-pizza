@@ -3,11 +3,13 @@ import { ApiError } from "./error";
 
 export class API {
     protected _baseUrl: string;
+    protected _serverUrl: string | undefined;
     protected _headers: IBase["headers"];
 
-    constructor({ baseUrl, headers }: IBase) {
+    constructor({ baseUrl, headers, serverUrl }: IBase) {
         this._baseUrl = baseUrl;
         this._headers = headers;
+        this._serverUrl = serverUrl;
     }
 
     protected async _checkResponse<T>(response: Response): Promise<IApiData<T>> {

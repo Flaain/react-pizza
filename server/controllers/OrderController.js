@@ -2,6 +2,7 @@ import Stripe from "stripe";
 import { ConfigController } from "./ConfigController.js";
 import { initialSizes, initialTypes } from "../utils/constants/initial.js";
 import { Order } from "../models/Order.js";
+import { User } from "../models/User.js";
 
 class OrderController extends ConfigController {
     constructor({ apiKey, config }) {
@@ -17,7 +18,7 @@ class OrderController extends ConfigController {
                 type,
                 data: {
                     object: {
-                        metadata: { order_id },
+                        metadata: { order_id, user_id },
                         amount_total,
                     },
                 },
@@ -25,21 +26,22 @@ class OrderController extends ConfigController {
 
             if (type === "checkout.session.completed") {
                 const order = await Order.findById(order_id);
-
-                if (!order) return res.status(404).json({ message: "Заказ не найден" });
-
+                const user = await User.findById(user_id);
+                
+                if (!order || !user) return res.status(404).json({ message: "Заказ не найден" });
+                
                 order.status = "PAID";
                 order.total_amount = amount_total;
+                user.cart = [];
 
+                await user.save();
                 await order.save();
 
                 return res.json({ message: "Заказ оплачен" });
             }
         } catch (error) {
             console.error(error);
-            res.status(500).json({
-                message: (error instanceof Stripe.errors.StripeError && error.message) || "Во время обработки Webhook произошла ошибка",
-            });
+            res.status(500).json({ message: error.message || "Во время обработки Webhook произошла ошибка" });
         }
     };
 
@@ -52,18 +54,16 @@ class OrderController extends ConfigController {
 
             if (!cart.items.length) return res.status(400).json({ message: "Корзина пуста" });
 
+            const { 
+                address: { id, rating, ...address }, 
+                deliveryPrice 
+            } = await this._getDeliveryInfo({ id: user.deliveryInfo.id, method: user.deliveryInfo.method, user });
+            
             const order = new Order({
-                cart: {
-                    items: cart.items.map(({ imageUrl, title, _id, ...rest }) => rest),
-                    total_price: cart.total_price,
-                },
+                cart: { items: cart.items.map(({ _id, ...rest }) => rest), total_price: cart.total_price },
+                deliveryInfo: { address, deliveryPrice },
+                paymentInfo: { method: "cash" },
                 user,
-                deliveryInfo: {
-                    address: "58 Middle Point Rd, 94124, San Francisco, California",
-                    method: "delivery",
-                    deliveryPrice: 50,
-                },
-                paymentInfo: { method: "card" },
             });
 
             const savedOrder = await order.save();
@@ -72,9 +72,7 @@ class OrderController extends ConfigController {
             res.json({ orderId: _id, message: "Заказ успешно создан" });
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                message: (error instanceof Error && error.message) || "Во время создания заказа произошла ошибка",
-            });
+            res.status(500).json({ message: error.message || "Во время создания заказа произошла ошибка" });
         }
     };
 
@@ -94,21 +92,19 @@ class OrderController extends ConfigController {
                 email: user.email,
                 phone: user.phone,
                 address: { country: "RU" },
-                metadata: { user_id: user._id.toString() } 
+                metadata: { user_id: user._id.toString() },
             }));
 
+            const { 
+                address: { id, rating, ...address }, 
+                deliveryPrice 
+            } = await this._getDeliveryInfo({ id: user.deliveryInfo.id, method: user.deliveryInfo.method, user });
+
             const order = new Order({
-                cart: {
-                    items: cart.items.map(({ imageUrl, title, _id, ...rest }) => rest),
-                    total_price: cart.total_price,
-                },
-                user,
-                deliveryInfo: {
-                    address: "58 Middle Point Rd, 94124, San Francisco, California",
-                    method: "delivery",
-                    deliveryPrice: 50,
-                },
+                cart: { items: cart.items.map(({ _id, ...rest }) => rest), total_price: cart.total_price },
+                deliveryInfo: { address, deliveryPrice },
                 paymentInfo: { method: "card" },
+                user,
             });
 
             const session = await this._stripe.checkout.sessions.create({
@@ -128,14 +124,13 @@ class OrderController extends ConfigController {
                     setup_future_usage: "off_session",
                     shipping: {
                         name: user.name,
-                        address: {
-                            country: "USA",
-                            state: "California",
-                            city: "San Francisco",
-                            line1: "58 Middle Point Rd",
-                            line2: "",
-                            postal_code: "94124",
-                        },
+                        address: { 
+                            country: "RU",
+                            city: address.city,
+                            line1: address.line,
+                            postal_code: address.postal_code,
+                            state: address.state
+                         },
                     },
                 },
                 shipping_options: [
@@ -143,13 +138,13 @@ class OrderController extends ConfigController {
                         shipping_rate_data: {
                             display_name: "Доставка",
                             type: "fixed_amount",
-                            fixed_amount: { amount: 50, currency: "rub" }, // amount 50 just for now. Later need take it from user.deliveryInfo.deliveryPrice
+                            fixed_amount: { amount: deliveryPrice ? deliveryPrice * 100 : 0, currency: "rub" },
                         },
                     },
                 ],
                 mode: "payment",
-                metadata: { user_id: user._id, order_id: order._id.toString() },
-                success_url: `${process.env.FRONTEND_URL}/orders/${order._id.toString()}`,
+                metadata: { user_id: user._id.toString(), order_id: order._id.toString() },
+                success_url: `${process.env.FRONTEND_URL}/orders`,
                 cancel_url: `${process.env.FRONTEND_URL}/cart`,
             });
 
@@ -162,11 +157,42 @@ class OrderController extends ConfigController {
             res.json({ url: session.url });
         } catch (error) {
             console.log(error);
-            res.status(500).json({
-                message: (error instanceof Stripe.errors.StripeError && error.message) || "Во время создания сессии произошла ошибка",
-            });
+            res.status(500).json({ message: error.message || "Во время создания сессии произошла ошибка" });
         }
     };
+
+    updateDeliveryInfo = async (req, res) => {
+        const token = req.headers.authorization?.split(" ")[1];
+        const { id, method } = req.body;
+
+        try {
+            const user = await this._getUser(token, res);
+            const address = await this._getDeliveryInfo({ id, method, user });
+
+            user.deliveryInfo = { id, method };
+
+            await user.save();
+
+            res.json({ deliveryInfo: address, message: "Адрес обновлен" });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error.message || "Во время обновления адреса произошла ошибка" });
+        }
+    }
+
+    getOrders = async (req, res) => {
+        const token = req.headers.authorization?.split(" ")[1];
+
+        try {
+            const user = await this._getUser(token, res);
+            const orders = await Order.find({ user: user._id }).lean();
+
+            res.json({ orders });
+        } catch (error) {
+            console.log(error);
+            res.status(500).json({ message: error.message || "Во время получения заказов произошла ошибка" });
+        }
+    }
 }
 
 export const orderController = new OrderController({ apiKey: process.env.STRIPE_SECRET });

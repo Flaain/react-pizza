@@ -12,20 +12,16 @@ import { MinimizeCartInfo, MinimizeButton } from "@/features/MinimizeCartInfo";
 import { Navigate, Outlet } from "react-router-dom";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
-import { clearCart } from "../model/slice";
-import { useDispatch } from "react-redux";
 import { AnimatePresence } from "framer-motion";
 import { EmptyCart } from "../model/lazy";
 import { useCart } from "../lib/hooks/useCart";
 
 const Cart = () => {
     const { priceView: { totalItems } } = useAppSelector(cartSelector);
-    const { cartArr, isCartEmpty, isCartMinimized, setIsCartMinimized, cartLoading } = useCart();
+    const { cartArr, isCartEmpty, isCartMinimized, setIsCartMinimized, cartLoading, handleClearCart } = useCart();
     const { isAuthInProgress } = useAppSelector(userSelector);
     
     const [paymentModalOpened, setPaymentModalOpened] = React.useState(false);
-
-    const dispatch = useDispatch();
 
     if (isCartEmpty) {
         return (
@@ -66,7 +62,7 @@ const Cart = () => {
                             </h1>
                             <div className='flex items-center gap-5'>
                                 <button
-                                    onClick={() => dispatch(clearCart())}
+                                    onClick={handleClearCart}
                                     className='text-primary-black border-b border-dashed hover:text-primary-orange hover:border-primary-orange'
                                 >
                                     Очистить корзину

@@ -21,12 +21,17 @@ export default {
                         transform: "translateX(100%)",
                     },
                 },
+                loadingStatic: {
+                    "0%": { transform: "rotate(0)" },
+                    "100%": { transform: "rotate(360deg)" },
+                },
             },
             transitionProperty: {
                 height: 'height'
             },
             animation: {
                 loading: "loading .5s linear infinite",
+                loadingStatic: "loadingStatic .5s linear infinite",
             },
         },
     },

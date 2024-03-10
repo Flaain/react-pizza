@@ -1,20 +1,20 @@
 import { Schema } from "mongoose";
 
 export const AddressSchema = new Schema({
+    state: {
+        type: String,
+        required: true,
+    },
     city: {
         type: String,
         required: true,
     },
-    address: {
+    line: {
         type: String,
         required: true,
     },
-    postcode: {
+    post_code: {
         type: String,
-        required: true,
-    },
-    deliveryPrice: {
-        type: Number,
         required: true,
     },
 });

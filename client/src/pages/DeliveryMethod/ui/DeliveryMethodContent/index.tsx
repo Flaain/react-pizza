@@ -3,11 +3,11 @@ import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
 import { Tabs, TabsSkeleton } from "@/widgets/Tabs";
 import { Await, useLoaderData } from "react-router-dom";
-import { Address, Data } from "@/shared/model/interfaces";
+import { IApiData, IStaicAddress } from "@/shared/model/interfaces";
 import { DeliveryMethodModalContentProps } from "../../model/interfaces";
 
 const DeliveryMethodModalContent = ({ title, navigate }: DeliveryMethodModalContentProps) => {
-    const data = useLoaderData() as Promise<Data<Array<Address>>> ;
+    const data = useLoaderData() as Promise<IApiData<Array<IStaicAddress>>>;
 
     return (
         <ModalBody>

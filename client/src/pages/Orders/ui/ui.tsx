@@ -1,26 +1,18 @@
-import { useToast } from "@/shared/hooks/useToast";
-import Container from "@/shared/ui/Container";
-import Toaster from "@/shared/ui/Toaster/ui/ui";
+import EmptyOrders from "./EmptyOrders";
+import Spinner from "@/shared/ui/Spinner/ui";
+import cn from "@/shared/lib/classNames";
+import OrdersList from "./OrdersList";
+import { useOrders } from "../lib/hooks/useOrders";
 
 const Orders = () => {
-    const {
-        toast,
-        heights,
-        toasts,
-        actions: { setHeights, removeToast },
-    } = useToast();
+    const { isEmpty, loading } = useOrders();
+
+    if (isEmpty) return <EmptyOrders />;
 
     return (
-        <Container>
-            <button
-                onClick={() =>
-                    toast.error("error toast", { closeButton: true, onClose: (toast) => console.log(toast) })
-                }
-            >
-                error toast
-            </button>
-            <Toaster toasts={toasts} setHeights={setHeights} removeToast={removeToast} heights={heights} />
-        </Container>
+        <section className={cn("pb-5", loading && "min-h-[calc(100vh-102px)]")}>
+            {loading ? <Spinner position='center' /> : <OrdersList />}
+        </section>
     );
 };
 

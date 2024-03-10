@@ -8,9 +8,10 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { DeliveryInfo, DeliveryMethod } from "@/pages/DeliveryMethod/model/interfaces";
 import { useDispatch } from "react-redux";
 import { setDeliveryInfo } from "@/app/redux/slice/user.slice";
+import { routerList } from "@/shared/config/constants";
 
 const Tabs = () => {
-    const { deliveryInfo } = useAppSelector(userSelector);
+    const { deliveryInfo, jwt } = useAppSelector(userSelector);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentInfo, setCurrentInfo] = React.useState<DeliveryInfo | null>(deliveryInfo);
@@ -19,14 +20,19 @@ const Tabs = () => {
         setCurrentInfo(info);
     };
 
-    const handleSave = () => {
+    const handleSave = async () => {
+        if (!jwt) {
+            navigate(routerList.AUTH);
+            return;
+        }
+
         dispatch(setDeliveryInfo(currentInfo!));
-        navigate("/cart");
+        navigate(routerList.CART.main);
     };
 
     const deliveryMethods: Array<DeliveryMethod> = [
         {
-            name: "Самовывозом", // maybe better to put it in constant
+            title: "Самовывозом", // maybe better to put it in constant
             component: (
                 <TabStaticAddresses
                     currentInfo={currentInfo}
@@ -37,7 +43,7 @@ const Tabs = () => {
             ),
         },
         {
-            name: "Курьером",
+            title: "Курьером",
             component: (
                 <TabUserAddresses
                     currentInfo={currentInfo}

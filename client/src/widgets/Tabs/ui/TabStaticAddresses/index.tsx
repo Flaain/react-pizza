@@ -3,12 +3,12 @@ import TabContentList from "../TabContentList";
 import isSaveDisabled from "../../lib/isSaveDisabled";
 import { TabContentProps } from "../../model/interfaces";
 import { useAsyncValue, useNavigate } from "react-router-dom";
-import { Address } from "@/shared/model/interfaces";
+import { IApiData, IStaicAddress } from "@/shared/model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 
 const TabStaticAddresses = ({ method, currentInfo, handleChange, handleSave }: TabContentProps) => {
-    const addresses = useAsyncValue() as Array<Address>;
+    const { data: addresses } = useAsyncValue() as IApiData<Array<IStaicAddress>>;
     const { deliveryInfo } = useAppSelector(userSelector);
 
     const isSaveBtnDisabled = isSaveDisabled(method, currentInfo, deliveryInfo);

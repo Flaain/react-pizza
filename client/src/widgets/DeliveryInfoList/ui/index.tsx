@@ -12,10 +12,10 @@ const DeliveryInfoList = ({ address, method, deliveryPrice }: Omit<DeliveryInfo,
                 <p
                     className={cn(
                         "font-medium w-[calc(100%-200px)]",
-                        address.length > 300 ? "truncate" : "break-words"
+                        address.line.length > 300 ? "truncate" : "break-words"
                     )}
                 >
-                    {address}
+                    {address.line}
                 </p>
             </li>
             <li className='flex items-start w-full'>

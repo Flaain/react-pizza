@@ -1,5 +1,5 @@
 import { DeliveryInfo, DeliveryMethod, DeliveryMethodType } from "@/pages/DeliveryMethod/model/interfaces";
-import { Address } from "@/shared/model/interfaces";
+import { IStaicAddress, IUserAddress } from "@/shared/model/interfaces";
 import { NavigateFunction, SetURLSearchParams } from "react-router-dom";
 
 export interface TabSelectorProps {
@@ -9,27 +9,33 @@ export interface TabSelectorProps {
     setSearchParams: SetURLSearchParams;
 }
 
+export interface Address {
+    line: string;
+    city: string;
+    state: string;
+    postal_code: string;
+}
+
 export interface TabContentProps {
     method: DeliveryMethodType;
-    handleChange: ({ address, method, deliveryPrice, rating }: DeliveryInfo) => void;
+    handleChange: ({ address, method, deliveryPrice }: DeliveryInfo) => void;
     handleSave: () => void;
     currentInfo: DeliveryInfo | null;
 }
 
 export interface TabItemProps {
-    address: string;
+    address: IStaicAddress | IUserAddress;
     method: DeliveryMethodType;
     currentInfo: DeliveryInfo | null;
-    rating?: number;
     deliveryPrice?: number;
-    handleChange: ({ address, deliveryPrice, method, rating }: DeliveryInfo) => void;
+    handleChange: ({ address, deliveryPrice, method }: DeliveryInfo) => void;
 }
 
 export interface TabContentListProps {
-    elements: Array<Address>;
+    elements: Array<IStaicAddress | IUserAddress>;
     method: DeliveryMethodType;
     currentInfo: DeliveryInfo | null;
-    handleChange: ({ address, deliveryPrice, method, rating }: DeliveryInfo) => void;
+    handleChange: ({ address, deliveryPrice, method }: DeliveryInfo) => void;
 }
 
 export interface EmptyUserAddressesProps {

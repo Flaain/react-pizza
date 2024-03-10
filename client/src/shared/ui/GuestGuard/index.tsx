@@ -4,11 +4,18 @@ import { Navigate } from "react-router-dom";
 import { userSelector } from "@/shared/model/selectors";
 import { routerList } from "@/shared/config/constants";
 import Spinner from "../Spinner/ui";
+import Container from "../Container";
 
 export const GuestGuard = ({ children }: GuestGuardProps) => {
     const { jwt, isAuthInProgress } = useAppSelector(userSelector);
 
-    if (isAuthInProgress) return <Spinner position='center' />;
+    if (isAuthInProgress) {
+        return (
+            <Container classNames='min-h-[calc(100vh-102px)]'>
+                <Spinner position='center' />
+            </Container>
+        );
+    }
 
     return jwt ? children : <Navigate to={routerList.AUTH} replace />;
 };

@@ -13,7 +13,7 @@ export class UserAPI extends API {
             headers: { ...rest.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<Omit<Profile, "token">>(response);
+        return this._checkResponse<{ user: Omit<Profile, "token"> }>(response);
     };
 
     signin = async (params?: IApiMethodParams) => {
@@ -22,7 +22,7 @@ export class UserAPI extends API {
             method: "POST",
             headers: this._headers,
         });
-        return this._checkResponse<Profile>(response);
+        return this._checkResponse<{ user: Profile }>(response);
     };
 
     signup = async (params?: IApiMethodParams) => {
@@ -31,6 +31,6 @@ export class UserAPI extends API {
             method: "POST",
             headers: this._headers,
         });
-        return this._checkResponse<Profile>(response);
+        return this._checkResponse<{ user: Profile }>(response);
     };
 }

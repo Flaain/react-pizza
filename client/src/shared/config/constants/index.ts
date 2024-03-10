@@ -48,10 +48,15 @@ export const routerList = {
             DELIVERY_METHOD: "delivery-method",
         },
     },
+    LK: {
+        main: "/lk",
+        children: {
+            ORDERS: "/lk/orders", // не получается сделать роутинг без рендера родительского компонента, по этому делаю отдельными компонентами
+            DETAILS: "/lk/details",            
+        }
+    },
     PRODUCT: "/product/:id",
     AUTH: "/auth",
-    ORDERS: "/orders",
-    ORDER: "/orders/:id",
 };
 
 export const actionTypes = {

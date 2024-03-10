@@ -1,7 +1,7 @@
 import { CartInterface } from "@/pages/Cart";
-import { Address, Meta, Product } from "@/shared/model/interfaces";
+import { IUserAddress, Meta, Product } from "@/shared/model/interfaces";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
-import { CreditCard, PaymentInfo } from "@/widgets/PaymentModal/model/interfaces";
+import { PaymentInfo } from "@/widgets/PaymentModal/model/interfaces";
 
 export interface ViewportState {
     width: number;
@@ -45,10 +45,9 @@ export interface UserSliceState {
     deliveryInfo: DeliveryInfo | null;
     paymentInfo: PaymentInfo | null;
     lang: string;
-    addresses: Map<string, Address>;
-    orders: Array<CartInterface>;
-    cards: Map<number, CreditCard>;
+    addresses: Map<string, IUserAddress>;
     isAuthInProgress: boolean;
+    extraInfo: { ordersGoods: Array<{ id: string, src: string }>, ordersCount: number, totalItemsCount: number } | null
 }
 
 export interface IAuthData {

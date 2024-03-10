@@ -1,5 +1,5 @@
-export interface Props {
+export interface Props extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     title: string;
     quantity: number | null;
-    handleClick: () => void;
+    loading?: boolean;
 }

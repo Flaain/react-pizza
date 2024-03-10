@@ -2,7 +2,7 @@ import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { localStorageKeys } from "@/shared/config/constants";
 import { userInitialState } from "./user.initialState";
-import { Address, Profile } from "@/shared/model/interfaces";
+import { IUserAddress, Profile } from "@/shared/model/interfaces";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { PaymentInfo } from "@/widgets/PaymentModal";
 import { getProfile } from "./asyncActions";
@@ -31,8 +31,8 @@ export const userSlice = createSlice({
             state.deliveryInfo = payload;
             saveToLocalStorage({ key: localStorageKeys.DELIVERY_INFO, data: payload });
         },
-        setNewAddress: (state, { payload }: PayloadAction<Address>) => {
-            state.addresses.set(payload.address, payload);
+        setNewAddress: (state, { payload }: PayloadAction<IUserAddress>) => {
+            state.addresses.set(payload._id, payload);
             saveToLocalStorage({ key: localStorageKeys.USER_ADDRESSES, data: [...state.addresses.values()] });
         },
         setPaymentInfo: (state, { payload }: PayloadAction<PaymentInfo>) => {
@@ -49,6 +49,7 @@ export const userSlice = createSlice({
                 state._id = payload._id;
                 state.name = payload.name;
                 state.email = payload.email;
+                state.extraInfo = payload.extraInfo;
                 state.isAuthInProgress = false;
             })
             .addCase(getProfile.rejected, (state) => {

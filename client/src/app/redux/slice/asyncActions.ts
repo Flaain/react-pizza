@@ -47,11 +47,11 @@ export const fetchProducts = createAsyncThunk(
 
 export const getProfile = createAsyncThunk("user/getProfile", async (token: string, { rejectWithValue, dispatch }) => {
     try {
-        const { data } = await api.user.getProfile({ token });
+        const { data: { user } } = await api.user.getProfile({ token });
 
-        dispatch(setCart(data.cart));
+        dispatch(setCart(user.cart));
 
-        return data;
+        return user;
     } catch (error) {
         console.error(error);
 

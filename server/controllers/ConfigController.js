@@ -56,4 +56,43 @@ export class ConfigController {
 
         return user;
     };
+
+    _revalidatePickupPoint = async (id) => {
+        const response = await fetch(process.env.MOKKY + `/addresses?id=${id}`);
+        const actualAddress = await response.json();
+
+        return actualAddress;
+    }
+
+    _getDeliveryInfo = async ({ id, method, user, throwError = true }) => {
+
+        if (!id || !method) throw new Error("Необходимо передать id и метод доставки");
+
+        const actions = {
+            pickup: async () => {
+                const { 0: revalidatedPickupPoint } = await this._revalidatePickupPoint(id);
+
+                if (!revalidatedPickupPoint) {
+                    if (throwError) throw new Error("Пункт самовывоза не найден");
+                    return null;
+                };
+
+                return { address: revalidatedPickupPoint };
+            },
+            delivery: async () => {
+                const userAddress = user.addresses.find(({ _id }) => _id.toString() === id);
+
+                if (!userAddress) {
+                    if (throwError) throw new Error("Адрес не найден");
+                    return null;
+                };
+
+                return { address: { ...userAddress.toObject() }, deliveryPrice: Math.floor(Math.random() * (500 - 300 + 1)) + 300 };
+            }
+        }
+
+        const address = await actions[method]();
+
+        return address;
+    }
 }

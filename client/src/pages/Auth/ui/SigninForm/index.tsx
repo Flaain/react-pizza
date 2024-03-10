@@ -50,11 +50,11 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { data: user } = await api.user.signin({
+            const { data: { user } } = await api.user.signin({
                 body: JSON.stringify(data),
                 signal: abortControllerRef.current.signal,
             });
-
+            console.log(user)
             cart.size ? updateCartOnSignin(user.token) : dispatch(setCart(user.cart));
 
             dispatch(signin(user));

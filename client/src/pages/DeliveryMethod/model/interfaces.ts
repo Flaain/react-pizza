@@ -1,3 +1,4 @@
+import { IStaicAddress, IUserAddress } from "@/shared/model/interfaces";
 import { NavigateFunction } from "react-router-dom";
 
 export type DeliveryMethodType = "pickup" | "courier";
@@ -7,7 +8,7 @@ export interface Props {
 }
 
 export interface DeliveryMethod {
-    name: string;
+    title: string;
     component: React.ReactNode;
 }
 
@@ -29,8 +30,7 @@ export interface LazyErrorElementProps {
 }
 
 export interface DeliveryInfo {
-    address: string;
-    rating?: number;
+    address: IStaicAddress | IUserAddress;
     deliveryPrice?: number;
     method: DeliveryMethodType;
 }

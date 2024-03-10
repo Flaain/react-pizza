@@ -1,7 +1,8 @@
 import { CartInterface } from "@/pages/Cart";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { Field } from "../hooks/useForm/types";
-import { PaymentInfo } from "@/widgets/PaymentModal";
+import { PaymentInfo, PaymentMethod } from "@/widgets/PaymentModal";
+import { Address } from "@/widgets/Tabs/model/interfaces";
 
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
@@ -29,10 +30,31 @@ export interface EmptyCartGuardProps {
     children: React.ReactElement;
 }
 
-export interface Address {
-    address: string;
-    rating?: number;
-    deliveryPrice?: number;
+export interface IStaicAddress extends Address{
+    id: string;
+    rating: number;
+}
+
+export interface Order {
+    _id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    user: string;
+    deliveryInfo: {
+        address: Address;
+        deliveryPrice?: number;
+    };
+    paymentInfo: {
+        method: PaymentMethod;
+    };
+    cart: IApiCart
+    status: "PAID" | "WAITING_PAYMENT" | "CANCELLED";
+    checkoutSessionId?: string;
+    total_amount?: number;
+}
+
+export interface IUserAddress extends Address {
+    _id: string;
 }
 
 export interface BrowserTitleProps {
@@ -45,6 +67,7 @@ export interface ProductSelectorState {
     price: number;
     size: number;
     count: number;
+    loading: boolean;
 }
 
 export interface Promocode {
@@ -94,11 +117,6 @@ export interface Data<T> {
     data: T;
 }
 
-export interface Order {
-    order: Array<Product & CartInterface>;
-    totalPrice: number | string;
-    deliveryInfo: DeliveryInfo;
-} // <-- this is bad. Im talking about dependence from "@/pages/Cart" and "@/pages/DeliveryMethod/model/interfaces" cuz of this interface
 
 export interface Form extends Omit<Field, "value" | "isDirty" | "validateOnChange" | "onChange"> {
     value?: string;
@@ -116,6 +134,7 @@ export type SignalWithBody = WithRequired<Pick<IApiMethodParams, "body" | "signa
 
 export interface IBase {
     baseUrl: string;
+    serverUrl?: string;
     headers: {
         "Content-Type"?: "application/json" | (string & object);
         Authorization?: "Bearer" | (string & object);
@@ -148,8 +167,7 @@ export interface IApiCart {
     total_price: number;
 }
 
-export interface IApiCartChangeQuantity
-    extends WithRequired<Pick<IApiMethodParams, "body" | "signal" | "token">, "body" | "token"> {
+export interface IApiCartChangeQuantity extends WithRequired<Pick<IApiMethodParams, "body" | "signal" | "token">, "body" | "token"> {
     _id: string;
 }
 
@@ -157,12 +175,13 @@ export interface Profile {
     _id: string;
     name: string;
     email: string;
-    addresses: Array<Address>;
+    addresses: Array<Omit<IStaicAddress, "id" | "rating"> & { deliveryPrice: number }>;
     cart: IApiCart;
     deliveryInfo?: Pick<DeliveryInfo, "address" | "method">;
     paymentInfo?: PaymentInfo;
     createdAt: string;
     updatedAt: string;
-    orders: Array<Order>;
+    // orders: Array<Order>;
     token: string;
+    extraInfo: { ordersGoods: Array<{ id: string, src: string }>, ordersCount: number, totalItemsCount: number }
 }

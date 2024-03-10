@@ -61,7 +61,7 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { data: user } = await api.user.signup({
+            const { data: { user } } = await api.user.signup({
                 body: JSON.stringify({ name, email, password }),
                 signal: controller.current.signal,
             });

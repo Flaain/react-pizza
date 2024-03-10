@@ -1,5 +1,4 @@
 import mongoose, { Schema, model } from "mongoose";
-import { DeliveryInfoSchema } from "./DeliveryInfo.js";
 import { PaymentInfoSchema } from "./PaymentInfo.js";
 
 export const OrderSchema = new Schema(
@@ -11,7 +10,30 @@ export const OrderSchema = new Schema(
             required: true,
         },
         deliveryInfo: {
-            type: DeliveryInfoSchema,
+            type: {
+                address: {
+                    type: {
+                        state: {
+                            type: String,
+                            required: true,
+                        },
+                        city: {
+                            type: String,
+                            required: true,
+                        },
+                        line: {
+                            type: String,
+                            required: true,
+                        },
+                        postal_code: {
+                            type: String,
+                            required: true,
+                        },
+                    },
+                    required: true,
+                },
+                deliveryPrice: Number,
+            },
             required: true,
         },
         paymentInfo: {
@@ -23,6 +45,14 @@ export const OrderSchema = new Schema(
                 {
                     productId: {
                         type: Number,
+                        required: true,
+                    },
+                    title: {
+                        type: String,
+                        required: true,
+                    },
+                    imageUrl: {
+                        type: String,
                         required: true,
                     },
                     size: {

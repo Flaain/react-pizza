@@ -45,11 +45,21 @@ export const useCart = () => {
         }
     }, [actions, paymentInfo, jwt, dispatch]);
 
+    const handleClearCart = React.useCallback(async () => {
+        try {
+            await api.cart.clearCart({ token: jwt as string });
+            dispatch(clearCart());
+        } catch (error) {
+            console.error(error);
+        }
+    }, []);
+
     return {
         cartArr,
         cartLoading,
         isCartEmpty,
         handleOrder,
+        handleClearCart,
         isCartMinimized,
         setIsCartMinimized,
         orderLoading,

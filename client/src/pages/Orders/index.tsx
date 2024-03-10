@@ -9,7 +9,13 @@ const View = React.lazy(() => import("./ui/ui"));
 
 export const ViewWithSuspense = () => {
     return (
-        <React.Suspense fallback={<Spinner position='center' />}>
+        <React.Suspense
+            fallback={
+                <section className='min-h-[calc(100vh-102px)]'>
+                    <Spinner position='center' />
+                </section>
+            }
+        >
             <View />
         </React.Suspense>
     );
@@ -25,7 +31,7 @@ export const OrdersPage: RouteObject = {
     errorElement: (
         <NotFound
             title='Что-то пошло не так'
-            description='не удалось отобразить корзину, пожалуйста, попробуйте обновить страницу'
+            description='не удалось отобразить заказы, пожалуйста, попробуйте обновить страницу'
             reloadButton
         />
     ),

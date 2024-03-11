@@ -7,7 +7,7 @@ import { DeliveryMethodType } from "@/pages/DeliveryMethod/model/interfaces";
 
 const titles: Record<DeliveryMethodType, string> = {
     pickup: "Доставка в пункт выдачи",
-    courier: "Доставка курьером",
+    delivery: "Доставка курьером",
 };
 
 const CheckoutInfoActionLink = ({ deliveryInfo, ...rest }: CheckoutInfoActionLinkProps) => {

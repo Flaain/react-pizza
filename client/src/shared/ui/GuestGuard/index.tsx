@@ -7,7 +7,7 @@ import Spinner from "../Spinner/ui";
 import Container from "../Container";
 
 export const GuestGuard = ({ children }: GuestGuardProps) => {
-    const { jwt, isAuthInProgress } = useAppSelector(userSelector);
+    const { isAuthInProgress, isAuthenticated } = useAppSelector(userSelector);
 
     if (isAuthInProgress) {
         return (
@@ -17,5 +17,5 @@ export const GuestGuard = ({ children }: GuestGuardProps) => {
         );
     }
 
-    return jwt ? children : <Navigate to={routerList.AUTH} replace />;
+    return isAuthenticated ? children : <Navigate to={routerList.AUTH} replace />;
 };

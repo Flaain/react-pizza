@@ -36,6 +36,6 @@ export const zodCartSchemaAsArray = z.array(zodCartSchema);
 export const zodQuantitySchema = z
     .strictObject({
         action: z.enum(["increment", "decrement", "direct"]),
-        value: z.number().min(1).max(10).optional(),
+        value: z.number().min(1).max(100).optional(),
     })
     .refine(({ action, value }) => action === "direct" ? !!value : true, { message: "Value is required for 'direct' action" });

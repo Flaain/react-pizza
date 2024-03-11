@@ -13,7 +13,7 @@ export const AddressSchema = new Schema({
         type: String,
         required: true,
     },
-    post_code: {
+    postal_code: {
         type: String,
         required: true,
     },

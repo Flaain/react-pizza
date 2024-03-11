@@ -175,7 +175,7 @@ export interface Profile {
     _id: string;
     name: string;
     email: string;
-    addresses: Array<Omit<IStaicAddress, "id" | "rating"> & { deliveryPrice: number }>;
+    addresses: Array<IUserAddress>;
     cart: IApiCart;
     deliveryInfo?: Pick<DeliveryInfo, "address" | "method">;
     paymentInfo?: PaymentInfo;

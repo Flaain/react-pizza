@@ -23,7 +23,7 @@ export class CartController extends ConfigController {
             const user = await this._getUser(token);
             const { cart: { items: revalidatedCart, total_price } } = await this._revalidateCart([...cart, ...user.cart.toObject()]);
 
-            const cartMap = new Map(revalidatedCart.map((item) => [`${item.id}_${item.size}_${item.type}`, item]));
+            const cartMap = new Map(revalidatedCart.map((item) => [`${item.productId}_${item.size}_${item.type}`, item]));
 
             user.cart = [...cartMap.values()].map(({ title, imageUrl, price, ...rest }) => rest);
 
@@ -31,7 +31,7 @@ export class CartController extends ConfigController {
             const { cart: updatedCart } = savedUser.toObject();
 
             updatedCart.forEach((product) => {
-                const key = `${product.id}_${product.size}_${product.type}`;
+                const key = `${product.productId}_${product.size}_${product.type}`;
                 cartMap.set(key, { ...cartMap.get(key), _id: product._id });
             });
 

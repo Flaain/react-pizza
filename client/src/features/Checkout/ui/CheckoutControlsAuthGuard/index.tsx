@@ -12,7 +12,7 @@ import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 const CheckoutControlsAuthGuard = () => {
     const [isAgreedWithTerms, setIsAgreedWithTerms] = React.useState(getDataFromLocalStorage(localStorageKeys.TERMS, false));
 
-    const { deliveryInfo, paymentInfo, jwt } = useAppSelector(userSelector);
+    const { deliveryInfo, paymentInfo, isAuthenticated } = useAppSelector(userSelector);
     const { handleOrder, orderLoading } = useCart();
 
     const isOrderBtnDisabled = !deliveryInfo || !paymentInfo || !isAgreedWithTerms || orderLoading;
@@ -22,7 +22,7 @@ const CheckoutControlsAuthGuard = () => {
         saveToLocalStorage({ key: localStorageKeys.TERMS, data: checked });
     };
 
-    return jwt ? (
+    return isAuthenticated ? (
         <>
             <button
                 onClick={handleOrder}

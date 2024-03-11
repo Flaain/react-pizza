@@ -5,9 +5,9 @@ import { Navigate } from "react-router-dom";
 import Spinner from "../Spinner/ui";
 
 export const AuthGuard = ({ children }: AuthGuardProps) => {
-    const { jwt, isAuthInProgress } = useAppSelector(userSelector);
+    const { isAuthInProgress, isAuthenticated } = useAppSelector(userSelector);
 
     if (isAuthInProgress) return <Spinner position='center' />;
 
-    return jwt ? <Navigate to='/' replace /> : children;
+    return isAuthenticated ? <Navigate to='/' replace /> : children;
 };

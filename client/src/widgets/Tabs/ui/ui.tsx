@@ -9,9 +9,10 @@ import { DeliveryInfo, DeliveryMethod } from "@/pages/DeliveryMethod/model/inter
 import { useDispatch } from "react-redux";
 import { setDeliveryInfo } from "@/app/redux/slice/user.slice";
 import { routerList } from "@/shared/config/constants";
+import { api } from "@/shared/api";
 
 const Tabs = () => {
-    const { deliveryInfo, jwt } = useAppSelector(userSelector);
+    const { deliveryInfo, isAuthenticated, token } = useAppSelector(userSelector);
 
     const [searchParams, setSearchParams] = useSearchParams();
     const [currentInfo, setCurrentInfo] = React.useState<DeliveryInfo | null>(deliveryInfo);
@@ -21,13 +22,24 @@ const Tabs = () => {
     };
 
     const handleSave = async () => {
-        if (!jwt) {
+        if (!isAuthenticated) {
             navigate(routerList.AUTH);
             return;
         }
-
-        dispatch(setDeliveryInfo(currentInfo!));
-        navigate(routerList.CART.main);
+        
+        try {
+            const { data: { deliveryInfo } } = await api.user.updateDeliveryInfo({ 
+                token: token as string, 
+                body: JSON.stringify({ 
+                    id: "id" in currentInfo!.address ? currentInfo!.address.id : currentInfo!.address._id, 
+                    method: currentInfo!.method
+                }) 
+            })
+            dispatch(setDeliveryInfo({ ...deliveryInfo, method: currentInfo!.method }));
+            navigate(routerList.CART.main);
+        } catch (error) {
+            console.error(error);
+        }
     };
 
     const deliveryMethods: Array<DeliveryMethod> = [
@@ -49,7 +61,7 @@ const Tabs = () => {
                     currentInfo={currentInfo}
                     handleChange={handleChange}
                     handleSave={handleSave}
-                    method='courier'
+                    method='delivery'
                 />
             ),
         },

@@ -20,12 +20,7 @@ import Toaster from "@/shared/ui/Toaster/ui/ui";
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
     const { cart } = useAppSelector(cartSelector);
-    const {
-        toast,
-        toasts,
-        heights,
-        actions: { setHeights, removeToast },
-    } = useToast();
+    const { toast, toasts, heights, actions: { setHeights, removeToast } } = useToast();
 
     const [loading, setLoading] = React.useState(false);
 
@@ -35,8 +30,8 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     const updateCartOnSignin = async (token: string) => {
         try {
-            const { data } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
-            dispatch(setCart(data));
+            const { data: { cart: updatedCart } } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
+            dispatch(setCart(updatedCart));
         } catch (error) {
             console.error(error);
             // dispatch(clearCart());
@@ -54,18 +49,17 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                 body: JSON.stringify(data),
                 signal: abortControllerRef.current.signal,
             });
-            console.log(user)
+
             cart.size ? updateCartOnSignin(user.token) : dispatch(setCart(user.cart));
 
             dispatch(signin(user));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError &&
-                toast.error(error.message, {
-                    closeButton: true,
-                    recalculateRemainingTime: true,
-                    description: "Проверьте правильность введенных данных",
-                });
+            error instanceof ApiError && toast.error(error.message, {
+                closeButton: true,
+                recalculateRemainingTime: true,
+                description: "Проверьте правильность введенных данных",
+            });
         } finally {
             setLoading(false);
         }

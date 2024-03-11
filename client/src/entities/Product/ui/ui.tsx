@@ -16,13 +16,19 @@ import { ProductSelectorState } from "@/shared/model/interfaces";
 import { useCart } from "@/pages/Cart/lib/hooks/useCart";
 
 const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
-    const { jwt } = useAppSelector(userSelector);
+    const { isAuthenticated, token } = useAppSelector(userSelector);
     const { cartArr } = useCart();
 
     const count = React.useMemo(() => cartArr.reduce((acc, { productId, count }) => acc + (productId === id ? count : 0), 0), [cartArr]);
     const sizeIndex = React.useMemo(() => initialSizes.findIndex((size) => size === sizes[0].size), []);
 
-    const initialState: ProductSelectorState = { type: types[0], size: sizeIndex, price: sizes[0].price, count, loading: false };
+    const initialState: ProductSelectorState = {
+        type: types[0],
+        size: sizeIndex,
+        price: sizes[0].price,
+        loading: false,
+        count,
+    };
 
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, initialState);
 
@@ -32,19 +38,22 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
 
     const handleAddToCart = async () => {
         try {
+            const { size, type, price } = productState;
+            
             productDispatch({ type: ProductSelectorTypes.SET_ADD_TO_CART, payload: { count: 1, loading: true } });
-            await dispatch(
-                jwt ? addToCartThunk({
-                    product: { productId: id, size: productState.size, type: productState.type },
-                    token: jwt,
-                }) : addToCart({ ...productState, productId: id, title, imageUrl })
-            );
+    
+            await dispatch(isAuthenticated ? addToCartThunk({ 
+                product: { productId: id, size, type }, 
+                token: token as string 
+            }) : addToCart({ productId: id, size, type, title, imageUrl, count, price }));
+    
         } catch (error) {
             console.error(error);
         } finally {
             productDispatch({ type: ProductSelectorTypes.SET_ADD_TO_CART_LOADING, payload: false });
         }
     };
+    
 
     return (
         <article className='flex flex-col justify-center items-center max-w-[400px] max-md:min-w-full max-md:max-w-none'>
@@ -69,7 +78,13 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                         className='text-xl font-bold text-primary-black flex items-center gap-2'
                         ref={priceRef}
                     ></span>
-                    <AddToCartButton title='Добавить' onClick={handleAddToCart} quantity={count} loading={productState.loading} />
+                    <AddToCartButton
+                        title='Добавить'
+                        onClick={handleAddToCart}
+                        quantity={count}
+                        loading={productState.loading}
+                        disabled={productState.loading}
+                    />
                 </div>
             </div>
         </article>

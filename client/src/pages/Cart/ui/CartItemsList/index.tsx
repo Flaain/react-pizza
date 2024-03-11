@@ -1,10 +1,9 @@
 import CartItem from "@/entities/Product/ui/CartItem";
-import { cartSelector } from "@/shared/model/selectors";
-import { useAppSelector } from "@/shared/model/store";
 import { CartListProps } from "../../model/interfaces";
+import { useCart } from "../../lib/hooks/useCart";
 
 const CartItemsList = ({ cart }: CartListProps) => {
-    const { orderLoading } = useAppSelector(cartSelector);
+    const { orderLoading } = useCart();
 
     return (
         <ul className='flex flex-col gap-5'>

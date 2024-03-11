@@ -5,10 +5,11 @@ import { useDispatch } from "react-redux";
 import { clearCart } from "../..";
 import { api } from "@/shared/api";
 import { useNavigate } from "react-router-dom";
+import { routerList } from "@/shared/config/constants";
 
 export const useCart = () => {
     const { cart, cartLoading } = useAppSelector(cartSelector);
-    const { isAuthInProgress, paymentInfo, jwt } = useAppSelector(userSelector);
+    const { isAuthInProgress, paymentInfo, token } = useAppSelector(userSelector);
 
     const [isCartMinimized, setIsCartMinimized] = React.useState(false);
     const [orderLoading, setOrderLoading] = React.useState(false);
@@ -21,21 +22,21 @@ export const useCart = () => {
 
     const actions = React.useMemo(() => ({
         card: async () => {
-            const { data: url } = await api.cart.createCheckoutSesstion({ token: jwt as string });
+            const { data: url } = await api.cart.createCheckoutSesstion({ token: token as string });
             window.location.href = url;
         },
         cash: async () => {
-            const { data: { _id } } = await api.cart.createOrder({ token: jwt as string });
-            navigate(`/orders/${_id}`);
+            await api.cart.createOrder({ token: token as string });
+            navigate(routerList.ORDERS);
         },
-    }), [jwt, navigate]);
+    }), [token, navigate]);
 
     const handleOrder = React.useCallback(async () => {
         try {
             setOrderLoading(true);
 
             await actions[paymentInfo!.method]();
-            await api.cart.clearCart({ token: jwt as string });
+            await api.cart.clearCart({ token: token as string });
 
             dispatch(clearCart());
         } catch (error) {
@@ -43,11 +44,11 @@ export const useCart = () => {
         } finally {
             setOrderLoading(false);
         }
-    }, [actions, paymentInfo, jwt, dispatch]);
+    }, [actions, paymentInfo, token, dispatch]);
 
     const handleClearCart = React.useCallback(async () => {
         try {
-            await api.cart.clearCart({ token: jwt as string });
+            await api.cart.clearCart({ token: token as string });
             dispatch(clearCart());
         } catch (error) {
             console.error(error);

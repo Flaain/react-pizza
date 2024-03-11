@@ -15,6 +15,13 @@ export const DeliveryInfoSchema = new Schema({
     },
 });
 
+export const zodAddressSchema = z.strictObject({
+    state: z.string(),
+    city: z.string(),
+    line: z.string(),
+    postal_code: z.string(),
+});
+
 export const zodDeliveryInfo = z.strictObject({
     id: z.string(),
     method: z.enum(deliveryTypes),

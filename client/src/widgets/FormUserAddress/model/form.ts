@@ -11,8 +11,18 @@ export const form: { [key: string]: Form } = {
             maxLength: { value: 20, errorMessage: "Максимальная длина поля - 20 символов" },
         },
     },
-    address: {
-        name: "address",
+    state: {
+        name: "state",
+        label: "Введите область",
+        type: "text",
+        validation: {
+            required: { errorMessage: "Поле обязательно для заполнения" },
+            minLength: { value: 5, errorMessage: "Минимальная длина поля - 5 символов" },
+            maxLength: { value: 20, errorMessage: "Максимальная длина поля - 20 символов" },
+        },
+    },
+    line: {
+        name: "line",
         label: "Введите адрес",
         type: "text",
         validation: {
@@ -20,8 +30,8 @@ export const form: { [key: string]: Form } = {
             minLength: { value: 5, errorMessage: "Минимальная длина поля - 5 символов" },
         },
     },
-    postcode: {
-        name: "postcode",
+    postal_code: {
+        name: "postal_code",
         label: "Введите почтовый индекс",
         type: "number",
         validation: {
@@ -33,17 +43,17 @@ export const form: { [key: string]: Form } = {
             },
         },
     },
-    building: {
-        name: "building",
-        label: "Введите здание, корпус или офис",
-        type: "number",
-        validation: {
-            required: { errorMessage: "Поле обязательно для заполнения" },
-            maxLength: { value: 5, errorMessage: "Максимальная длина поля - 5 символов" },
-            pattern: {
-                value: /^\d+$/,
-                errorMessage: "Допустимы только цифры",
-            },
-        },
-    },
+    // building: {
+    //     name: "building",
+    //     label: "Введите здание, корпус или офис",
+    //     type: "number",
+    //     validation: {
+    //         required: { errorMessage: "Поле обязательно для заполнения" },
+    //         maxLength: { value: 5, errorMessage: "Максимальная длина поля - 5 символов" },
+    //         pattern: {
+    //             value: /^\d+$/,
+    //             errorMessage: "Допустимы только цифры",
+    //         },
+    //     },
+    // },
 };

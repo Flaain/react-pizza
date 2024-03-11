@@ -12,14 +12,12 @@ import { localStorageKeys } from "@/shared/config/constants";
 
 const App = () => {
     const { error } = useAppSelector(appSelector);
-    const { jwt } = useAppSelector(userSelector);
+    const { token } = useAppSelector(userSelector);
 
     const dispatch = useAsyncThunkDispatch();
 
     React.useEffect(() => {
-        jwt
-            ? dispatch(getProfile(jwt))
-            : dispatch(getCart(getDataFromLocalStorage<Array<Omit<CartInterface, "category">>>(localStorageKeys.CART, [])));
+        token ? dispatch(getProfile(token)) : dispatch(getCart(getDataFromLocalStorage<Array<Omit<CartInterface, "category">>>(localStorageKeys.CART, [])));
     }, []);
 
     return error ? (

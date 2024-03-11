@@ -1,7 +1,7 @@
 import { IStaicAddress, IUserAddress } from "@/shared/model/interfaces";
 import { NavigateFunction } from "react-router-dom";
 
-export type DeliveryMethodType = "pickup" | "courier";
+export type DeliveryMethodType = "pickup" | "delivery";
 
 export interface Props {
     title: string;

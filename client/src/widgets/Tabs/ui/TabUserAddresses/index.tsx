@@ -4,24 +4,26 @@ import TabContentList from "../TabContentList";
 import FormUserAddress from "@/widgets/FormUserAddress/ui/ui";
 import EmptyUserAddresses from "./EmptyUserAddresses";
 import { TabContentProps } from "../../model/interfaces";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import isSaveDisabled from "../../lib/isSaveDisabled";
+import { routerList } from "@/shared/config/constants";
 
 const TabUserAddresses = ({ currentInfo, method, handleChange, handleSave }: TabContentProps) => {
     const { deliveryInfo, addresses } = useAppSelector(userSelector);
+    const { isAuthenticated } = useAppSelector(userSelector);
 
     const [showAddForm, setShowAddForm] = React.useState(false);
 
     const isSaveBtnDisabled = isSaveDisabled(method, currentInfo, deliveryInfo);
 
-    const addressesArr = [...addresses.values()];
+    const addressesArr = React.useMemo(() => [...addresses.values()], [addresses]);
 
     const navigate = useNavigate();
 
     if (showAddForm) {
-        return <FormUserAddress setShowAddForm={setShowAddForm} />;
+        return isAuthenticated ? <FormUserAddress setShowAddForm={setShowAddForm} /> : <Navigate to={routerList.AUTH} replace/>;
     }
 
     return !addressesArr.length ? (

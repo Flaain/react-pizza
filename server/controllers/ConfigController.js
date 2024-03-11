@@ -9,38 +9,38 @@ export class ConfigController {
         const actualProducts = await response.json();
 
         const revalidatedCart = [...new Map(cart.map((item) => [`${item.productId}_${item.size}_${item.type}`, item])).values()].reduce((acc, { _id, ...product }) => {
-            const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
+                const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
 
-            if (!cartItem) return acc;
-            // throw new Error(`Не удалось найти продукт с id - ${item.id}`);
+                if (!cartItem) return acc;
+                // throw new Error(`Не удалось найти продукт с id - ${item.id}`);
 
-            const size = cartItem.sizes.find(({ size }) => size === initialSizes[product.size]);
-            const price = size?.price ?? cartItem.sizes[0].price;
-            const count = Math.min(Math.max(product.count, 1), 10);
-            const type = cartItem.types.find((type) => type === product.type);
+                const size = cartItem.sizes.find(({ size }) => size === initialSizes[product.size]);
+                const price = size?.price ?? cartItem.sizes[0].price;
+                const count = Math.min(Math.max(product.count, 1), 10);
+                const type = cartItem.types.find((type) => type === product.type);
 
-            return {
-                ...acc,
-                cart: {
-                    ...acc.cart,
-                    items: [
-                        ...acc.cart.items,
-                        {
-                            ...product,
-                            ...(isValidObjectId(_id) && { _id }),
-                            productId: cartItem.id,
-                            imageUrl: cartItem.imageUrl,
-                            title: cartItem.title,
-                            type: type ?? cartItem.types[0],
-                            size: size ? product.size : initialSizes.findIndex((size) => size === cartItem.sizes[0].size),
-                            count,
-                            price,
-                        },
-                    ],
-                    total_price: acc.cart.total_price + price * count,
-                },
-            };
-        }, { cart: { items: [], total_price: 0 } });
+                return {
+                    ...acc,
+                    cart: {
+                        ...acc.cart,
+                        items: [
+                            ...acc.cart.items,
+                            {
+                                ...product,
+                                ...(isValidObjectId(_id) && { _id }),
+                                productId: cartItem.id,
+                                imageUrl: cartItem.imageUrl,
+                                title: cartItem.title,
+                                type: type ?? cartItem.types[0],
+                                size: size ? product.size : initialSizes.findIndex((size) => size === cartItem.sizes[0].size),
+                                count,
+                                price,
+                            },
+                        ],
+                        total_price: acc.cart.total_price + price * count,
+                    },
+                };
+            }, { cart: { items: [], total_price: 0 } });
 
         return revalidatedCart;
     };
@@ -62,10 +62,9 @@ export class ConfigController {
         const actualAddress = await response.json();
 
         return actualAddress;
-    }
+    };
 
     _getDeliveryInfo = async ({ id, method, user, throwError = true }) => {
-
         if (!id || !method) throw new Error("Необходимо передать id и метод доставки");
 
         const actions = {
@@ -75,9 +74,9 @@ export class ConfigController {
                 if (!revalidatedPickupPoint) {
                     if (throwError) throw new Error("Пункт самовывоза не найден");
                     return null;
-                };
+                }
 
-                return { address: revalidatedPickupPoint };
+                return { address: revalidatedPickupPoint, method };
             },
             delivery: async () => {
                 const userAddress = user.addresses.find(({ _id }) => _id.toString() === id);
@@ -85,14 +84,18 @@ export class ConfigController {
                 if (!userAddress) {
                     if (throwError) throw new Error("Адрес не найден");
                     return null;
-                };
+                }
 
-                return { address: { ...userAddress.toObject() }, deliveryPrice: Math.floor(Math.random() * (500 - 300 + 1)) + 300 };
-            }
-        }
+                return {
+                    method,
+                    address: userAddress.toObject(),
+                    deliveryPrice: Math.floor(Math.random() * (500 - 300 + 1)) + 300,
+                };
+            },
+        };
 
         const address = await actions[method]();
 
         return address;
-    }
+    };
 }

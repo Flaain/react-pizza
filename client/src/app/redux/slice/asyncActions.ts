@@ -50,7 +50,6 @@ export const getProfile = createAsyncThunk("user/getProfile", async (token: stri
         const { data: { user } } = await api.user.getProfile({ token });
 
         dispatch(setCart(user.cart));
-
         return user;
     } catch (error) {
         console.error(error);

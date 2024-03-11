@@ -27,15 +27,14 @@ export interface TabItemProps {
     address: IStaicAddress | IUserAddress;
     method: DeliveryMethodType;
     currentInfo: DeliveryInfo | null;
-    deliveryPrice?: number;
-    handleChange: ({ address, deliveryPrice, method }: DeliveryInfo) => void;
+    handleChange: ({ address, method }: DeliveryInfo) => void;
 }
 
 export interface TabContentListProps {
     elements: Array<IStaicAddress | IUserAddress>;
     method: DeliveryMethodType;
     currentInfo: DeliveryInfo | null;
-    handleChange: ({ address, deliveryPrice, method }: DeliveryInfo) => void;
+    handleChange: ({ address, method }: DeliveryInfo) => void;
 }
 
 export interface EmptyUserAddressesProps {

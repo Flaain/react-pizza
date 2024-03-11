@@ -5,12 +5,13 @@ import { UserSliceState } from "../../model/interfaces";
 export const userInitialState: UserSliceState = {
     _id: null,
     email: null,
-    jwt: getDataFromLocalStorage(localStorageKeys.JWT, null),
+    token: getDataFromLocalStorage(localStorageKeys.JWT, null),
     name: null,
     deliveryInfo: null,
     paymentInfo: null,
     addresses: new Map(),
     lang: navigator.language,
     isAuthInProgress: false,
+    isAuthenticated: false,
     extraInfo: null,
 };

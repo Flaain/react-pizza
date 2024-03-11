@@ -57,6 +57,7 @@ export const routerList = {
     },
     PRODUCT: "/product/:id",
     AUTH: "/auth",
+    ORDERS: "/orders",
 };
 
 export const actionTypes = {

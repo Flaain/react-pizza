@@ -94,11 +94,9 @@ export class AuthController extends ConfigController {
                 user: {
                     ...rest,
                     ...updateCart,
+                    deliveryInfo,
                     extraInfo: {
-                        ordersGoods: orders
-                            .flatMap((order) => order.cart.items.map((item) => ({ id: item._id, src: item.imageUrl })))
-                            .reverse()
-                            .slice(0, 5),
+                        ordersGoods: orders.flatMap(({ cart: { items } }) => items.map((item) => ({ id: item._id, src: item.imageUrl }))).reverse().slice(0, 5),
                         ordersCount: orders.length,
                         ...extraInfo
                     },

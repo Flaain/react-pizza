@@ -39,7 +39,7 @@ export interface OrderHandler {
 
 export interface UserSliceState {
     _id: string | null;
-    jwt: string | null;
+    token: string | null;
     email: string | null;
     name: string | null;
     deliveryInfo: DeliveryInfo | null;
@@ -47,6 +47,7 @@ export interface UserSliceState {
     lang: string;
     addresses: Map<string, IUserAddress>;
     isAuthInProgress: boolean;
+    isAuthenticated: boolean;
     extraInfo: { ordersGoods: Array<{ id: string, src: string }>, ordersCount: number, totalItemsCount: number } | null
 }
 

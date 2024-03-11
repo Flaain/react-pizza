@@ -2,7 +2,7 @@ import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { TabItemProps } from "../../model/interfaces";
 
-const TabContentItem = ({ address, method, currentInfo, deliveryPrice, handleChange }: TabItemProps) => {
+const TabContentItem = ({ address, method, currentInfo, handleChange }: TabItemProps) => {
     const isSelected = (currentInfo && ("id" in currentInfo.address ? currentInfo.address.id : currentInfo.address._id)) === ("id" in address ? address.id : address._id)
     return (
         <li className='flex relative'>
@@ -14,7 +14,7 @@ const TabContentItem = ({ address, method, currentInfo, deliveryPrice, handleCha
                 )}
             >
                 <div className='flex flex-col gap-2'>
-                    <p className='truncate font-medium'>{address.line}</p>
+                    <p className='truncate font-medium'>{`${address.city}, ${address.state}, ${address.line}, ${address.postal_code}`}</p>
                     {"rating" in address && (
                         <span className='flex items-center gap-2 font-medium text-primary-black'>
                             <img
@@ -33,7 +33,7 @@ const TabContentItem = ({ address, method, currentInfo, deliveryPrice, handleCha
                     className='sr-only'
                     autoComplete='off'
                     checked={isSelected}
-                    onChange={() => handleChange({ address, method, deliveryPrice })}
+                    onChange={() => handleChange({ address, method })}
                 />
             </label>
         </li>

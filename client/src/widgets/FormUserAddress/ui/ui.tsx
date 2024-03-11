@@ -3,20 +3,30 @@ import Input from "@/shared/ui/Input/ui";
 import { Props } from "../model/interfaces";
 import { useForm } from "@/shared/hooks/useForm";
 import { useDispatch } from "react-redux";
-import { setNewAddress } from "@/app/redux/slice/user.slice";
+import { setAddresses } from "@/app/redux/slice/user.slice";
 import { form } from "../model/form";
 import { AnimatePresence, motion } from "framer-motion";
 import { errorsAnimation } from "../model/animation";
+import { api } from "@/shared/api";
+import { useAppSelector } from "@/shared/model/store";
+import { userSelector } from "@/shared/model/selectors";
 
 const FormUserAddress = ({ setShowAddForm }: Props) => {
-    const { submitHandler, isFormValid, register, errors } = useForm({ validateOnChange: true });
+    const { submitHandler, isFormValid, register, errors } = useForm();
+    const { token } = useAppSelector(userSelector);
 
     const dispatch = useDispatch();
 
-    const handleSubmit = (data: { [key: string]: string }) => {
-        // dispatch(setNewAddress({ address: `${data.city}, ${data.address}, ${data.building}, ${data.postcode}` }));
-        // setShowAddForm(false);
-        console.log(data);
+    const handleSubmit = async (data: { [key: string]: string }) => {
+        try {
+            const { data: { addresses } } = await api.user.addAddress({ token: token as string, body: JSON.stringify(data) });
+        
+            dispatch(setAddresses(addresses));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setShowAddForm(false);
+        }
     };
 
     return (

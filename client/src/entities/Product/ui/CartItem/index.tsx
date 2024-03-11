@@ -15,7 +15,7 @@ import Input from "@/shared/ui/Input/ui";
 import { api } from "@/shared/api";
 
 const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price, loading }: CartItemProps) => {
-    const { lang, jwt } = useAppSelector(userSelector);
+    const { lang, token, isAuthenticated } = useAppSelector(userSelector);
     
     const [itemCount, setItemCount] = React.useState(count ?? 1);
 
@@ -43,7 +43,7 @@ const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price, l
 
     const handleRemoveItemFromCart = async () => {
         try {
-            jwt && _id && await api.cart.removeItemFromCart({ _id, token: jwt })
+            isAuthenticated && _id && await api.cart.removeItemFromCart({ _id, token: token as string });
             dispatch(removeProductFromCart({ key }));
         } catch (error) {
             console.error(error);
@@ -51,7 +51,7 @@ const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price, l
     }
 
     return (
-        <div className='flex items-center justify-between group'>
+        <li className='flex items-center justify-between group'>
             <div className='flex items-center gap-5'>
                 <Image
                     src={imageUrl}
@@ -113,7 +113,7 @@ const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price, l
                     </button>
                 </div>
             </div>
-        </div>
+        </li>
     );
 };
 

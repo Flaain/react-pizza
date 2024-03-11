@@ -11,6 +11,7 @@ const getInitialState = (item: Product, params: URLSearchParams) => {
         type: item.types.some((type) => type === paramsType) ? paramsType : item.types[0],
         size: size ? paramsSize : initialSizes.findIndex((size) => size === item.sizes[0].size),
         price: size?.price ?? item.sizes[0].price,
+        loading: false
     };
 };
 

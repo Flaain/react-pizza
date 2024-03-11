@@ -12,18 +12,12 @@ export const userSlice = createSlice({
     initialState: userInitialState,
     reducers: {
         signin: (state, { payload }: PayloadAction<Profile>) => {
-            state._id = payload._id;
-            state.jwt = payload.token;
-            state.name = payload.name;
-            state.email = payload.email;
+            Object.assign(state, { ...payload, isAuthenticated: true });
 
             saveToLocalStorage({ key: localStorageKeys.JWT, data: payload.token });
         },
         logout: (state) => {
-            state.jwt = null;
-            state._id = null;
-            state.email = null;
-            state.name = null;
+            Object.assign(state, { ...userSlice.getInitialState(), token: null });
 
             localStorage.removeItem(localStorageKeys.JWT);
         },
@@ -33,7 +27,9 @@ export const userSlice = createSlice({
         },
         setNewAddress: (state, { payload }: PayloadAction<IUserAddress>) => {
             state.addresses.set(payload._id, payload);
-            saveToLocalStorage({ key: localStorageKeys.USER_ADDRESSES, data: [...state.addresses.values()] });
+        },
+        setAddresses: (state, { payload }: PayloadAction<IUserAddress[]>) => {
+            payload.forEach((address) => state.addresses.set(address._id, address));
         },
         setPaymentInfo: (state, { payload }: PayloadAction<PaymentInfo>) => {
             state.paymentInfo = payload;
@@ -46,24 +42,21 @@ export const userSlice = createSlice({
                 state.isAuthInProgress = true;
             })
             .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<Profile, "token">>) => {
-                state._id = payload._id;
-                state.name = payload.name;
-                state.email = payload.email;
-                state.extraInfo = payload.extraInfo;
-                state.isAuthInProgress = false;
+                Object.assign(state, { 
+                    ...payload, 
+                    isAuthInProgress: false, 
+                    isAuthenticated: true, 
+                    addresses: new Map(payload.addresses.map((address) => [address, address])) 
+                });
             })
             .addCase(getProfile.rejected, (state) => {
-                state._id = null;
-                state.email = null;
-                state.jwt = null;
-                state.name = null;
-
                 state.isAuthInProgress = false;
-
+                state.token = null;
+                
                 localStorage.removeItem(localStorageKeys.JWT);
             });
     },
 });
 
-export const { logout, signin, setDeliveryInfo, setPaymentInfo, setNewAddress } = userSlice.actions;
+export const { logout, signin, setDeliveryInfo, setPaymentInfo, setAddresses, setNewAddress } = userSlice.actions;
 export default userSlice.reducer;

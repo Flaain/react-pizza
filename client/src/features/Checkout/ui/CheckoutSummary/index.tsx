@@ -32,7 +32,7 @@ const CheckoutSummary = ({ setPaymentModalOpened }: CheckoutSummaryProps) => {
                 <span className='text-base font-medium text-primary-black'>Сумма товаров</span>
                 <p className='text-gray-400'>{intl}</p>
             </div>
-            {deliveryInfo?.method === "courier" && deliveryInfo.deliveryPrice && (
+            {deliveryInfo?.method === "delivery" && deliveryInfo.deliveryPrice && (
                 <div className='flex flex-col'>
                     <span className='text-base font-medium text-primary-black'>Доставка</span>
                     <p className='text-gray-400'>{getIntlPrice(deliveryInfo.deliveryPrice)}</p>

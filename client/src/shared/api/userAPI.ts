@@ -1,5 +1,6 @@
-import { IApiMethodParams, Profile, WithRequired } from "@/shared/model/interfaces";
+import { IApiMethodParams, IUserAddress, Profile, WithRequired } from "@/shared/model/interfaces";
 import { API } from "./api";
+import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 
 export class UserAPI extends API {
     constructor() {
@@ -33,4 +34,37 @@ export class UserAPI extends API {
         });
         return this._checkResponse<{ user: Profile }>(response);
     };
+
+    addAddress = async ({ token, body, ...rest }: WithRequired<IApiMethodParams, "token" | "body">) => {
+        const response = await fetch(this._baseUrl + "/profile/add/address", {
+            ...rest,
+            method: "POST",
+            headers: { ...rest.headers, ...this._headers, Authorization: `Bearer ${token}` },
+            body,
+        });
+
+        return this._checkResponse<{ addresses: Array<IUserAddress> }>(response);
+    };
+
+    updateDeliveryInfo = async ({ token, body, ...rest }: WithRequired<IApiMethodParams, "token" | "body">) => {
+        const response = await fetch(this._baseUrl + "/profile/update/delivery-info", {
+            ...rest,
+            method: "PUT",
+            headers: { ...rest.headers, ...this._headers, Authorization: `Bearer ${token}` },
+            body,
+        })
+
+        return this._checkResponse<{ deliveryInfo: Omit<DeliveryInfo, "method"> }>(response);
+    }
+
+    updatePaymentInfo = async ({ token, body, ...rest }: WithRequired<IApiMethodParams, "token" | "body">) => {
+        const response = await fetch(this._baseUrl + "/profile/update/payment-info", {
+            ...rest,
+            method: "PUT",
+            headers: { ...rest.headers, ...this._headers, Authorization: `Bearer ${token}` },
+            body,
+        })
+
+        return this._checkResponse(response);
+    }
 }

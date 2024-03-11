@@ -1,3 +1,13 @@
+// Переделать это говно срочным образом
+// Rewrite this shit asap
+// Преработете това лайна по спешен начин
+// Ail-wneud y cachu hwn mewn ffordd frys
+// Rehacer esta mierda de una manera urgente
+// Rifare questa merda in modo urgente
+// Мұны шұғыл түрде қайта жасаңыз
+// 以紧急的方式重做这个狗屎
+// Refaire cette merde d'urgence
+
 import SliderTab from "@/shared/ui/SliderTab/ui";
 import OptionsItem from "../OptionsItem";
 import useTabSlider from "@/shared/hooks/useTabSlider";
@@ -5,6 +15,7 @@ import { OptionsListProps } from "../../model/interfaces";
 import { segmentSelectors } from "../../model/segmentSelectors";
 import { getPayloadBySegment } from "../../lib/getPayloadBySegment";
 import { ProductSelectorState } from "@/shared/model/interfaces";
+
 
 const OptionsList = ({
     classNames = "grid grid-cols-2 gap-2 p-1",
@@ -15,15 +26,10 @@ const OptionsList = ({
     stateProperty,
     dispatch,
 }: OptionsListProps) => {
-    const { tabLeft, tabWidth, tabRef, setActiveTabIndex } = useTabSlider<HTMLLabelElement>(
-        state[stateProperty as keyof ProductSelectorState]
-    );
+    const { tabLeft, tabWidth, tabRef, setActiveTabIndex } = useTabSlider<HTMLLabelElement>(state[stateProperty as keyof ProductSelectorState]);
 
     const handleChange = (index: number, availableValueIndex: number) => {
-        dispatch({
-            type: segmentType,
-            payload: getPayloadBySegment(segmentType, state, index, availableValueIndex, data),
-        });
+        dispatch({ type: segmentType, payload: getPayloadBySegment(segmentType, state, index, availableValueIndex, data) });
         setActiveTabIndex(index);
     };
 
@@ -32,9 +38,7 @@ const OptionsList = ({
             <SliderTab tabLeft={tabLeft} tabWidth={tabWidth} />
             <ul className={classNames}>
                 {initial.map((item, index) => {
-                    const availableValueIndex = data.findIndex((value) =>
-                        segmentSelectors[segmentType].availableValueIndex(item, value, index)
-                    );
+                    const availableValueIndex = data.findIndex((value) => segmentSelectors[segmentType].availableValueIndex(item, value, index));
                     const title = segmentSelectors[segmentType]?.title?.(item) ?? String(item);
 
                     return (

@@ -161,25 +161,6 @@ class OrderController extends ConfigController {
         }
     };
 
-    updateDeliveryInfo = async (req, res) => {
-        const token = req.headers.authorization?.split(" ")[1];
-        const { id, method } = req.body;
-
-        try {
-            const user = await this._getUser(token, res);
-            const address = await this._getDeliveryInfo({ id, method, user });
-
-            user.deliveryInfo = { id, method };
-
-            await user.save();
-
-            res.json({ deliveryInfo: address, message: "Адрес обновлен" });
-        } catch (error) {
-            console.log(error);
-            res.status(500).json({ message: error.message || "Во время обновления адреса произошла ошибка" });
-        }
-    }
-
     getOrders = async (req, res) => {
         const token = req.headers.authorization?.split(" ")[1];
 

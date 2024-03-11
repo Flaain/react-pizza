@@ -33,7 +33,7 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<IApiCart>(response);
+        return this._checkResponse<{ cart: IApiCart }>(response);
     };
 
     removeItemFromCart = async ({ _id, token, ...params }: IRemoveFromCartParams) => {

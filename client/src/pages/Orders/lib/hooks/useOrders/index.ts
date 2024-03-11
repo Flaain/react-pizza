@@ -5,7 +5,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 
 export const useOrders = () => {
-    const { jwt } = useAppSelector(userSelector);
+    const { token } = useAppSelector(userSelector);
 
     const [loading, setLoading] = React.useState(true);
     const [orders, setOrders] = React.useState<Array<Order>>([]);
@@ -15,7 +15,7 @@ export const useOrders = () => {
             try {
                 const {
                     data: { orders },
-                } = await api.base.getOrders({ token: jwt as string });
+                } = await api.base.getOrders({ token: token as string });
                 setOrders(orders);
             } catch (error) {
                 console.error(error);

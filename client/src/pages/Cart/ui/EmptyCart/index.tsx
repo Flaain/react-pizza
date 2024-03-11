@@ -7,11 +7,8 @@ const EmptyCart = () => {
     return (
         <Container classNames='max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border flex flex-col items-center justify-center gap-10 h-[calc(100vh-132px)]'>
             <div className='flex flex-col justify-center items-center gap-3'>
-                <h1 className='font-bold text-3xl'>Корзина пустая 😕</h1>
-                <p className='text-center text-gray-500'>
-                    Вероятней всего, вы не заказывали ещё пиццу. <br /> Для того, чтобы заказать пиццу, перейдите на
-                    главную страницу.
-                </p>
+                <h1 className='font-bold text-3xl'>Корзина пуста 😕</h1>
+                <p className='text-center text-gray-500'>Перейдите на «Главную» и выберите понравившийся товар.</p>
             </div>
             <Image
                 src={getImageUrl("shopping-cart-colour.svg")}

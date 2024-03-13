@@ -22,7 +22,7 @@ export const useCart = () => {
 
     const actions = React.useMemo(() => ({
         card: async () => {
-            const { data: url } = await api.cart.createCheckoutSesstion({ token: token as string });
+            const { data: { url } } = await api.cart.createCheckoutSesstion({ token: token as string });
             window.location.href = url;
         },
         cash: async () => {

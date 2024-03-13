@@ -11,7 +11,7 @@ export const userInitialState: UserSliceState = {
     paymentInfo: null,
     addresses: new Map(),
     lang: navigator.language,
-    isAuthInProgress: false,
+    isAuthInProgress: true,
     isAuthenticated: false,
     extraInfo: null,
 };

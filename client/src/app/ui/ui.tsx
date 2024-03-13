@@ -9,6 +9,7 @@ import { getProfile } from "../redux/slice/asyncActions";
 import { getCart } from "@/pages/Cart/model/asyncActions";
 import { CartInterface } from "@/pages/Cart/model/interfaces";
 import { localStorageKeys } from "@/shared/config/constants";
+import { setIsAuthInProgress } from "../redux/slice/user.slice";
 
 const App = () => {
     const { error } = useAppSelector(appSelector);
@@ -17,7 +18,13 @@ const App = () => {
     const dispatch = useAsyncThunkDispatch();
 
     React.useEffect(() => {
-        token ? dispatch(getProfile(token)) : dispatch(getCart(getDataFromLocalStorage<Array<Omit<CartInterface, "category">>>(localStorageKeys.CART, [])));
+        if (token) {
+            dispatch(getProfile(token));
+            return;
+        }
+
+        dispatch(getCart(getDataFromLocalStorage<Array<Omit<CartInterface, "category">>>(localStorageKeys.CART, [])));
+        dispatch(setIsAuthInProgress(false));
     }, []);
 
     return error ? (

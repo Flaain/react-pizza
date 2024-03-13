@@ -39,7 +39,10 @@ const InfoContainer = ({ setPaymentModalOpened }: Props) => {
             />
             <InfoBlock
                 item={<InfoList items={[
-                    { title: { value: `Оплата ${paymentInfo?.method === "card" ? "картой" : "наличными при получении"}` } },
+                    { 
+                        title: { value: paymentInfo?.method === "card" ? "Оплата картой" : "Наличными при получении" },
+                        ...(paymentInfo?.method === "card" && { description: { value: "мы используем платежную систему Stripe" } }) 
+                    },
                     { title: { value: "К оплате" }, description: { value: getIntlPrice(totalPrice + (deliveryInfo?.deliveryPrice ?? 0)) } },
                 ]} />}
                 callToActionReason={!!paymentInfo}

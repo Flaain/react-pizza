@@ -6,7 +6,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { Link } from "react-router-dom";
 
 const LKPage = () => {
-    const { extraInfo } = useAppSelector(userSelector);
+    const { extraInfo, isAuthenticated } = useAppSelector(userSelector);
 
     return (
         <section className='grid grid-cols-2'>

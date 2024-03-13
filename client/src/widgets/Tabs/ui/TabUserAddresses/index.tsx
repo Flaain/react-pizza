@@ -10,7 +10,7 @@ import { userSelector } from "@/shared/model/selectors";
 import isSaveDisabled from "../../lib/isSaveDisabled";
 import { routerList } from "@/shared/config/constants";
 
-const TabUserAddresses = ({ currentInfo, method, handleChange, handleSave }: TabContentProps) => {
+const TabUserAddresses = ({ currentInfo, setCurrentInfo, method, handleChange, handleSave }: TabContentProps) => {
     const { deliveryInfo, addresses } = useAppSelector(userSelector);
     const { isAuthenticated } = useAppSelector(userSelector);
 
@@ -23,7 +23,11 @@ const TabUserAddresses = ({ currentInfo, method, handleChange, handleSave }: Tab
     const navigate = useNavigate();
 
     if (showAddForm) {
-        return isAuthenticated ? <FormUserAddress setShowAddForm={setShowAddForm} /> : <Navigate to={routerList.AUTH} replace/>;
+        return isAuthenticated ? (
+            <FormUserAddress setShowAddForm={setShowAddForm} setCurrentInfo={setCurrentInfo} />
+        ) : (
+            <Navigate to={routerList.AUTH} replace />
+        );
     }
 
     return !addressesArr.length ? (

@@ -4,7 +4,7 @@ import { InfoItemProps } from "../../model/interfaces";
 const InfoItem = ({ title, description }: InfoItemProps) => {
     return (
         <li className='flex w-full items-start'>
-            <span className={cn("basis-[200px] text-gray-400", !!title.className && title.className)}>
+            <span className={cn("basis-1/3 text-gray-400", !!title.className && title.className)}>
                 {title.value}
             </span>
             {description && (

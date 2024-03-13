@@ -21,6 +21,7 @@ export interface TabContentProps {
     handleChange: ({ address, method, deliveryPrice }: DeliveryInfo) => void;
     handleSave: () => void;
     currentInfo: DeliveryInfo | null;
+    setCurrentInfo: React.Dispatch<React.SetStateAction<DeliveryInfo | null>>;
 }
 
 export interface TabItemProps {

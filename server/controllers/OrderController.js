@@ -144,7 +144,7 @@ class OrderController extends ConfigController {
                 ],
                 mode: "payment",
                 metadata: { user_id: user._id.toString(), order_id: order._id.toString() },
-                success_url: `${process.env.FRONTEND_URL}/orders`,
+                success_url: `${process.env.FRONTEND_URL}/lk/orders`,
                 cancel_url: `${process.env.FRONTEND_URL}/cart`,
             });
 

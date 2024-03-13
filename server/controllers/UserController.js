@@ -7,12 +7,12 @@ export class UserController extends ConfigController {
         try {
             const user = await this._getUser(token);
 
-            user.addresses = [req.body, ...user.addresses];
+            user.addresses = [...user.addresses, req.body];
 
             const savedUser = await user.save();
             const { addresses } = savedUser.toObject();
 
-            res.json({ addresses, message: "Адрес добавлен" });
+            res.json({ addresses, newAddress: addresses[addresses.length - 1], message: "Адрес добавлен" });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message || "Во время добавления адреса произошла ошибка" });

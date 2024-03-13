@@ -59,6 +59,7 @@ const Tabs = () => {
             component: (
                 <TabUserAddresses
                     currentInfo={currentInfo}
+                    setCurrentInfo={setCurrentInfo}
                     handleChange={handleChange}
                     handleSave={handleSave}
                     method='delivery'

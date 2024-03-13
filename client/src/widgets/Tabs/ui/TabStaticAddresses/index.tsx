@@ -7,7 +7,7 @@ import { IApiData, IStaicAddress } from "@/shared/model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 
-const TabStaticAddresses = ({ method, currentInfo, handleChange, handleSave }: TabContentProps) => {
+const TabStaticAddresses = ({ method, currentInfo, handleChange, handleSave }: Omit<TabContentProps, "setCurrentInfo">) => {
     const { data: addresses } = useAsyncValue() as IApiData<Array<IStaicAddress>>;
     const { deliveryInfo } = useAppSelector(userSelector);
 

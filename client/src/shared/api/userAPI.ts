@@ -43,7 +43,7 @@ export class UserAPI extends API {
             body,
         });
 
-        return this._checkResponse<{ addresses: Array<IUserAddress> }>(response);
+        return this._checkResponse<{ addresses: Array<IUserAddress>, newAddress: IUserAddress }>(response);
     };
 
     updateDeliveryInfo = async ({ token, body, ...rest }: WithRequired<IApiMethodParams, "token" | "body">) => {

@@ -35,6 +35,9 @@ export const userSlice = createSlice({
             state.paymentInfo = payload;
             saveToLocalStorage({ key: localStorageKeys.PAYMENT_INFO, data: payload });
         },
+        setIsAuthInProgress: (state, { payload }: PayloadAction<boolean>) => {
+            state.isAuthInProgress = payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -42,21 +45,21 @@ export const userSlice = createSlice({
                 state.isAuthInProgress = true;
             })
             .addCase(getProfile.fulfilled, (state, { payload }: PayloadAction<Omit<Profile, "token">>) => {
-                Object.assign(state, { 
-                    ...payload, 
-                    isAuthInProgress: false, 
-                    isAuthenticated: true, 
-                    addresses: new Map(payload.addresses.map((address) => [address, address])) 
+                Object.assign(state, {
+                    ...payload,
+                    isAuthInProgress: false,
+                    isAuthenticated: true,
+                    addresses: new Map(payload.addresses.map((address) => [address._id, address])),
                 });
             })
             .addCase(getProfile.rejected, (state) => {
                 state.isAuthInProgress = false;
                 state.token = null;
-                
+
                 localStorage.removeItem(localStorageKeys.JWT);
             });
     },
 });
 
-export const { logout, signin, setDeliveryInfo, setPaymentInfo, setAddresses, setNewAddress } = userSlice.actions;
+export const { logout, signin, setDeliveryInfo, setPaymentInfo, setAddresses, setNewAddress, setIsAuthInProgress } = userSlice.actions;
 export default userSlice.reducer;

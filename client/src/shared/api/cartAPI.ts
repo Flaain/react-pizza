@@ -14,7 +14,7 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<string>(response);
+        return this._checkResponse<{ url: string }>(response);
     };
 
     getCart = async (params?: IApiMethodParams) => {

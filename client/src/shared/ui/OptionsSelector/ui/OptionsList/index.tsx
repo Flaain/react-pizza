@@ -10,7 +10,7 @@
 
 import SliderTab from "@/shared/ui/SliderTab/ui";
 import OptionsItem from "../OptionsItem";
-import useTabSlider from "@/shared/hooks/useTabSlider";
+import { useTabSlider } from "@/shared/hooks/useTabSlider";
 import { OptionsListProps } from "../../model/interfaces";
 import { segmentSelectors } from "../../model/segmentSelectors";
 import { getPayloadBySegment } from "../../lib/getPayloadBySegment";

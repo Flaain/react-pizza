@@ -2,7 +2,6 @@ import { CartInterface } from "@/pages/Cart";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { Field } from "../hooks/useForm/types";
 import { PaymentInfo, PaymentMethod } from "@/widgets/PaymentModal";
-import { Address } from "@/widgets/Tabs/model/interfaces";
 
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
@@ -10,6 +9,13 @@ export interface PossibleParams {
     search: string;
     category: string;
     sort: string;
+}
+
+export interface Address {
+    line: string;
+    city: string;
+    state: string;
+    postal_code: string;
 }
 
 export interface Sort {
@@ -30,7 +36,7 @@ export interface EmptyCartGuardProps {
     children: React.ReactElement;
 }
 
-export interface IStaicAddress extends Address{
+export interface IStaticAddress extends Address {
     id: string;
     rating: number;
 }

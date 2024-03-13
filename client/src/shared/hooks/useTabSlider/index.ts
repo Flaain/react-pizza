@@ -1,6 +1,6 @@
 import React from "react";
 
-const useTabSlider = <T extends HTMLElement>(initialActiveIndex: number) => {
+export const useTabSlider = <T extends HTMLElement>(initialActiveIndex: number) => {
     const [activeTabIndex, setActiveTabIndex] = React.useState(initialActiveIndex);
     const [tabWidth, setTabWidth] = React.useState<number | null>(null);
     const [tabLeft, setTabLeft] = React.useState<number | null>(null);
@@ -24,5 +24,3 @@ const useTabSlider = <T extends HTMLElement>(initialActiveIndex: number) => {
         setActiveTabIndex,
     };
 };
-
-export default useTabSlider;

@@ -1,9 +1,12 @@
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import { TabItemProps } from "../../model/interfaces";
+import { MethodItemProps } from "../../model/interfaces";
+import { isAddressSelected } from "../../lib/helpers/isAddressSelected";
 
-const TabContentItem = ({ address, method, currentInfo, handleChange }: TabItemProps) => {
-    const isSelected = (currentInfo && ("id" in currentInfo.address ? currentInfo.address.id : currentInfo.address._id)) === ("id" in address ? address.id : address._id)
+const MethodItem = ({ address, handleAddressChange, currentInfo }: MethodItemProps) => {
+    const isUserAddress = "_id" in address;
+    const isSelected = isAddressSelected(currentInfo, address);
+
     return (
         <li className='flex relative'>
             <label
@@ -15,6 +18,7 @@ const TabContentItem = ({ address, method, currentInfo, handleChange }: TabItemP
             >
                 <div className='flex flex-col gap-2'>
                     <p className='truncate font-medium'>{`${address.city}, ${address.state}, ${address.line}, ${address.postal_code}`}</p>
+
                     {"rating" in address && (
                         <span className='flex items-center gap-2 font-medium text-primary-black'>
                             <img
@@ -32,12 +36,20 @@ const TabContentItem = ({ address, method, currentInfo, handleChange }: TabItemP
                     name='address'
                     className='sr-only'
                     autoComplete='off'
-                    checked={isSelected}
-                    onChange={() => handleChange({ address, method })}
+                    checked={!!isSelected}
+                    onChange={() => handleAddressChange({ address })}
                 />
             </label>
+            {isUserAddress && (
+                <div className='absolute right-0 top-0'>
+                    <ul>
+                        <li>Удалить</li>
+                        <li>Редактировать</li>
+                    </ul>
+                </div>
+            )}
         </li>
     );
 };
 
-export default TabContentItem;
+export default MethodItem;

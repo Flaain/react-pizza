@@ -1,4 +1,4 @@
-import { IStaicAddress, IUserAddress } from "@/shared/model/interfaces";
+import { IStaticAddress, IUserAddress } from "@/shared/model/interfaces";
 import { NavigateFunction } from "react-router-dom";
 
 export type DeliveryMethodType = "pickup" | "delivery";
@@ -30,7 +30,19 @@ export interface LazyErrorElementProps {
 }
 
 export interface DeliveryInfo {
-    address: IStaicAddress | IUserAddress;
+    address: IStaticAddress | IUserAddress;
     deliveryPrice?: number;
     method: DeliveryMethodType;
+}
+
+export interface MethodListProps {
+    currentInfo: DeliveryInfo | null;
+    addresses: Array<IStaticAddress | IUserAddress>;
+    handleAddressChange: (info: Omit<DeliveryInfo, "method">) => void;
+}
+
+export interface MethodItemProps extends React.HTMLAttributes<HTMLLIElement> {
+    address: IStaticAddress | IUserAddress;
+    currentInfo: DeliveryInfo | null;
+    handleAddressChange: (info: Omit<DeliveryInfo, "method">) => void;
 }

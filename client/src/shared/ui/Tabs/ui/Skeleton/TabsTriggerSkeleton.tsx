@@ -1,6 +1,6 @@
-import TabContentItemSkeleton from "./TabContentItemSkeleton";
+import TabContentItemSkeleton from "./TabsContentItemSkeleton";
 
-const TabsSkeleton = () => {
+const TabsTriggerSkeleton = () => {
     return (
         <div className='flex flex-col overflow-auto box-border'>
             <div className='grid grid-cols-2 w-full border border-solid rounded-xl border-primary-gray gap-5 p-1'>
@@ -16,4 +16,4 @@ const TabsSkeleton = () => {
     );
 };
 
-export default TabsSkeleton;
+export default TabsTriggerSkeleton;

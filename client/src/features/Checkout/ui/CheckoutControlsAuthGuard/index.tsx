@@ -56,11 +56,11 @@ const CheckoutControlsAuthGuard = () => {
                 </div>
                 <input className='sr-only' type='checkbox' checked={isAgreedWithTerms} onChange={handleChangeTerms} />
                 <p className='text-sm text-gray-400 select-none'>
-                    Соглашаюсь с&#32;
+                    Соглашаюсь с&nbsp;
                     <Link to='#' className='text-primary-black hover:text-primary-orange'>
                         правилами пользования торговой площадкой
                     </Link>
-                    &#32;и&#32;
+                    &nbsp;и&nbsp;
                     <Link to='#' className='text-primary-black hover:text-primary-orange'>
                         возврата
                     </Link>

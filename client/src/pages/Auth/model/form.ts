@@ -29,8 +29,6 @@ export const signinform: Record<string, Form> = {
 };
 
 export const signupform: Record<string, Form> = {
-    email: repatedFields.email,
-    password: repatedFields.password,
     name: {
         name: "name",
         label: "Введите имя",
@@ -40,6 +38,8 @@ export const signupform: Record<string, Form> = {
             maxLength: { value: 20, errorMessage: "Максимальная длина поля - 20 символов" },
         },
     },
+    email: repatedFields.email,
+    password: repatedFields.password,
     confirmPassword: {
         name: "confirmPassword",
         label: "Повторите пароль",

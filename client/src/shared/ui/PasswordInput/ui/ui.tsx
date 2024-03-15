@@ -10,7 +10,7 @@ const PasswordInput = forwardRef(({ hasEye, label, error, ...rest }: Props, ref:
     const [isPasswordVisible, setIsPasswordVisible] = React.useState(false);
 
     return (
-        <label className='flex flex-col gap-2 min-h-fit transition-all duration-200 ease-in-out'>
+        <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out relative'>
             {label && <span className='text-primary-black'>{label}</span>}
             <div className='relative w-full after:absolute after:right-[60px] after:top-[8px] after:bottom-[8px] after:w-[2px] after:bg-primary-gray'>
                 <Input {...rest} type={isPasswordVisible ? "text" : "password"} ref={ref} />
@@ -30,7 +30,7 @@ const PasswordInput = forwardRef(({ hasEye, label, error, ...rest }: Props, ref:
             </div>
             <AnimatePresence>
                 {error && (
-                    <motion.span {...errorsAnimation} className='text-red-500 text-sm'>
+                    <motion.span {...errorsAnimation} className='absolute -bottom-6 text-red-500 text-sm'>
                         {error}
                     </motion.span>
                 )}

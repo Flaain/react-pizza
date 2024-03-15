@@ -2,6 +2,8 @@ import React from "react";
 import Input from "@/shared/ui/Input/ui";
 import PasswordInput from "@/shared/ui/PasswordInput/ui/ui";
 import AuthButton from "../AuthButton";
+import cn from "@/shared/lib/classNames";
+import Toaster from "@/shared/ui/Toaster/ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
 import { useForm } from "@/shared/hooks/useForm";
@@ -15,7 +17,6 @@ import { useAppSelector } from "@/shared/model/store";
 import { api } from "@/shared/api";
 import { setCart } from "@/pages/Cart/model/slice";
 import { useToast } from "@/shared/hooks/useToast";
-import Toaster from "@/shared/ui/Toaster/ui/ui";
 
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
@@ -71,7 +72,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
                 <h1 className='text-5xl font-bold text-primary-black'>Вход</h1>
                 <p className='text-primary-black'>
-                    Нет аккаунта?&#32;
+                    Нет аккаунта?&nbsp;
                     <span
                         onClick={() => setActiveForm("signup")}
                         className='text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
@@ -80,8 +81,8 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                     </span>
                 </p>
             </div>
-            <form className='flex flex-col gap-5 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
-                <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out'>
+            <form className='flex flex-col gap-8 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
+                <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out relative'>
                     <span className='text-primary-black'>Введите почту</span>
                     <Input
                         {...register(signinform.email, { validateOnChange: true })}
@@ -89,7 +90,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                     />
                     <AnimatePresence>
                         {errors["email"] && (
-                            <motion.span {...errorsAnimation} className='text-red-500 text-sm'>
+                            <motion.span {...errorsAnimation} className='absolute -bottom-6 text-red-500 text-sm'>
                                 {errors["email"]}
                             </motion.span>
                         )}
@@ -102,7 +103,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                 />
-                <span className='text-primary-orange font-medium'>Забыли пароль?</span>
+                <span className={cn({ "text-primary-orange font-medium": true, "-mt-5": !errors["password"] })}>Забыли пароль?</span>
                 <AuthButton title='Войти' disabled={!isFormValid || loading} />
             </form>
         </div>

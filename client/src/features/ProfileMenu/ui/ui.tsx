@@ -2,7 +2,6 @@ import React from "react";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import ProfileMenuHeader from "./ProfileMenuHeader";
 import ProfileMenuLinks from "./ProfileMenuLinks";
-import ProfileMenuFooter from "./ProfileMenuFooter";
 import { routerList } from "@/shared/config/constants";
 import { AnimatePresence, motion } from "framer-motion";
 import { Link } from "react-router-dom";

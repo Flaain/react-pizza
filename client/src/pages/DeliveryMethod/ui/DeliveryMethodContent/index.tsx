@@ -1,23 +1,18 @@
 import React from "react";
-import ModalBody from "@/shared/ui/ModalBody/ui";
-import ModalHeader from "@/shared/ui/ModalHeader/ui";
-import { Tabs, TabsSkeleton } from "@/widgets/Tabs";
+import MethodTabs from "../MethodTabs";
+import TabsSkeleton from "@/shared/ui/Tabs/ui/Skeletons/TabsTriggerSkeleton";
 import { Await, useLoaderData } from "react-router-dom";
-import { IApiData, IStaicAddress } from "@/shared/model/interfaces";
-import { DeliveryMethodModalContentProps } from "../../model/interfaces";
+import { Address, IApiData } from "@/shared/model/interfaces";
 
-const DeliveryMethodModalContent = ({ title, navigate }: DeliveryMethodModalContentProps) => {
-    const data = useLoaderData() as Promise<IApiData<Array<IStaicAddress>>>;
+const DeliveryMethodModalContent = () => {
+    const data = useLoaderData() as Promise<IApiData<Array<Address>>>;
 
     return (
-        <ModalBody>
-            <ModalHeader title={title} closeHandler={() => navigate("/cart")} />
-            <React.Suspense fallback={<TabsSkeleton />}>
-                <Await resolve={data}>
-                    <Tabs />
-                </Await>
-            </React.Suspense>
-        </ModalBody>
+        <React.Suspense fallback={<TabsSkeleton />}>
+            <Await resolve={data}>
+                <MethodTabs />
+            </Await>
+        </React.Suspense>
     );
 };
 

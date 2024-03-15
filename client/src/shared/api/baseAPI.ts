@@ -1,14 +1,5 @@
-import {
-    IApiMethodParams,
-    IProductDetailsParams,
-    Meta,
-    Order,
-    Product,
-    Promocode,
-    StaticAddresses,
-    WithRequired,
-} from "@/shared/model/interfaces";
 import { API } from "./api";
+import { Address, IApiMethodParams, IProductDetailsParams, Meta, Order, Product, Promocode, WithRequired } from "@/shared/model/interfaces";
 
 export class BaseAPI extends API {
     constructor() {
@@ -21,7 +12,7 @@ export class BaseAPI extends API {
 
     getStaticAddresses = async (params?: IApiMethodParams) => {
         const response = await fetch(this._baseUrl + "/addresses", { ...params, headers: this._headers });
-        return this._checkResponse<Array<StaticAddresses>>(response);
+        return this._checkResponse<Array<Address>>(response);
     };
 
     getProductDetails = async ({ id, ...rest }: IProductDetailsParams) => {

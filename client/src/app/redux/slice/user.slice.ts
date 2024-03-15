@@ -2,7 +2,7 @@ import saveToLocalStorage from "@/shared/lib/helpers/saveToLocalStorage";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { localStorageKeys } from "@/shared/config/constants";
 import { userInitialState } from "./user.initialState";
-import { IUserAddress, Profile } from "@/shared/model/interfaces";
+import { Address, Profile } from "@/shared/model/interfaces";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { PaymentInfo } from "@/widgets/PaymentModal";
 import { getProfile } from "./asyncActions";
@@ -25,11 +25,11 @@ export const userSlice = createSlice({
             state.deliveryInfo = payload;
             saveToLocalStorage({ key: localStorageKeys.DELIVERY_INFO, data: payload });
         },
-        setNewAddress: (state, { payload }: PayloadAction<IUserAddress>) => {
-            state.addresses.set(payload._id, payload);
+        setNewAddress: (state, { payload }: PayloadAction<Address>) => {
+            state.addresses.set(payload.id, payload);
         },
-        setAddresses: (state, { payload }: PayloadAction<IUserAddress[]>) => {
-            payload.forEach((address) => state.addresses.set(address._id, address));
+        setAddresses: (state, { payload }: PayloadAction<Array<Address>>) => {
+            payload.forEach((address) => state.addresses.set(address.id, address));
         },
         setPaymentInfo: (state, { payload }: PayloadAction<PaymentInfo>) => {
             state.paymentInfo = payload;
@@ -49,7 +49,7 @@ export const userSlice = createSlice({
                     ...payload,
                     isAuthInProgress: false,
                     isAuthenticated: true,
-                    addresses: new Map(payload.addresses.map((address) => [address._id, address])),
+                    addresses: new Map(payload.addresses.map((address) => [address.id, address])),
                 });
             })
             .addCase(getProfile.rejected, (state) => {

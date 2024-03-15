@@ -12,10 +12,12 @@ export interface PossibleParams {
 }
 
 export interface Address {
+    id: string;
     line: string;
     city: string;
     state: string;
     postal_code: string;
+    rating?: number;
 }
 
 export interface Sort {
@@ -60,7 +62,7 @@ export interface Order {
 }
 
 export interface IUserAddress extends Address {
-    _id: string;
+    id: string;
 }
 
 export interface BrowserTitleProps {

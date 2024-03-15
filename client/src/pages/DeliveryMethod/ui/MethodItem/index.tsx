@@ -1,14 +1,12 @@
 import cn from "@/shared/lib/classNames";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import { MethodItemProps } from "../../model/interfaces";
-import { isAddressSelected } from "../../lib/helpers/isAddressSelected";
 
-const MethodItem = ({ address, handleAddressChange, currentInfo }: MethodItemProps) => {
-    const isUserAddress = "_id" in address;
-    const isSelected = isAddressSelected(currentInfo, address);
+const MethodItem = ({ address, handleAddressChange, currentInfo, ...rest }: MethodItemProps) => {
+    const isSelected = currentInfo?.address.id === address.id;
 
     return (
-        <li className='flex relative'>
+        <li {...rest} className='flex relative'>
             <label
                 title={address.line}
                 className={cn(
@@ -40,14 +38,14 @@ const MethodItem = ({ address, handleAddressChange, currentInfo }: MethodItemPro
                     onChange={() => handleAddressChange({ address })}
                 />
             </label>
-            {isUserAddress && (
+            {/* {method === "delivery" && (
                 <div className='absolute right-0 top-0'>
                     <ul>
                         <li>Удалить</li>
                         <li>Редактировать</li>
                     </ul>
                 </div>
-            )}
+            )} */}
         </li>
     );
 };

@@ -30,7 +30,7 @@ const FormUserAddress = ({ setShowAddForm }: Props) => {
     };
 
     return (
-        <form className='flex flex-col h-full' onSubmit={submitHandler(handleSubmit)}>
+        <form className='mt-5 flex flex-col h-full' onSubmit={submitHandler(handleSubmit)}>
             <fieldset className='grid grid-cols-2 gap-5'>
                 {Object.values(form).map(({ label, ...field }) => (
                     <label className='flex flex-col gap-2 min-h-fit transition-all duration-200 ease-in-out' key={field.name}>
@@ -60,6 +60,7 @@ const FormUserAddress = ({ setShowAddForm }: Props) => {
                     Сохранить
                 </button>
                 <button
+                    type="button"
                     onClick={() => setShowAddForm(false)}
                     className='bg-primary-orange/10 py-2 px-5 rounded-lg text-primary-orange hover:bg-primary-orange/20 transition-colors duration-200 ease-in-out'
                 >

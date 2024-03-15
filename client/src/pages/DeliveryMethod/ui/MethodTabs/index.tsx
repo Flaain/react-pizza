@@ -1,16 +1,7 @@
-import Tabs from "@/shared/ui/Tabs/ui/ui";
-import TabsList from "@/shared/ui/Tabs/ui/TabsList";
-import TabsTrigger from "@/shared/ui/Tabs/ui/TabsTrigger";
 import cn from "@/shared/lib/classNames";
 import SliderTab from "@/shared/ui/SliderTab/ui";
-import MethodList from "../MethodList";
+import MethodTabContent from "../MethodTabContent";
 import { useDeliveryMethodTabs } from "../../lib/hooks/useDeliveryMethodTabs";
-import { DeliveryMethodType } from "../../model/interfaces";
-
-const emptyComponents: Record<DeliveryMethodType, React.ReactNode> = {
-    pickup: <p>Не удалось загрузить пункты самовывоза</p>,
-    delivery: <p>Не удалось загрузить адреса доставки</p>,
-};
 
 const MethodTabs = () => {
     const {
@@ -20,16 +11,18 @@ const MethodTabs = () => {
         currentInfo,
         handleMethodChange,
         handleAddressChange,
+        handleSave,
+        isSaveBtnDisabled,
         slider: { tabLeft, tabRef, tabWidth },
     } = useDeliveryMethodTabs();
 
     return (
-        <Tabs className='flex flex-col rounded-lg max-md:w-full gap-2 overflow-auto'>
+        <div className='flex flex-col rounded-lg max-md:w-full h-full gap-2 overflow-auto'>
             <div className='relative'>
                 <SliderTab tabLeft={tabLeft} tabWidth={tabWidth} shadow={false} />
-                <TabsList>
+                <ul className='bg-primary-gray w-full p-1 rounded-lg grid grid-cols-2 gap-2 relative'>
                     {initalTabs.map(({ value }, index) => (
-                        <TabsTrigger
+                        <li
                             key={value}
                             onClick={() => handleMethodChange(index)}
                             ref={(element) => (tabRef.current[index] = element)}
@@ -39,16 +32,19 @@ const MethodTabs = () => {
                             )}
                         >
                             <span className='z-50'>{value}</span>
-                        </TabsTrigger>
+                        </li>
                     ))}
-                </TabsList>
+                </ul>
             </div>
-            {!addresses.length ? (
-                emptyComponents[initalTabs[tab].method]
-            ) : (
-                <MethodList addresses={addresses} currentInfo={currentInfo} handleAddressChange={handleAddressChange} />
-            )}
-        </Tabs>
+            <MethodTabContent
+                addresses={addresses}
+                currentInfo={currentInfo}
+                handleAddressChange={handleAddressChange}
+                method={initalTabs[tab].method}
+                handleSave={handleSave}
+                isSaveBtnDisabled={isSaveBtnDisabled}
+            />
+        </div>
     );
 };
 

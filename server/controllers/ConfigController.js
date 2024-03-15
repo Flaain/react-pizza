@@ -7,7 +7,7 @@ export class ConfigController {
     _revalidateCart = async (cart = []) => {
         const response = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.productId).join("&id[]=")}`);
         const actualProducts = await response.json();
-
+        
         const revalidatedCart = [...new Map(cart.map((item) => [`${item.productId}_${item.size}_${item.type}`, item])).values()].reduce((acc, { _id, ...product }) => {
                 const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
 
@@ -85,10 +85,11 @@ export class ConfigController {
                     if (throwError) throw new Error("Адрес не найден");
                     return null;
                 }
+                const { _id, ...address } = userAddress.toObject();
 
                 return {
                     method,
-                    address: userAddress.toObject(),
+                    address: { id: _id, ...address },
                     deliveryPrice: Math.floor(Math.random() * (500 - 300 + 1)) + 300,
                 };
             },

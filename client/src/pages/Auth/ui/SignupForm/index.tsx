@@ -45,9 +45,9 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
 
     const updateCartOnSignup = async (token: string) => {
         try {
-            const { data } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
+            const { data: { cart: updatedCart } } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
 
-            dispatch(setCart(data));
+            dispatch(setCart(updatedCart));
         } catch (error) {
             console.error(error);
             // dispatch(clearCart());

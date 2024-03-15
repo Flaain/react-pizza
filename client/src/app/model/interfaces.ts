@@ -1,5 +1,5 @@
 import { CartInterface } from "@/pages/Cart";
-import { IUserAddress, Meta, Product } from "@/shared/model/interfaces";
+import { Address, Meta, Product } from "@/shared/model/interfaces";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { PaymentInfo } from "@/widgets/PaymentModal/model/interfaces";
 
@@ -45,7 +45,7 @@ export interface UserSliceState {
     deliveryInfo: DeliveryInfo | null;
     paymentInfo: PaymentInfo | null;
     lang: string;
-    addresses: Map<string, IUserAddress>;
+    addresses: Map<string, Address>;
     isAuthInProgress: boolean;
     isAuthenticated: boolean;
     extraInfo: { ordersGoods: Array<{ id: string, src: string }>, ordersCount: number, totalItemsCount: number } | null

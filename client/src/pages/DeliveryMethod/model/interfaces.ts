@@ -1,9 +1,8 @@
-import { IStaticAddress, IUserAddress } from "@/shared/model/interfaces";
-import { NavigateFunction } from "react-router-dom";
+import { Address } from "@/shared/model/interfaces";
 
 export type DeliveryMethodType = "pickup" | "delivery";
 
-export interface Props {
+export interface DeliveryMethodProps {
     title: string;
 }
 
@@ -12,37 +11,40 @@ export interface DeliveryMethod {
     component: React.ReactNode;
 }
 
-export interface initialState {
-    loading: boolean;
-    deliveryMethods: Array<DeliveryMethod>;
-    error: unknown;
-    tabIndex: number;
-}
-
-export interface DeliveryMethodModalContentProps {
-    title: string;
-    navigate: NavigateFunction;
-}
-
-export interface LazyErrorElementProps {
-    error: unknown;
-    navigate: NavigateFunction;
-}
-
 export interface DeliveryInfo {
-    address: IStaticAddress | IUserAddress;
+    address: Address;
     deliveryPrice?: number;
     method: DeliveryMethodType;
 }
 
 export interface MethodListProps {
     currentInfo: DeliveryInfo | null;
-    addresses: Array<IStaticAddress | IUserAddress>;
+    addresses: Array<Address>;
+    method: DeliveryMethodType;
     handleAddressChange: (info: Omit<DeliveryInfo, "method">) => void;
 }
 
 export interface MethodItemProps extends React.HTMLAttributes<HTMLLIElement> {
-    address: IStaticAddress | IUserAddress;
+    address: Address;
     currentInfo: DeliveryInfo | null;
+    method: DeliveryMethodType;
     handleAddressChange: (info: Omit<DeliveryInfo, "method">) => void;
+}
+
+export interface MethodControlsProps {
+    method: DeliveryMethodType;
+    onSave: () => void;
+    onCancel: () => void;
+    onShowForm: () => void;
+    hasAddresses: boolean;
+    isSaveBtnDisabled: boolean;
+}
+
+export interface MethodTabContentProps {
+    method: DeliveryMethodType;
+    addresses: Array<Address>;
+    currentInfo: DeliveryInfo | null;
+    handleSave: () => void;
+    handleAddressChange: (info: Omit<DeliveryInfo, "method">) => void;
+    isSaveBtnDisabled: boolean;
 }

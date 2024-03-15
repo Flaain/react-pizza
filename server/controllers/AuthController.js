@@ -80,7 +80,7 @@ export class AuthController extends ConfigController {
             !deliveryInfo && user.deliveryInfo && (user.deliveryInfo = undefined);
 
             const savedUser = await user.save();
-            const { password, ...rest } = savedUser.toObject();
+            const { password, addresses, ...rest } = savedUser.toObject();
 
             const extraInfo = orders.reduce((acc, order) => {
                 return {
@@ -95,6 +95,7 @@ export class AuthController extends ConfigController {
                     ...rest,
                     ...updateCart,
                     deliveryInfo,
+                    addresses: addresses.map(({ _id, ...rest }) => ({ id: _id, ...rest })),
                     extraInfo: {
                         ordersGoods: orders.flatMap(({ cart: { items } }) => items.map((item) => ({ id: item._id, src: item.imageUrl }))).reverse().slice(0, 5),
                         ordersCount: orders.length,

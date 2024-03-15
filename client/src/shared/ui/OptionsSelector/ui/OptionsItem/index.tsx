@@ -3,7 +3,7 @@ import { OptionsItemProps } from "../../model/interfaces";
 
 const OptionsItem = ({ availableValueIndex, tabRef, index, handleChange, title, checked }: OptionsItemProps) => {
     return (
-        <li className='z-10'>
+        <li className='z-50'>
             <label
                 ref={(element) => (tabRef.current[index] = element)}
                 className={cn(

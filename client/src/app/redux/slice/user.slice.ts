@@ -38,6 +38,9 @@ export const userSlice = createSlice({
         setIsAuthInProgress: (state, { payload }: PayloadAction<boolean>) => {
             state.isAuthInProgress = payload;
         },
+        setExtraInfo: (state, { payload }: PayloadAction<Profile["extraInfo"]>) => {
+            state.extraInfo = payload;
+        },
     },
     extraReducers(builder) {
         builder
@@ -61,5 +64,14 @@ export const userSlice = createSlice({
     },
 });
 
-export const { logout, signin, setDeliveryInfo, setPaymentInfo, setAddresses, setNewAddress, setIsAuthInProgress } = userSlice.actions;
+export const {
+    logout,
+    signin,
+    setDeliveryInfo,
+    setPaymentInfo,
+    setAddresses,
+    setNewAddress,
+    setIsAuthInProgress,
+    setExtraInfo,
+} = userSlice.actions;
 export default userSlice.reducer;

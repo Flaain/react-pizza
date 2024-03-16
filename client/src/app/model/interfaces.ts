@@ -8,6 +8,15 @@ export interface ViewportState {
     breakpoints: Breakpoints;
 }
 
+export interface ExtraInfo {
+    ordersGoods: Array<{ id: string; src: string }>;
+    ordersCount: number;
+    totalItemsCount: number;
+    totalOrdersPrice: number;
+    purchaseAmount: number;
+    purchasePercent: number;
+}
+
 export interface Breakpoints {
     sm: number;
     md: number;
@@ -48,7 +57,7 @@ export interface UserSliceState {
     addresses: Map<string, Address>;
     isAuthInProgress: boolean;
     isAuthenticated: boolean;
-    extraInfo: { ordersGoods: Array<{ id: string, src: string }>, ordersCount: number, totalItemsCount: number } | null
+    extraInfo: ExtraInfo | null;
 }
 
 export interface IAuthData {

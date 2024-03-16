@@ -1,54 +1,24 @@
-import React from "react";
 import cn from "@/shared/lib/classNames";
+import Input from "@/shared/ui/Input/ui";
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import Image from "@/shared/ui/Image/ui/ui";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import { CartItemProps } from "../../model/interfaces";
 import { Link } from "react-router-dom";
-import { initialSizes, initialTypes } from "@/shared/config/constants";
-import { useDispatch } from "react-redux";
-import { changeItemCount, removeProductFromCart } from "@/pages/Cart/model/slice";
-import { useAppSelector } from "@/shared/model/store";
-import { userSelector } from "@/shared/model/selectors";
-import Input from "@/shared/ui/Input/ui";
-import { api } from "@/shared/api";
+import { initialTypes } from "@/shared/config/constants";
+import { useCartItem } from "../../lib/hooks/useCartItem";
 
-const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price, loading }: CartItemProps) => {
-    const { lang, token, isAuthenticated } = useAppSelector(userSelector);
-    
-    const [itemCount, setItemCount] = React.useState(count ?? 1);
-
-    const key = `${productId}_${size}_${type}`;
-    const intlSize = new Intl.NumberFormat(lang, { style: "unit", unit: "centimeter", unitDisplay: "short" }).format(initialSizes[size]);
-
-    const dispatch = useDispatch();
-
-    const handleChange = ({ target: { valueAsNumber } }: React.ChangeEvent<HTMLInputElement>) => {
-        const isValueInvalid = valueAsNumber <= 0 || !valueAsNumber;
-        const count = isValueInvalid ? 1 : valueAsNumber;
-
-        setItemCount(count);
-        dispatch(changeItemCount({ type: "direct", count, key }));
-    };
-
-    const handleIncrease = () => {
-        setItemCount((prevState) => prevState + 1);
-        dispatch(changeItemCount({ type: "increase", key }));
-    };
-    const handleDecrease = () => {
-        setItemCount((prevState) => prevState - 1);
-        dispatch(changeItemCount({ type: "decrease", key }));
-    };
-
-    const handleRemoveItemFromCart = async () => {
-        try {
-            isAuthenticated && _id && await api.cart.removeItemFromCart({ _id, token: token as string });
-            dispatch(removeProductFromCart({ key }));
-        } catch (error) {
-            console.error(error);
-        }
-    }
+const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price }: CartItemProps) => {
+    const { 
+        handleChange, 
+        handleDecrease, 
+        handleIncrease, 
+        handleRemoveItemFromCart, 
+        intlSize, 
+        itemCount, 
+        loading 
+    } = useCartItem({ _id, productId, count, size, type });
 
     return (
         <li className='flex items-center justify-between group'>

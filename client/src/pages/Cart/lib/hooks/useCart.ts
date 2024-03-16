@@ -6,6 +6,7 @@ import { clearCart } from "../..";
 import { api } from "@/shared/api";
 import { useNavigate } from "react-router-dom";
 import { routerList } from "@/shared/config/constants";
+import { setExtraInfo } from "@/app/redux/slice/user.slice";
 
 export const useCart = () => {
     const { cart, cartLoading } = useAppSelector(cartSelector);
@@ -26,10 +27,11 @@ export const useCart = () => {
             window.location.href = url;
         },
         cash: async () => {
-            await api.cart.createOrder({ token: token as string });
-            navigate(routerList.ORDERS);
+            const { data: { extraInfo } } = await api.cart.createOrder({ token: token as string });
+            dispatch(setExtraInfo(extraInfo));
+            navigate(routerList.LK.children.ORDERS);
         },
-    }), [token, navigate]);
+    }), [token]);
 
     const handleOrder = React.useCallback(async () => {
         try {

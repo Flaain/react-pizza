@@ -44,9 +44,9 @@ const ProfileMenu = () => {
                         transition={{ duration: 0.2, ease: "easeInOut" }}
                         onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
-                        className='absolute left-1/2 -translate-x-1/2 pt-3'
+                        className='absolute max-sm:left-0 sm:left-1/2 sm:-translate-x-1/2 pt-3'
                     >
-                        <ul className='after:top-0.5 after:bg-white after:rotate-45 after:left-1/2 after:-translate-x-1/2 after:border-l-2 after:border-t-2 after:border-solid after:border-primary-gray after:absolute after:w-5 after:h-5 flex flex-col gap-5 p-5 box-border rounded-lg bg-white w-full max-w-[320px] z-50 shadow-lg border border-solid border-primary-gray'>
+                        <ul className='sm:after:top-0.5 sm:after:bg-white sm:after:rotate-45 sm:after:left-1/2 sm:after:-translate-x-1/2 sm:after:border-l-2 sm:after:border-t-2 sm:after:border-solid sm:after:border-primary-gray sm:after:absolute sm:after:w-5 sm:after:h-5 flex flex-col gap-5 p-5 box-border rounded-lg bg-white w-full max-w-[320px] z-50 shadow-lg border border-solid border-primary-gray'>
                             {Object.values(links).map((component, index) => <React.Fragment key={index}>{component}</React.Fragment>)}
                         </ul>
                     </motion.div>

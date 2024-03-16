@@ -73,8 +73,8 @@ export class CartController extends ConfigController {
 
         try {
             const actions = {
-                increment: (count) => count + 1,
-                decrement: (count) => count - 1,
+                increment: (count) => (count + 1) <= 100 ? count + 1 : 100,
+                decrement: (count) => (count - 1) >= 1 ? count - 1 : 1,
             };
 
             const user = await this._getUser(token);

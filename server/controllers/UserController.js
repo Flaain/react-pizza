@@ -40,12 +40,11 @@ export class UserController extends ConfigController {
 
     updatePaymentInfo = async (req, res) => {
         const token = req.headers.authorization?.split(" ")[1];
-        const { method } = req.body;
 
         try {
             const user = await this._getUser(token);
 
-            user.paymentInfo = method;
+            user.paymentInfo = req.body;
 
             await user.save();
 

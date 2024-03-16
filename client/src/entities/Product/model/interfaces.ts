@@ -17,7 +17,6 @@ export enum ProductSelectorTypes {
 export interface OrderItemProps extends Omit<CartItemProps, "productId" | "itemId" | "loading"> {}
 
 export interface CartItemProps extends Omit<CartInterface, "category"> {
-    loading: boolean;
 }
 
 export type Action =

@@ -2,6 +2,7 @@ import { Schema } from "mongoose";
 import { z } from "zod";
 
 const deliveryTypes = ["pickup", "delivery"];
+const paymentTypes = ["cash", "card"];
 
 export const DeliveryInfoSchema = new Schema({
     id: {
@@ -26,3 +27,5 @@ export const zodDeliveryInfo = z.strictObject({
     id: z.string(),
     method: z.enum(deliveryTypes),
 });
+
+export const zodPaymentInfo = z.strictObject({ method: z.enum(paymentTypes) });

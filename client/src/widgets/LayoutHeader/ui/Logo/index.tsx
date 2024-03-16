@@ -12,7 +12,7 @@ const Logo = ({ title, description }: LogoProps) => {
             />
             <div className='max-sm:flex max-lg:hidden flex-col flex'>
                 <strong className='uppercase m-0 text-xl font-extrabold text-primary-black'>{title}</strong>
-                {description && <p className='text-gray-400 m-0'>{description}</p>}
+                {description && <p className='text-gray-400 m-0 max-[390px]:hidden'>{description}</p>}
             </div>
         </Link>
     );

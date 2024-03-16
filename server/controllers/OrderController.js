@@ -68,8 +68,33 @@ class OrderController extends ConfigController {
 
             const savedOrder = await order.save();
             const { _id } = savedOrder.toObject();
+            
+            const orders = await Order.find({ user: user._id }).lean();
 
-            res.json({ orderId: _id, message: "Заказ успешно создан" });
+            const extraInfo = orders.reduce((acc, order) => {
+                const isPayed = order.status === "PAID";
+                const totalOrdersPrice = acc.totalOrdersPrice + order.cart.total_price;
+                const purchaseAmount = acc.purchaseAmount + (isPayed ? (order.total_amount / 100) : 0);
+                const purchasePercent = (purchaseAmount / totalOrdersPrice) * 100;
+            
+                return {
+                    ...acc,
+                    totalItemsCount: acc.totalItemsCount + order.cart.items.length,
+                    purchasePercent,
+                    purchaseAmount,
+                    totalOrdersPrice,
+                };
+            }, { totalItemsCount: 0, totalOrdersPrice: 0, purchaseAmount: 0, purchasePercent: 0 });
+
+            res.json({ 
+                orderId: _id, 
+                extraInfo: {
+                    ...extraInfo,
+                    ordersGoods: orders.flatMap(({ cart: { items } }) => items.map((item) => ({ id: item._id, src: item.imageUrl }))).reverse().slice(0, 5),
+                    ordersCount: orders.length
+                }, 
+                message: "Заказ успешно создан" 
+            });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message || "Во время создания заказа произошла ошибка" });

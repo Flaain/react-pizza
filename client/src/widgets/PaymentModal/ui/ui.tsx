@@ -1,57 +1,38 @@
-import React from "react";
 import ModalContainer from "@/shared/ui/ModalContainer/ui";
 import ModalBody from "@/shared/ui/ModalBody/ui";
 import ModalHeader from "@/shared/ui/ModalHeader/ui";
-import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import PaymentMain from "./PaymentMain/ui";
+import PaymentMain from "./PaymentMain";
+import cn from "@/shared/lib/classNames";
 
-import { useAppSelector } from "@/shared/model/store";
-import { userSelector } from "@/shared/model/selectors";
-import { Menu, Menus, PaymentInfo, Props } from "../model/interfaces";
-import { useDispatch } from "react-redux";
-import { setPaymentInfo } from "@/app/redux/slice/user.slice";
+import { usePaymentModal } from "../lib/hooks/usePaymentModal";
+import { Props } from "../model/interfaces";
 
 const PaymentModal = ({ closeHandler }: Props) => {
-    const { paymentInfo } = useAppSelector(userSelector);
-
-    const [activeMenu, setActiveMenu] = React.useState<Menu>("main");
-    const [currentInfo, setCurrentInfo] = React.useState<PaymentInfo | null>(paymentInfo);
-
-    const dispatch = useDispatch();
-
-    const handleSave = () => {
-        dispatch(setPaymentInfo(currentInfo as PaymentInfo));
-        closeHandler();
-    };
-
-    const menus: Menus = {
-        main: {
-            component: <PaymentMain {...{ currentInfo, handleSave, setActiveMenu, setCurrentInfo, closeHandler }} />,
-            title: "Способ оплаты",
-        },
-        // "add-card": { component: <div>add card</div>, title: "Привязка карты" },
-        // "choose-card": {
-        //     component: <ChooseCard {...props} />,
-        //     title: "Выбор карты",
-        // },
-    };
+    const { currentInfo, setCurrentInfo, handleSave, isSaveBtnDisabled } = usePaymentModal(closeHandler);
 
     return (
         <ModalContainer closeHandler={closeHandler}>
             <ModalBody>
-                <div className='flex items-center gap-5'>
-                    {activeMenu !== "main" && (
-                        <button
-                            className='flex items-center justify-center p-2 min-w-[30px] min-h-[30px] rounded-full bg-primary-gray'
-                            onClick={() => setActiveMenu("main")}
-                            title='Вернуться назад'
-                        >
-                            <img src={getImageUrl("arrow.svg")} alt='back arrow' className='mr-[2px]' />
-                        </button>
-                    )}
-                    <ModalHeader title={menus[activeMenu].title} closeHandler={closeHandler} />
+                <ModalHeader title='Способ оплаты' closeHandler={closeHandler} />
+                <PaymentMain currentInfo={currentInfo} setCurrentInfo={setCurrentInfo} />
+                <div className='flex items-center gap-5 mt-auto'>
+                    <button
+                        onClick={handleSave}
+                        disabled={isSaveBtnDisabled}
+                        className={cn(
+                            "flex items-center justify-center py-2 px-5 rounded-lg bg-primary-orange text-white",
+                            isSaveBtnDisabled && "opacity-50"
+                        )}
+                    >
+                        Сохранить
+                    </button>
+                    <button
+                        onClick={closeHandler}
+                        className='bg-primary-orange/10 py-2 px-5 rounded-lg text-primary-orange hover:bg-primary-orange/20 transition-colors duration-200 ease-in-out'
+                    >
+                        Отмена
+                    </button>
                 </div>
-                {menus[activeMenu].component}
             </ModalBody>
         </ModalContainer>
     );

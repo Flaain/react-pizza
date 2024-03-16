@@ -2,6 +2,7 @@ import { CartInterface } from "@/pages/Cart";
 import { DeliveryInfo } from "@/pages/DeliveryMethod/model/interfaces";
 import { Field } from "../hooks/useForm/types";
 import { PaymentInfo, PaymentMethod } from "@/widgets/PaymentModal";
+import { ExtraInfo } from "@/app/model/interfaces";
 
 export type WithRequired<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 
@@ -191,5 +192,5 @@ export interface Profile {
     updatedAt: string;
     // orders: Array<Order>;
     token: string;
-    extraInfo: { ordersGoods: Array<{ id: string, src: string }>, ordersCount: number, totalItemsCount: number }
+    extraInfo: ExtraInfo
 }

@@ -83,13 +83,20 @@ export class AuthController extends ConfigController {
             const { password, addresses, ...rest } = savedUser.toObject();
 
             const extraInfo = orders.reduce((acc, order) => {
+                const isPayed = order.status === "PAID";
+                const totalOrdersPrice = acc.totalOrdersPrice + order.cart.total_price;
+                const purchaseAmount = acc.purchaseAmount + (isPayed ? (order.total_amount / 100) : 0);
+                const purchasePercent = (purchaseAmount / totalOrdersPrice) * 100;
+            
                 return {
                     ...acc,
                     totalItemsCount: acc.totalItemsCount + order.cart.items.length,
-                    totalOrdersPrice: acc.totalOrdersPrice + order.cart.total_price
-                }
-            }, { totalItemsCount: 0, totalOrdersPrice: 0 });
-
+                    purchasePercent,
+                    purchaseAmount,
+                    totalOrdersPrice,
+                };
+            }, { totalItemsCount: 0, totalOrdersPrice: 0, purchaseAmount: 0, purchasePercent: 0 });
+            
             return res.json({
                 user: {
                     ...rest,

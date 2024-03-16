@@ -1,4 +1,4 @@
-import { IApiCart, IApiCartChangeQuantity, IApiMethodParams, IRemoveFromCartParams, WithRequired } from "../model/interfaces";
+import { IApiCart, IApiCartChangeQuantity, IApiMethodParams, IRemoveFromCartParams, Profile, WithRequired } from "../model/interfaces";
 import { API } from "./api";
 import { CartItem } from "@/pages/Cart/model/interfaces";
 
@@ -81,6 +81,6 @@ export class CartAPI extends API {
             headers: { ...params.headers, ...this._headers, Authorization: `Bearer ${token}` },
         });
 
-        return this._checkResponse<{ _id: string }>(response);
+        return this._checkResponse<{ _id: string, extraInfo: Profile['extraInfo'] }>(response);
     };
 }

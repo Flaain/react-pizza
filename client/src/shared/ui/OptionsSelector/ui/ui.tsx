@@ -5,7 +5,7 @@ import { OptionsSelectorProps } from "@/shared/model/interfaces";
 const OptionsSelector = ({ options, onOptionChange, layoutId }: OptionsSelectorProps) => {
     return (
         <LayoutGroup id={layoutId}>
-            <ul className='grid' style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}>
+            <ul className='grid gap-1' style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}>
                 {options.map(({ id, label, isAvailable, isActive }) => {
                     return (
                         <li className='relative' key={id}>
@@ -17,10 +17,12 @@ const OptionsSelector = ({ options, onOptionChange, layoutId }: OptionsSelectorP
                                 />
                             )}
                             <label
-                                className={cn(
-                                    "px-9 py-2 rounded-lg flex items-center justify-center text-primary-black text-sm max-md:text-base font-bold transition-shadow duration-200 ease-in-out",
-                                    isAvailable ? "cursor-pointer" : "opacity-50 cursor-default"
-                                )}
+                                className={cn({
+                                    "px-9 py-2 rounded-lg flex items-center justify-center text-primary-black text-sm max-md:text-base font-bold": true,
+                                    "opacity-50 cursor-default": !isAvailable,
+                                    "cursor-pointer": !!isAvailable,
+                                    "hover:bg-white/20 transition-colors duration-200 ease-in-out": !!isAvailable
+                                })}
                             >
                                 <span className='z-50'>{label}</span>
                                 <input

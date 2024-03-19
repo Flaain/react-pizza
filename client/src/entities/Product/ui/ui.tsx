@@ -81,7 +81,7 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                                 isAvailable: types.some((type) => type === index),
                                 isActive: index === productState.type,
                             }))}
-                            layoutId={`${id}-types`}
+                            layoutId={`${id}-types-home-page`}
                             onOptionChange={handleTypeChange}
                             />
                         <OptionsSelector
@@ -91,7 +91,7 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                                 isAvailable: sizes.some(({ size: _size }) => _size === size),
                                 isActive: index === productState.size,
                             }))}
-                            layoutId={`${id}-sizes`}
+                            layoutId={`${id}-sizes-home-page`}
                             onOptionChange={handleSizeChange}
                         />
                     </div>

@@ -67,7 +67,7 @@ const Cart = () => {
                                 >
                                     Очистить корзину
                                 </button>
-                                {!!cartArr.length && (
+                                {cartArr.length > 1 && (
                                     <MinimizeButton
                                         title={isCartMinimized ? "показать товары" : "скрыть товары"}
                                         minimizeCartItems={isCartMinimized}

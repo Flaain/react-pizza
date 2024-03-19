@@ -19,7 +19,7 @@ const ProductList = () => {
     });
 
     return (
-        <ul className='py-[30px] flex flex-wrap justify-between items-center gap-10'>
+        <ul className='flex flex-wrap justify-between items-center gap-10'>
             {loading || cartLoading || isAuthInProgress
                 ? [...Array(6)].map((_, index) => <ProductSkeleton key={index} />)
                 : products.map((item, index, products) => (

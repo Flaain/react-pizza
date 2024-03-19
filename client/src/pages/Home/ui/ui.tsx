@@ -35,13 +35,13 @@ const Home = () => {
     return (
         <section>
             <Container>
-                <div className='flex flex-col gap-5'>
+                <div className='flex flex-col gap-5 pb-5'>
                     <Tools searchParams={searchParams} setSearchParams={setSearchParams} />
                     <Title title={`${title} пиццы`} />
                 </div>
                 <>
                     <ProductList />
-                    {perPageLoading && <Spinner position='bottom' />}
+                    {perPageLoading && <div className="relative pt-20 flex items-center justify-center"><Spinner position='bottom' /></div>}
                 </>
             </Container>
         </section>

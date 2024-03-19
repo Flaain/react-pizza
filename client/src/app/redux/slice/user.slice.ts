@@ -17,7 +17,7 @@ export const userSlice = createSlice({
             saveToLocalStorage({ key: localStorageKeys.JWT, data: payload.token });
         },
         logout: (state) => {
-            Object.assign(state, { ...userSlice.getInitialState(), token: null });
+            Object.assign(state, { ...userSlice.getInitialState(), token: null, isAuthInProgress: false });
 
             localStorage.removeItem(localStorageKeys.JWT);
         },

@@ -1,4 +1,4 @@
-const OptionsSelectorSkeleton = () => {
+const Skeleton = () => {
     return (
         <div className='sticky top-5 flex flex-col gap-2 justify-between p-5 min-w-[400px] min-h-[250px] rounded-xl bg-white shadow-xl border border-solid border-primary-gray'>
             <span className='w-[150px] h-[30px] bg-gray-100 rounded-full relative before:absolute before:inset-0 before:-translate-x-full before:animate-[shimmer_2s_infinite] before:bg-gradient-to-r before:from-transparent before:via-gray-200/10 before:to-transparent overflow-hidden isolate before:border-t before:border-primary-gray/30'></span>
@@ -32,4 +32,4 @@ const OptionsSelectorSkeleton = () => {
     );
 };
 
-export default OptionsSelectorSkeleton;
+export default Skeleton;

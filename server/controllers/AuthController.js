@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { ConfigController } from "./ConfigController.js";
 import { Order } from "../models/Order.js";
+import { months } from "../utils/constants/initial.js";
 
 export class AuthController extends ConfigController {
     signup = async (req, res) => {
@@ -81,13 +82,27 @@ export class AuthController extends ConfigController {
 
             const savedUser = await user.save();
             const { password, addresses, ...rest } = savedUser.toObject();
+            
+            const date = new Date();
+            const sixMonthsAgo = new Date(date.getFullYear(), date.getMonth() - 6, date.getDate());
+
+            const lastSixMonthsOrders = await Order.find({ createdAt: { $gte: sixMonthsAgo, $lt: date } }).lean();
+            
+            const lastSixMonthsOrdersMap = new Map();
+
+            lastSixMonthsOrders.forEach(order => {
+                const orderDate = new Date(order.createdAt);
+                const month = orderDate.getMonth();
+
+                lastSixMonthsOrdersMap.set(month, (lastSixMonthsOrdersMap.get(month) ?? 0) + 1);
+            });
 
             const extraInfo = orders.reduce((acc, order) => {
                 const isPayed = order.status === "PAID";
                 const totalOrdersPrice = acc.totalOrdersPrice + order.cart.total_price;
                 const purchaseAmount = acc.purchaseAmount + (isPayed ? (order.total_amount / 100) : 0);
                 const purchasePercent = (purchaseAmount / totalOrdersPrice) * 100;
-            
+
                 return {
                     ...acc,
                     totalItemsCount: acc.totalItemsCount + order.cart.items.length,
@@ -106,6 +121,7 @@ export class AuthController extends ConfigController {
                     extraInfo: {
                         ordersGoods: orders.flatMap(({ cart: { items } }) => items.map((item) => ({ id: item._id, src: item.imageUrl }))).reverse().slice(0, 5),
                         ordersCount: orders.length,
+                        lastSixMonthsOrders: [...lastSixMonthsOrdersMap.entries()].map(([date, count]) => ({ date: months[date], count })),
                         ...extraInfo
                     },
                 },

@@ -1,29 +1,43 @@
-import OptionsList from "./OptionsList";
-import { OptionsSelectorProps } from "../model/interfaces";
-import { initialSizes, initialTypes } from "@/shared/config/constants";
-import { ProductSelectorTypes } from "@/entities/Product/model/interfaces";
+import cn from "@/shared/lib/classNames";
+import { LayoutGroup, motion } from "framer-motion";
+import { OptionsSelectorProps } from "@/shared/model/interfaces";
 
-const OptionsSelector = (props: OptionsSelectorProps) => {
+const OptionsSelector = ({ options, onOptionChange, layoutId }: OptionsSelectorProps) => {
     return (
-        <div className='flex flex-col bg-primary-gray rounded-lg max-md:w-full'>
-            <OptionsList
-                data={props.types}
-                dispatch={props.handleChange}
-                initial={initialTypes}
-                segmentType={ProductSelectorTypes.SET_TYPE}
-                stateProperty='type'
-                state={props.state}
-            />
-            <OptionsList
-                classNames='grid grid-cols-3 gap-2 p-1'
-                data={props.sizes}
-                dispatch={props.handleChange}
-                initial={initialSizes}
-                segmentType={ProductSelectorTypes.SET_SIZE}
-                stateProperty='size'
-                state={props.state}
-            />
-        </div>
+        <LayoutGroup id={layoutId}>
+            <ul className='grid' style={{ gridTemplateColumns: `repeat(${options.length}, 1fr)` }}>
+                {options.map(({ id, label, isAvailable, isActive }) => {
+                    return (
+                        <li className='relative' key={id}>
+                            {isActive && (
+                                <motion.span
+                                    layoutId='options-selector'
+                                    className='absolute inset-0 z-10 bg-white rounded-lg'
+                                    transition={{ ease: "easeInOut", duration: 0.3 }}
+                                />
+                            )}
+                            <label
+                                className={cn(
+                                    "px-9 py-2 rounded-lg flex items-center justify-center text-primary-black text-sm max-md:text-base font-bold transition-shadow duration-200 ease-in-out",
+                                    isAvailable ? "cursor-pointer" : "opacity-50 cursor-default"
+                                )}
+                            >
+                                <span className='z-50'>{label}</span>
+                                <input
+                                    type='radio'
+                                    name='type'
+                                    className='sr-only'
+                                    value={label}
+                                    checked={isActive}
+                                    disabled={!isAvailable}
+                                    {...(isAvailable && { onChange: () => onOptionChange(id) })}
+                                />
+                            </label>
+                        </li>
+                    );
+                })}
+            </ul>
+        </LayoutGroup>
     );
 };
 

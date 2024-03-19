@@ -5,44 +5,48 @@ import { initialSizes } from "../utils/constants/initial.js";
 
 export class ConfigController {
     _revalidateCart = async (cart = []) => {
-        const response = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.productId).join("&id[]=")}`);
-        const actualProducts = await response.json();
-        
-        const revalidatedCart = [...new Map(cart.map((item) => [`${item.productId}_${item.size}_${item.type}`, item])).values()].reduce((acc, { _id, ...product }) => {
-                const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
+        try {
+            const response = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.productId).join("&id[]=")}`);
+            const actualProducts = await response.json();
 
-                if (!cartItem) return acc;
-                // throw new Error(`Не удалось найти продукт с id - ${item.id}`);
+            const revalidatedCart = [...new Map(cart.map((item) => [`${item.productId}_${item.size}_${item.type}`, item])).values()].reduce((acc, { _id, ...product }) => {
+                    const cartItem = actualProducts.find((actualProduct) => actualProduct.id === product.productId);
 
-                const size = cartItem.sizes.find(({ size }) => size === initialSizes[product.size]);
-                const price = size?.price ?? cartItem.sizes[0].price;
-                const count = Math.min(Math.max(product.count, 1), 10);
-                const type = cartItem.types.find((type) => type === product.type);
+                    if (!cartItem) return acc;
+                    // throw new Error(`Не удалось найти продукт с id - ${item.id}`);
 
-                return {
-                    ...acc,
-                    cart: {
-                        ...acc.cart,
-                        items: [
-                            ...acc.cart.items,
-                            {
-                                ...product,
-                                ...(isValidObjectId(_id) && { _id }),
-                                productId: cartItem.id,
-                                imageUrl: cartItem.imageUrl,
-                                title: cartItem.title,
-                                type: type ?? cartItem.types[0],
-                                size: size ? product.size : initialSizes.findIndex((size) => size === cartItem.sizes[0].size),
-                                count,
-                                price,
-                            },
-                        ],
-                        total_price: acc.cart.total_price + price * count,
-                    },
-                };
-            }, { cart: { items: [], total_price: 0 } });
+                    const size = cartItem.sizes.find(({ size }) => size === initialSizes[product.size]);
+                    const price = size?.price ?? cartItem.sizes[0].price;
+                    const count = Math.min(Math.max(product.count, 1), 10);
+                    const type = cartItem.types.find((type) => type === product.type);
 
-        return revalidatedCart;
+                    return {
+                        ...acc,
+                        cart: {
+                            ...acc.cart,
+                            items: [
+                                ...acc.cart.items,
+                                {
+                                    ...product,
+                                    ...(isValidObjectId(_id) && { _id }),
+                                    productId: cartItem.id,
+                                    imageUrl: cartItem.imageUrl,
+                                    title: cartItem.title,
+                                    type: type ?? cartItem.types[0],
+                                    size: size ? product.size : initialSizes.findIndex((size) => size === cartItem.sizes[0].size),
+                                    count,
+                                    price,
+                                },
+                            ],
+                            total_price: acc.cart.total_price + price * count,
+                        },
+                    };
+                }, { cart: { items: [], total_price: 0 } });
+
+            return revalidatedCart;
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     _getUser = async (token) => {

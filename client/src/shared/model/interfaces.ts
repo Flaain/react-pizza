@@ -194,3 +194,9 @@ export interface Profile {
     token: string;
     extraInfo: ExtraInfo
 }
+
+export interface OptionsSelectorProps {
+    options: Array<{ id: number, label: string; isAvailable?: boolean, isActive: boolean }>;
+    layoutId: string;
+    onOptionChange: (index: number) => void;
+}

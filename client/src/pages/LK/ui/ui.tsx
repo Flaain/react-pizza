@@ -1,11 +1,11 @@
 import Stacked from "@/shared/ui/Stacked/ui/ui";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
+import LogoutBtn from "@/features/LogoutBtn/ui/ui";
 import { routerList } from "@/shared/config/constants";
 import { declOfNum } from "@/shared/lib/helpers/declOfNum";
 import { userSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { Link } from "react-router-dom";
-import LogoutBtn from "@/features/LogoutBtn/ui/ui";
 
 const LKPage = () => {
     const { extraInfo, lang, name, email } = useAppSelector(userSelector);
@@ -22,11 +22,9 @@ const LKPage = () => {
                             {name}
                         </h2>
                     </div>
-                    <div className='mt-auto flex items-center gap-2'>
                         <p className='mt-auto text-gray-300 truncate' title={email!}>
                             Почта: <span className='text-primary-black'>{email}</span>
                         </p>
-                    </div>
                 </Link>
                 <LogoutBtn className='z-50' />
             </div>

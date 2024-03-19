@@ -14,8 +14,10 @@ export const cartSlice = createSlice({
     initialState,
     reducers: {
         setCart: (state, { payload }: PayloadAction<IApiCart>) => {
-            state.cart = new Map(payload.items.map((item) => [`${item.productId}_${item.size}_${item.type}`, item]));
-            cartSlice.caseReducers.updateViewAndStorage(state);
+            if (payload?.items?.length) {
+                state.cart = new Map(payload.items.map((item) => [`${item.productId}_${item.size}_${item.type}`, item]));
+                cartSlice.caseReducers.updateViewAndStorage(state);
+            }
         },
         addToCart(state, { payload }: PayloadAction<Omit<CartInterface, "category">>) {
             const key = `${payload.productId}_${payload.size}_${payload.type}`;
@@ -63,14 +65,16 @@ export const cartSlice = createSlice({
             .addCase(getCart.pending, (state) => {
                 state.cartLoading = true;
             })
-            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<IApiCart>) => {
-                state.cart = new Map(payload.items.map((product) => [`${product.productId}_${product.size}_${product.type}`, product]));
-                state.cartLoading = false;
-                cartSlice.caseReducers.updateViewAndStorage(state);
+            .addCase(getCart.fulfilled, (state, { payload }: PayloadAction<IApiCart | undefined>) => {
+                if (payload) {
+                    state.cart = new Map(payload.items.map((product) => [`${product.productId}_${product.size}_${product.type}`, product]));
+                    state.cartLoading = false;
+                    cartSlice.caseReducers.updateViewAndStorage(state);
+                }
             })
-            .addCase(getCart.rejected, (state, { error }) => {
+            .addCase(getCart.rejected, (state, { error, payload }) => {
                 state.cartLoading = false;
-                console.log(error);
+                console.log(payload);
             })
             .addCase(addToCartThunk.fulfilled, (state, { payload }: PayloadAction<IApiCart>) => {
                 payload.items.forEach((product) => state.cart.set(`${product.productId}_${product.size}_${product.type}`, product));

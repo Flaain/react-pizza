@@ -6,11 +6,11 @@ import PriceBlock from "@/widgets/PriceBlock/ui/ui";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import BrowserTitle from "@/shared/ui/BrowserTitle";
 import RelatedItems from "@/widgets/RelatedItems/ui/ui";
+import OptionsSelectorSkeleton from "@/shared/ui/OptionsSelector/ui/Skeleton";
 import { useAsyncValue } from "react-router-dom";
 import { IApiData, Product } from "@/shared/model/interfaces";
 import { useAppSelector } from "@/shared/model/store";
 import { cartSelector, userSelector } from "@/shared/model/selectors";
-import { OptionsSelectorSkeleton } from "@/shared/ui/OptionsSelector";
 
 const ResolvedProductDetails = () => {
     const { data: product } = useAsyncValue() as IApiData<Product>;
@@ -30,7 +30,11 @@ const ResolvedProductDetails = () => {
                         loading='lazy'
                         skeleton={<ImageSkeleton width={450} height={450} />}
                     />
-                    {(cartLoading || isAuthInProgress) ? <OptionsSelectorSkeleton /> : <PriceBlock activeItem={product} />}
+                    {cartLoading || isAuthInProgress ? (
+                        <OptionsSelectorSkeleton />
+                    ) : (
+                        <PriceBlock activeItem={product} />
+                    )}
                 </div>
                 <div className='flex flex-col gap-5 pb-5'>
                     <h2 className='text-2xl font-bold text-primary-black'>О Пицце </h2>

@@ -2,7 +2,7 @@ import CollapseInfoSkeleton from "@/features/CollapseInfo/ui/Skeleton";
 import cn from "@/shared/lib/classNames";
 import Container from "@/shared/ui/Container";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
-import { OptionsSelectorSkeleton } from "@/shared/ui/OptionsSelector";
+import OptionsSelectorSkeleton from "@/shared/ui/OptionsSelector/ui/Skeleton";
 
 const ProductDetailsSkeleton = () => {
     return (

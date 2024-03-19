@@ -1,5 +1,4 @@
 import React from "react";
-import { uuidv4 } from "./custom.uuidv4";
 import { IExternalToast, IHeights, IToast } from "./types";
 
 const DEFAULT_TOAST_DURATION = 4000;
@@ -13,7 +12,7 @@ export const useToast = () => {
         setToasts((prevState) => [
             {
                 ...toast,
-                id: toast?.id ?? uuidv4(),
+                id: toast?.id ?? window.crypto.randomUUID(),
                 duration: toast?.duration ?? DEFAULT_TOAST_DURATION,
             },
             ...(prevState.length === MAX_TOASTS ? prevState.slice(0, MAX_TOASTS - 1) : prevState),

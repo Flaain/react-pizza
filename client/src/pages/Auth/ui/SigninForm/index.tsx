@@ -42,10 +42,9 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
     const handleSubmit = async (data: Record<string, string>) => {
         abortControllerRef.current && abortControllerRef.current.abort();
         abortControllerRef.current = new AbortController();
-
         try {
             setLoading(true);
-
+            
             const { data: { user } } = await api.user.signin({
                 body: JSON.stringify(data),
                 signal: abortControllerRef.current.signal,

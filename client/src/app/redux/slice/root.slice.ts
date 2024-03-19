@@ -19,7 +19,7 @@ export const rootSlice = createSlice({
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.error = action.payload;
-                state.loading = false;
+                // state.loading = false;
             })
             .addCase(getProductPerPage.pending, (state) => {
                 state.perPageLoading = true;
@@ -29,9 +29,9 @@ export const rootSlice = createSlice({
                 state.products = [...state.products, ...action.payload.items];
                 state.perPageLoading = false;
             })
-            .addCase(getProductPerPage.rejected, (state) => {
-                state.perPageLoading = false;
-            });
+            // .addCase(getProductPerPage.rejected, (state) => {
+            //     state.perPageLoading = false;
+            // });
     },
 });
 

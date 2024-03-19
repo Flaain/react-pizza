@@ -2,17 +2,19 @@ import React from "react";
 import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import getInitialState from "../lib/getInitialState";
 import productSelectorReducer from "@/entities/Product/model/reducer";
-import { OptionsSelector } from "@/shared/ui/OptionsSelector";
+import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";
 import { AddToCartButton } from "@/features/AddToCartButton";
 import { Props } from "../model/interfaces";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
-import { Action, ProductSelectorTypes } from "@/entities/Product/model/interfaces";
+import { ProductSelectorTypes } from "@/entities/Product/model/interfaces";
 import { useSearchParams } from "react-router-dom";
 import { addToCart } from "@/pages/Cart";
 import { ProductSelectorState } from "@/shared/model/interfaces";
 import { addToCartThunk } from "@/pages/Cart/model/asyncActions";
 import { useCart } from "@/pages/Cart/lib/hooks/useCart";
+import { initialSizes, initialTypes } from "@/shared/config/constants";
+import { getRelativeSizeString } from "@/entities/Product/lib/helpers/getRelativeSizeString";
 
 const PriceBlock = ({ activeItem }: Props) => {
     const { cartArr } = useCart();
@@ -29,27 +31,33 @@ const PriceBlock = ({ activeItem }: Props) => {
 
     const dispatch = useAsyncThunkDispatch();
 
-    const onProductOptionChange = (action: Action) => {
-        const params = { [ProductSelectorTypes.SET_SIZE]: "size", [ProductSelectorTypes.SET_TYPE]: "type" };
+    const handleTypeChange = React.useCallback((index: number) => {
+        productDispatch({ type: ProductSelectorTypes.SET_TYPE, payload: { type: index } });
+        setSearchParams((prevState) => {
+            prevState.set("type", index.toString());
+            return prevState;
+        })
+    }, []);
 
-        setSearchParams(
-            (prevState) => {
-                prevState.set(
-                    params[action.type as keyof typeof params],
-                    String(action.payload[params[action.type as keyof typeof params] as keyof typeof action.payload])
-                );
-                return prevState;
-            },
-            { replace: true }
-        );
-        productDispatch(action);
-    };
+    const handleSizeChange = React.useCallback((index: number) => {
+        const price = activeItem.sizes.find(({ size }) => size === initialSizes[index])!.price;
+
+        productDispatch({ type: ProductSelectorTypes.SET_SIZE, payload: { size: index, price } });
+        setSearchParams((prevState) => {
+            prevState.set("size", index.toString());
+            return prevState;
+        })
+    }, []);
 
     const handleAddToCart = async () => {
         try {
             productDispatch({ type: ProductSelectorTypes.SET_ADD_TO_CART, payload: { count: 1, loading: true } });
             await dispatch(
-                isAuthenticated ? addToCartThunk({ product: { productId: activeItem.id, size: productState.size, type: productState.type }, token: token as string })
+                isAuthenticated
+                    ? addToCartThunk({
+                          product: { productId: activeItem.id, size: productState.size, type: productState.type },
+                          token: token as string,
+                      })
                     : addToCart({ ...productState, productId: activeItem.id, title, imageUrl })
             );
         } catch (error) {
@@ -60,14 +68,30 @@ const PriceBlock = ({ activeItem }: Props) => {
     };
 
     return (
-        <div className='sticky top-5 gap-5 flex flex-col justify-between p-5 min-w-[300px] min-h-[200px] rounded-xl bg-white shadow-xl border border-solid border-primary-gray'>
+        <div className='sticky top-28 gap-5 flex flex-col justify-between p-5 min-w-[300px] min-h-[200px] rounded-xl bg-white shadow-xl border border-solid border-primary-gray'>
             <strong className='text-2xl font-bold'>{getIntlPrice(productState.price)}</strong>
-            <OptionsSelector
-                {...activeItem}
-                {...productState}
-                handleChange={onProductOptionChange}
-                state={productState}
-            />
+            <div className='flex p-1 gap-1 flex-col bg-primary-gray rounded-lg max-md:w-full'>
+                <OptionsSelector
+                    options={initialTypes.map((type, index) => ({
+                        id: index,
+                        label: type,
+                        isAvailable: activeItem.types.some((type) => type === index),
+                        isActive: index === productState.type,
+                    }))}
+                    layoutId={`${id}-types`}
+                    onOptionChange={handleTypeChange}
+                />
+                <OptionsSelector
+                    options={initialSizes.map((size, index) => ({
+                        id: index,
+                        label: getRelativeSizeString(size),
+                        isAvailable: activeItem.sizes.some(({ size: _size }) => _size === size),
+                        isActive: index === productState.size,
+                    }))}
+                    layoutId={`${id}-sizes`}
+                    onOptionChange={handleSizeChange}
+                />
+            </div>
             <AddToCartButton
                 title='Добавить в корзину'
                 quantity={count}

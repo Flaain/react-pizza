@@ -29,7 +29,7 @@ const ModalContainer = ({ children, closeHandler }: Props) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ ease: "easeInOut", duration: 0.2 }}
-            className='fixed inset-0 bg-modal z-50 flex items-center justify-center'
+            className='fixed inset-0 bg-modal z-[9999] flex items-center justify-center'
             onClick={handleOverlayClick}
         >
             {children}

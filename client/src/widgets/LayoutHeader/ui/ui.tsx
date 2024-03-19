@@ -12,7 +12,7 @@ export const LayoutHeader = () => {
     const { isAuthenticated } = useAppSelector(userSelector);
 
     return (
-        <header className='py-[25px] box-border sticky bg-white left-0 right-0 top-0 z-50'>
+        <header className='py-[25px] box-border sticky bg-white left-0 right-0 top-0 z-[100]'>
             <Container classNames='max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border flex max-sm:flex-col items-center justify-between gap-5'>
                 <Logo title='React Pizza' description='самая вкусная пицца во вселенной' />
                 <Search />

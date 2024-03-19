@@ -4,7 +4,6 @@ import { useAppSelector } from "@/shared/model/store";
 import { useAsyncValue, useNavigate, useSearchParams } from "react-router-dom";
 import { DeliveryInfo, DeliveryMethodType } from "@/pages/DeliveryMethod/model/interfaces";
 import { Address, IApiData } from "@/shared/model/interfaces";
-import { useTabSlider } from "@/shared/hooks/useTabSlider";
 import { routerList } from "@/shared/config/constants";
 import { api } from "@/shared/api";
 import { useDispatch } from "react-redux";
@@ -28,13 +27,10 @@ export const useDeliveryMethodTabs = () => {
         return initalTabs[tab] ? tab : 0;
     });
 
-    const { tabLeft, tabRef, tabWidth, setActiveTabIndex } = useTabSlider<HTMLLIElement>(tab);
-    
     const navigate = useNavigate();
     const dispatch = useDispatch();
     
     const handleMethodChange = React.useCallback((index: number) => {
-        setActiveTabIndex(index);
         setTab(index);
         setSearchParams((prevState) => {
             prevState.set("method", String(index));
@@ -74,7 +70,6 @@ export const useDeliveryMethodTabs = () => {
         currentInfo,
         initalTabs,
         addresses: items[initalTabs[tab].method as keyof typeof items],
-        slider: { tabLeft, tabRef, tabWidth },
         isSaveBtnDisabled,
         handleMethodChange,
         handleAddressChange,

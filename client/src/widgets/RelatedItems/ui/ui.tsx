@@ -6,6 +6,7 @@ import RelatedItem from "./RelatedItem";
 import { api } from "@/shared/api";
 import { Props } from "../model/interfaces";
 import { Product } from "@/shared/model/interfaces";
+import Typography from "@/shared/ui/Typography/ui/ui";
 
 const RelatedItems = ({ activeItem, title }: Props) => {
     const [items, setItems] = React.useState<Array<Product>>([]);
@@ -47,7 +48,7 @@ const RelatedItems = ({ activeItem, title }: Props) => {
     return (
         <div className='w-full overflow-hidden'>
             <div className='flex items-center justify-between'>
-                <h2 className='text-2xl font-bold text-primary-black'>{title}</h2>
+                <Typography as="h2" size="2xl" weight="medium">{title}</Typography>
                 <div className='hidden items-center justify-between gap-[10px] md:flex'>
                     <button
                         disabled={isPrevDisabled}

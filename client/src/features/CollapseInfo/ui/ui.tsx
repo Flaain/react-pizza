@@ -1,5 +1,6 @@
 import React from "react";
 import cn from "@/shared/lib/classNames";
+import Typography from "@/shared/ui/Typography/ui/ui";
 import { Props } from "../model/interfaces";
 
 const CollapseInfo = ({ description, MAX_LENGTH = 100, title }: Props) => {
@@ -14,8 +15,12 @@ const CollapseInfo = ({ description, MAX_LENGTH = 100, title }: Props) => {
                         "after:absolute after:bg-gradient-to-b after:from-[#ffffff00] after:to-white after:h-[50px] after:bottom-0 after:w-full"
                 )}
             >
-                <h3 className='text-primary-black text-base font-medium'>{title}</h3>
-                <p className={cn("max-w-[700px]", !expanded && "max-h-[70px] overflow-hidden")}>{description}</p>
+                <Typography as='h3' size='md' weight='medium'>
+                    {title}
+                </Typography>
+                <Typography className={cn("max-w-[700px]", !expanded && "max-h-[70px] overflow-hidden")}>
+                    {description}
+                </Typography>
             </div>
             {description.length > MAX_LENGTH && (
                 <button

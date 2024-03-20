@@ -1,11 +1,9 @@
-import ModalContainer from "@/shared/ui/ModalContainer/ui";
-import ModalBody from "@/shared/ui/ModalBody/ui";
-import ModalHeader from "@/shared/ui/ModalHeader/ui";
 import PaymentMain from "./PaymentMain";
 import cn from "@/shared/lib/classNames";
 
 import { usePaymentModal } from "../lib/hooks/usePaymentModal";
 import { Props } from "../model/interfaces";
+import { ModalBody, ModalContainer, ModalHeader } from "@/shared/ui/Modal";
 
 const PaymentModal = ({ closeHandler }: Props) => {
     const { currentInfo, setCurrentInfo, handleSave, isSaveBtnDisabled } = usePaymentModal(closeHandler);

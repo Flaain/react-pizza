@@ -15,6 +15,7 @@ import { addToCartThunk } from "@/pages/Cart/model/asyncActions";
 import { useCart } from "@/pages/Cart/lib/hooks/useCart";
 import { initialSizes, initialTypes } from "@/shared/config/constants";
 import { getRelativeSizeString } from "@/entities/Product/lib/helpers/getRelativeSizeString";
+import AnimatedNumber from "@/shared/ui/AnimatedNumber/ui/ui";
 
 const PriceBlock = ({ activeItem }: Props) => {
     const { cartArr } = useCart();
@@ -36,7 +37,7 @@ const PriceBlock = ({ activeItem }: Props) => {
         setSearchParams((prevState) => {
             prevState.set("type", index.toString());
             return prevState;
-        })
+        }, { replace: true });
     }, []);
 
     const handleSizeChange = React.useCallback((index: number) => {
@@ -46,7 +47,7 @@ const PriceBlock = ({ activeItem }: Props) => {
         setSearchParams((prevState) => {
             prevState.set("size", index.toString());
             return prevState;
-        })
+        }, { replace: true });
     }, []);
 
     const handleAddToCart = async () => {
@@ -69,7 +70,7 @@ const PriceBlock = ({ activeItem }: Props) => {
 
     return (
         <div className='sticky top-28 gap-5 flex flex-col justify-between p-5 min-w-[300px] min-h-[200px] rounded-xl bg-white shadow-xl border border-solid border-primary-gray'>
-            <strong className='text-2xl font-bold'>{getIntlPrice(productState.price)}</strong>
+            <AnimatedNumber value={productState.price} cb={(price) => getIntlPrice(price)}/>
             <div className='flex p-1 gap-1 flex-col bg-primary-gray rounded-lg max-md:w-full'>
                 <OptionsSelector
                     options={initialTypes.map((type, index) => ({

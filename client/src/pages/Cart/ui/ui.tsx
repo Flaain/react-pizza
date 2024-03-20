@@ -15,6 +15,7 @@ import { useAppSelector } from "@/shared/model/store";
 import { AnimatePresence } from "framer-motion";
 import { EmptyCart } from "../model/lazy";
 import { useCart } from "../lib/hooks/useCart";
+import Typography from "@/shared/ui/Typography/ui/ui";
 
 const Cart = () => {
     const { priceView: { totalItems } } = useAppSelector(cartSelector);
@@ -57,9 +58,9 @@ const Cart = () => {
                         )}
                     >
                         <div className='flex items-center justify-between sticky top-0 bg-white z-10 py-5'>
-                            <h1 className='text-2xl font-bold text-primary-black'>
+                            <Typography as='h1' size="2xl" weight="bold">
                                 Корзина <sup className='text-lg'>{totalItems}</sup>
-                            </h1>
+                            </Typography>
                             <div className='flex items-center gap-5'>
                                 <button
                                     onClick={handleClearCart}

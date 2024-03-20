@@ -1,10 +1,10 @@
 import React from "react";
 import cn from "@/shared/lib/classNames";
 import Container from "@/shared/ui/Container";
-import Title from "@/shared/ui/Title/ui";
 import { Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { Props } from "../model/interfaces";
+import Typography from "@/shared/ui/Typography/ui/ui";
 
 const NotFound = ({
     title,
@@ -33,7 +33,7 @@ const NotFound = ({
                     screen ? "min-h-screen" : "min-h-[calc(100vh-132px)]"
                 )}
             >
-                <Title title={title} />
+                <Typography size="3xl" weight="bold">{title}</Typography>
                 {description && (
                     <p className='text-gray-400 text-xl font-medium text-center max-md:text-lg'>{description}</p>
                 )}

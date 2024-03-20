@@ -30,11 +30,7 @@ const ResolvedProductDetails = () => {
                         loading='lazy'
                         skeleton={<ImageSkeleton width={450} height={450} />}
                     />
-                    {cartLoading || isAuthInProgress ? (
-                        <OptionsSelectorSkeleton />
-                    ) : (
-                        <PriceBlock activeItem={product} />
-                    )}
+                    {(cartLoading || isAuthInProgress) ? <OptionsSelectorSkeleton /> : <PriceBlock activeItem={product} />}
                 </div>
                 <div className='flex flex-col gap-5 pb-5'>
                     <h2 className='text-2xl font-bold text-primary-black'>О Пицце </h2>

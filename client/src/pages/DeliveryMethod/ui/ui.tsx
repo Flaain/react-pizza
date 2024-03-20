@@ -1,12 +1,10 @@
 import React from "react";
-import ModalContainer from "@/shared/ui/ModalContainer/ui";
 import TabsSkeleton from "@/shared/ui/Tabs/ui/Skeletons/TabsTriggerSkeleton";
-import ModalBody from "@/shared/ui/ModalBody/ui";
-import ModalHeader from "@/shared/ui/ModalHeader/ui";
 
 import { DeliveryMethodProps } from "../model/interfaces";
 import { useNavigate } from "react-router-dom";
 import { DeliveryMethodContent } from "../model/lazy";
+import { ModalBody, ModalContainer, ModalHeader } from "@/shared/ui/Modal";
 
 const DeliveryMethod = ({ title }: DeliveryMethodProps) => {
     const navigate = useNavigate();

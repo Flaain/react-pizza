@@ -1,6 +1,6 @@
 import getImageUrl from "@/shared/lib/helpers/getImageUrl";
-import Title from "@/shared/ui/Title/ui";
 import { DetailsHeaderProps } from "../../model/interfaces";
+import Typography from "@/shared/ui/Typography/ui/ui";
 
 const DetailsHeader = ({ title, rating }: DetailsHeaderProps) => {
     return (
@@ -13,7 +13,9 @@ const DetailsHeader = ({ title, rating }: DetailsHeaderProps) => {
                 >
                     <img src={getImageUrl("arrow.svg")} alt='back arrow' className='mr-[2px]' />
                 </button>
-                <Title title={title} />
+                <Typography as='h1' size='3xl' weight='bold'>
+                    {title}
+                </Typography>
             </div>
             <div className='flex items-center gap-5'>
                 <span className='flex items-center gap-2 font-semibold'>

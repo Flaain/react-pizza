@@ -4,6 +4,7 @@ import PasswordInput from "@/shared/ui/PasswordInput/ui/ui";
 import AuthButton from "../AuthButton";
 import cn from "@/shared/lib/classNames";
 import Toaster from "@/shared/ui/Toaster/ui/ui";
+import Typography from "@/shared/ui/Typography/ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
 import { useForm } from "@/shared/hooks/useForm";
@@ -21,7 +22,12 @@ import { useToast } from "@/shared/hooks/useToast";
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
     const { cart } = useAppSelector(cartSelector);
-    const { toast, toasts, heights, actions: { setHeights, removeToast } } = useToast();
+    const {
+        toast,
+        toasts,
+        heights,
+        actions: { setHeights, removeToast },
+    } = useToast();
 
     const [loading, setLoading] = React.useState(false);
 
@@ -31,7 +37,9 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     const updateCartOnSignin = async (token: string) => {
         try {
-            const { data: { cart: updatedCart } } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
+            const {
+                data: { cart: updatedCart },
+            } = await api.cart.updateCart({ token, body: JSON.stringify([...cart.values()]) });
             dispatch(setCart(updatedCart));
         } catch (error) {
             console.error(error);
@@ -42,24 +50,25 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
     const handleSubmit = async (data: Record<string, string>) => {
         abortControllerRef.current && abortControllerRef.current.abort();
         abortControllerRef.current = new AbortController();
+
         try {
             setLoading(true);
-            
-            const { data: { user } } = await api.user.signin({
-                body: JSON.stringify(data),
-                signal: abortControllerRef.current.signal,
-            });
+
+            const {
+                data: { user },
+            } = await api.user.signin({ body: JSON.stringify(data), signal: abortControllerRef.current.signal });
 
             cart.size ? updateCartOnSignin(user.token) : dispatch(setCart(user.cart));
 
             dispatch(signin(user));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError && toast.error(error.message, {
-                closeButton: true,
-                recalculateRemainingTime: true,
-                description: "Проверьте правильность введенных данных",
-            });
+            error instanceof ApiError &&
+                toast.error(error.message, {
+                    closeButton: true,
+                    recalculateRemainingTime: true,
+                    description: "Проверьте правильность введенных данных",
+                });
         } finally {
             setLoading(false);
         }
@@ -69,20 +78,24 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
         <div className='p-10 flex flex-col justify-center items-center max-w-[600px] w-full box-content'>
             <Toaster toasts={toasts} heights={heights} setHeights={setHeights} removeToast={removeToast} />
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
-                <h1 className='text-5xl font-bold text-primary-black'>Вход</h1>
-                <p className='text-primary-black'>
-                    Нет аккаунта?&nbsp;
-                    <span
-                        onClick={() => setActiveForm("signup")}
-                        className='text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
+                <Typography as='h1' size='5xl' weight='bold'>
+                    Вход
+                </Typography>
+                <div className='inline-flex items-center'>
+                    <Typography as='p' size='md'>
+                        Уже есть аккаунт?&nbsp;
+                    </Typography>
+                    <button
+                        onClick={() => setActiveForm("signin")}
+                        className='text-lg font-medium text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
                     >
-                        Создайте прямо сейчас
-                    </span>
-                </p>
+                        Войти
+                    </button>
+                </div>
             </div>
             <form className='flex flex-col gap-8 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
                 <label className='flex flex-col gap-2 transition-all duration-200 ease-in-out relative'>
-                    <span className='text-primary-black'>Введите почту</span>
+                    <Typography>Введите почту</Typography>
                     <Input
                         {...register(signinform.email, { validateOnChange: true })}
                         className='border border-solid border-primary-gray px-5 py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
@@ -102,7 +115,15 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                     hasEye
                     className='border border-solid border-primary-gray pl-5 pr-[60px] py-2 rounded-lg outline-gray-200 max-w-[600px] w-full'
                 />
-                <span className={cn({ "text-primary-orange font-medium": true, "-mt-5": !errors["password"] })}>Забыли пароль?</span>
+                <button
+                    type='button'
+                    className={cn({
+                        "text-primary-orange font-medium self-start": true,
+                        "-mt-5": !errors["password"],
+                    })}
+                >
+                    Забыли пароль?
+                </button>
                 <AuthButton title='Войти' disabled={!isFormValid || loading} />
             </form>
         </div>

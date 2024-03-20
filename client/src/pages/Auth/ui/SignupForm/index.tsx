@@ -2,6 +2,7 @@ import React from "react";
 import PasswordInput from "@/shared/ui/PasswordInput/ui/ui";
 import Input from "@/shared/ui/Input/ui";
 import AuthButton from "../AuthButton";
+import Typography from "@/shared/ui/Typography/ui/ui";
 import { useForm } from "@/shared/hooks/useForm";
 import { FormProps } from "../../model/interfaces";
 import { signupform } from "../../model/form";
@@ -16,7 +17,7 @@ import { cartSelector } from "@/shared/model/selectors";
 
 const SignupForm = ({ setActiveForm }: FormProps) => {
     const [loading, setLoading] = React.useState(false);
-    const [errorState, setErrorState] = React.useState<{ prevForm: Record<string, string>; error: string; valid: boolean } | null>(null);
+    const [errorState, setErrorState] = React.useState<{ prevForm: Record<string, string>; error: string; valid: boolean; } | null>(null);
 
     const { errors, isFormValid, register, submitHandler, getFormValues } = useForm({ provideFormValues: true });
     const { cart } = useAppSelector(cartSelector);
@@ -28,17 +29,20 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
     const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         const formValues = { ...getFormValues(), [name]: value }; // don't like it at all but right now can't figure how get actual values
 
-        errorState && setErrorState((prevState) => {
-            const valid = Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]);
-            return { ...prevState!, valid };
-        });
+        errorState &&
+            setErrorState((prevState) => {
+                const valid = Object.entries(prevState!.prevForm).every(([key, value]) => value !== formValues[key]);
+                return { ...prevState!, valid };
+            });
     };
 
     const regOptions: RegisterOptions = { onChange: handleChange, validateOnChange: true };
 
     const updateCartOnSignup = async (token: string) => {
         try {
-            const { data: { cart: updatedCart } } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
+            const {
+                data: { cart: updatedCart },
+            } = await api.cart.updateCart({ body: JSON.stringify([...cart.values()]), token });
 
             dispatch(setCart(updatedCart));
         } catch (error) {
@@ -54,9 +58,11 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
         try {
             setLoading(true);
 
-            const { data: { user } } = await api.user.signup({ 
-                body: JSON.stringify({ name, email, password }), 
-                signal: controller.current.signal 
+            const {
+                data: { user },
+            } = await api.user.signup({
+                body: JSON.stringify({ name, email, password }),
+                signal: controller.current.signal,
             });
 
             cart.size ? updateCartOnSignup(user.token) : dispatch(setCart(user.cart));
@@ -73,16 +79,18 @@ const SignupForm = ({ setActiveForm }: FormProps) => {
     return (
         <div className='p-10 flex flex-col justify-center items-center max-w-[600px] w-full box-content'>
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
-                <h1 className='text-5xl font-bold text-primary-black'>Регистрация</h1>
-                <p className='text-primary-black'>
-                    Уже есть аккаунт?&nbsp;
-                    <span
+                <Typography as='h1' size='5xl' weight='bold'>
+                    Регистрация
+                </Typography>
+                <div className='inline-flex items-center'>
+                    <Typography as='p'>Уже есть аккаунт?&nbsp;</Typography>
+                    <button
                         onClick={() => setActiveForm("signin")}
-                        className='text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
+                        className='text-lg font-medium text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
                     >
                         Войти
-                    </span>
-                </p>
+                    </button>
+                </div>
             </div>
             <form className='flex flex-col gap-8 max-w-[600px] w-full' onSubmit={submitHandler(handleSubmit)}>
                 {Object.entries(signupform).map(([key, field]) => (

@@ -2,8 +2,8 @@ import React from "react";
 import Container from "@/shared/ui/Container";
 import ProductList from "@/widgets/ProductList/ui";
 import Tools from "@/widgets/Tools/ui";
-import Title from "@/shared/ui/Title/ui";
 import Spinner from "@/shared/ui/Spinner/ui";
+import Typography from "@/shared/ui/Typography/ui/ui";
 import getNotFoundTitle from "../lib/helpers/getNotFoundTitle";
 import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
 import { useSearchParams } from "react-router-dom";
@@ -28,20 +28,24 @@ const Home = () => {
         dispatch(fetchProducts(controller));
 
         return () => controller.abort();
-    }, [searchParams])
-    
+    }, [searchParams]);
+
     if (!loading && !products.length) return <NotFound title={getNotFoundTitle(activeCategory, searchParams.get("search") ?? "")} backLink />;
 
     return (
-        <section>
+        <section className="pb-5">
             <Container>
                 <div className='flex flex-col gap-5 pb-5'>
                     <Tools searchParams={searchParams} setSearchParams={setSearchParams} />
-                    <Title title={`${title} пиццы`} />
+                    <Typography as="h1" size="3xl" weight="bold">{`${title} пиццы`}</Typography>
                 </div>
                 <>
                     <ProductList />
-                    {perPageLoading && <div className="relative pt-20 flex items-center justify-center"><Spinner position='bottom' /></div>}
+                    {perPageLoading && (
+                        <div className='relative pt-20 flex items-center justify-center'>
+                            <Spinner position='bottom' />
+                        </div>
+                    )}
                 </>
             </Container>
         </section>

@@ -3,13 +3,14 @@ import productSelectorReducer from "../model/reducer";
 import ImageSkeleton from "@/shared/ui/Image/ui/Skeleton";
 import Image from "@/shared/ui/Image/ui/ui";
 import OptionsSelector from "@/shared/ui/OptionsSelector/ui/ui";
+import AnimatedNumber from "@/shared/ui/AnimatedNumber/ui/ui";
+import getIntlPrice from "@/shared/lib/helpers/getIntlPrice";
 import { Link } from "react-router-dom";
 import { addToCart } from "@/pages/Cart";
 import { ProductSelectorTypes, Props } from "../model/interfaces";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { userSelector } from "@/shared/model/selectors";
 import { initialSizes, initialTypes } from "@/shared/config/constants";
-import { useAnimatedPrice } from "../lib/hooks/useAnimatedPrice";
 import { AddToCartButton } from "@/features/AddToCartButton";
 import { addToCartThunk } from "@/pages/Cart/model/asyncActions";
 import { ProductSelectorState } from "@/shared/model/interfaces";
@@ -26,8 +27,6 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
     const initialState: ProductSelectorState = { type: types[0], size: sizeIndex, price: sizes[0].price, loading: false, count };
 
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, initialState);
-
-    const { priceRef } = useAnimatedPrice(initialState.price, productState.price);
 
     const dispatch = useAsyncThunkDispatch();
 
@@ -69,9 +68,7 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                 </Link>
             </picture>
             <div className='flex flex-col justify-center items-center gap-2 w-full'>
-                <h2 className='text-primary-black font-bold text-lg cursor-pointer'>
-                    <Link to={`product/${id}`}>{title}</Link>
-                </h2>
+                <Link to={`product/${id}`} className='text-primary-black font-bold text-lg cursor-pointer'>{title}</Link>
                 <div className='flex flex-col gap-5 w-full mt-[5px]'>
                     <div className='flex p-1 gap-1 flex-col bg-primary-gray rounded-lg max-md:w-full'>
                         <OptionsSelector
@@ -96,10 +93,7 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                         />
                     </div>
                     <div className='flex items-center justify-between'>
-                        <span
-                            className='text-xl font-bold text-primary-black flex items-center gap-2'
-                            ref={priceRef}
-                        ></span>
+                        <AnimatedNumber value={productState.price} cb={(price) => `от ${getIntlPrice(price)}`}/>
                         <AddToCartButton
                             title='Добавить'
                             onClick={handleAddToCart}

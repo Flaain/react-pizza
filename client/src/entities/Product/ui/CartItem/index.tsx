@@ -8,6 +8,8 @@ import { CartItemProps } from "../../model/interfaces";
 import { Link } from "react-router-dom";
 import { initialTypes } from "@/shared/config/constants";
 import { useCartItem } from "../../lib/hooks/useCartItem";
+import Typography from "@/shared/ui/Typography/ui/ui";
+import AnimatedNumber from "@/shared/ui/AnimatedNumber/ui/ui";
 
 const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price }: CartItemProps) => {
     const { 
@@ -37,9 +39,9 @@ const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price }:
                     >
                         {title}
                     </Link>
-                    <span className='text-gray-400'>
+                    <Typography variant='description' as="p">
                         {initialTypes[type]} тесто, {intlSize}
-                    </span>
+                    </Typography>
                 </div>
             </div>
             <div className='flex justify-between items-start gap-5'>
@@ -71,9 +73,7 @@ const CartItem = ({ _id, productId, count, imageUrl, size, title, type, price }:
                     </button>
                 </div>
                 <div className='flex items-center gap-4'>
-                    <span className='text-xl min-w-[100px] flex justify-end font-medium'>
-                        {getIntlPrice(itemCount * price)}
-                    </span>
+                    <AnimatedNumber value={count * price} cb={(price) => getIntlPrice(price)} size="xl" weight="semibold"/>
                     <button
                         disabled={loading}
                         onClick={handleRemoveItemFromCart}

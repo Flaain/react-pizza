@@ -7,7 +7,7 @@ import { Await, useLoaderData } from "react-router-dom";
 import { IApiData, Product } from "@/shared/model/interfaces";
 
 const ProductDetails = () => {
-    const data = useLoaderData() as Promise<IApiData<Product>>;
+    const { product } = useLoaderData() as { product: Promise<IApiData<Product>> };
 
     return (
         <section className="mt-5">
@@ -15,7 +15,7 @@ const ProductDetails = () => {
                 classNames={cn("max-w-[1320px] w-full my-0 mx-auto px-[15px] box-border flex flex-col gap-5 relative")}
             >
                 <React.Suspense fallback={<ProductDetailsSkeleton />}>
-                    <Await resolve={data}>
+                    <Await resolve={product}>
                         <ResolvedProductDetails />
                     </Await>
                 </React.Suspense>

@@ -18,7 +18,7 @@ export const ViewWithSuspense = () => {
 export const ProductDetailsPage: RouteObject = {
     path: currentRoute,
     element: <ViewWithSuspense />,
-    errorElement: <NotFound title='Что-то пошло не так, продукт не найден' backLink backLinkText='Вернуться на главную' />,
-    loader: ({ params: { id } }) => api.base.getProductDetails({ id: +id! }),
+    errorElement: (<NotFound title='Что-то пошло не так, продукт не найден' backLink backLinkText='Вернуться на главную' />),
+    loader: ({ params: { id } }) => ({ product: api.base.getProductDetails({ id: +id! }) }),
     shouldRevalidate: ({ currentParams, nextParams }) => currentParams.id !== nextParams.id,
 };

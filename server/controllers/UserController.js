@@ -1,6 +1,6 @@
-import { ConfigController } from "./ConfigController.js";
+import { BaseController } from "./BaseController.js";
 
-export class UserController extends ConfigController {
+export class UserController extends BaseController {
     setAddress = async (req, res) => {
         const token = req.headers.authorization?.split(" ")[1];
 

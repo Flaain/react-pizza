@@ -9,7 +9,7 @@ import { CartPreview } from "@/features/CartPreview";
 import { routerList } from "@/shared/config/constants";
 
 export const LayoutHeader = () => {
-    const { isAuthenticated } = useAppSelector(userSelector);
+    const { isAuthenticated, isAuthInProgress } = useAppSelector(userSelector);
 
     return (
         <header className='py-[25px] box-border sticky bg-white left-0 right-0 top-0 z-[100]'>
@@ -17,16 +17,17 @@ export const LayoutHeader = () => {
                 <Logo title='React Pizza' description='самая вкусная пицца во вселенной' />
                 <Search />
                 <div className='flex items-center gap-5 max-sm:w-full max-sm:justify-between'>
-                    {isAuthenticated ? (
-                        <ProfileMenu />
-                    ) : (
-                        <Link
-                            to={routerList.AUTH}
-                            className='text-primary-black border-b border-dashed hover:text-primary-orange hover:border-primary-orange'
-                        >
-                            войти
-                        </Link>
-                    )}
+                    {!isAuthInProgress &&
+                        (isAuthenticated ? (
+                            <ProfileMenu />
+                        ) : (
+                            <Link
+                                to={routerList.AUTH}
+                                className='text-primary-black border-b border-dashed hover:text-primary-orange hover:border-primary-orange'
+                            >
+                                войти
+                            </Link>
+                        ))}
                     <CartPreview />
                 </div>
             </Container>

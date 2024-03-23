@@ -19,19 +19,11 @@ export const rootSlice = createSlice({
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.error = action.payload;
-                // state.loading = false;
-            })
-            .addCase(getProductPerPage.pending, (state) => {
-                state.perPageLoading = true;
             })
             .addCase(getProductPerPage.fulfilled, (state, action) => {
                 state._meta = action.payload.meta;
                 state.products = [...state.products, ...action.payload.items];
-                state.perPageLoading = false;
-            })
-            // .addCase(getProductPerPage.rejected, (state) => {
-            //     state.perPageLoading = false;
-            // });
+            });
     },
 });
 

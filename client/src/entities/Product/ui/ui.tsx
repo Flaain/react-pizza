@@ -21,10 +21,19 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
     const { isAuthenticated, token } = useAppSelector(userSelector);
     const { cartArr } = useCart();
 
-    const count = React.useMemo(() => cartArr.reduce((acc, { productId, count }) => acc + (productId === id ? count : 0), 0), [cartArr]);
+    const count = React.useMemo(
+        () => cartArr.reduce((acc, { productId, count }) => acc + (productId === id ? count : 0), 0),
+        [cartArr]
+    );
     const sizeIndex = React.useMemo(() => initialSizes.findIndex((size) => size === sizes[0].size), []);
 
-    const initialState: ProductSelectorState = { type: types[0], size: sizeIndex, price: sizes[0].price, loading: false, count };
+    const initialState: ProductSelectorState = {
+        type: types[0],
+        size: sizeIndex,
+        price: sizes[0].price,
+        loading: false,
+        count,
+    };
 
     const [productState, productDispatch] = React.useReducer(productSelectorReducer, initialState);
 
@@ -46,7 +55,11 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
 
             productDispatch({ type: ProductSelectorTypes.SET_ADD_TO_CART, payload: { count: 1, loading: true } });
 
-            await dispatch(isAuthenticated ? addToCartThunk({ product: { productId: id, size, type }, token: token as string }) : addToCart({ productId: id, size, type, title, imageUrl, count, price }));
+            await dispatch(
+                isAuthenticated
+                    ? addToCartThunk({ product: { productId: id, size, type }, token: token as string })
+                    : addToCart({ productId: id, size, type, title, imageUrl, count, price })
+            );
         } catch (error) {
             console.error(error);
         } finally {
@@ -68,7 +81,9 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                 </Link>
             </picture>
             <div className='flex flex-col justify-center items-center gap-2 w-full'>
-                <Link to={`product/${id}`} className='text-primary-black font-bold text-lg cursor-pointer'>{title}</Link>
+                <Link to={`product/${id}`} className='text-primary-black font-bold text-lg cursor-pointer'>
+                    {title}
+                </Link>
                 <div className='flex flex-col gap-5 w-full mt-[5px]'>
                     <div className='flex p-1 gap-1 flex-col bg-primary-gray rounded-lg max-md:w-full'>
                         <OptionsSelector
@@ -80,7 +95,7 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                             }))}
                             layoutId={`${id}-types-home-page`}
                             onOptionChange={handleTypeChange}
-                            />
+                        />
                         <OptionsSelector
                             options={initialSizes.map((size, index) => ({
                                 id: index,
@@ -93,7 +108,12 @@ const Card = ({ id, title, types, sizes, imageUrl }: Props) => {
                         />
                     </div>
                     <div className='flex items-center justify-between'>
-                        <AnimatedNumber value={productState.price} cb={(price) => `от ${getIntlPrice(price)}`}/>
+                        <AnimatedNumber
+                            value={productState.price}
+                            cb={(price) => `от ${getIntlPrice(price)}`}
+                            size='xl'
+                            weight='bold'
+                        />
                         <AddToCartButton
                             title='Добавить'
                             onClick={handleAddToCart}

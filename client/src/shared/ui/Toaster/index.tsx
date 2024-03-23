@@ -1,21 +1,27 @@
 import React from "react";
-import Toast from "../../Toast/ui/ui";
-import { IHeights, IToast } from "@/shared/hooks/useToast/types";
+import Toast from "../Toast";
+import { IHeights, IToast } from "@/shared/lib/toast/types";
+import { toastState } from "@/shared/lib/toast";
 
-const Toaster = ({
-    toasts,
-    setHeights,
-    removeToast,
-    duration,
-    heights,
-}: {
-    toasts: Array<IToast>;
-    setHeights: React.Dispatch<React.SetStateAction<Array<IHeights>>>;
-    removeToast: (id: number | string) => void;
-    duration?: number;
-    heights: Array<IHeights>;
-}) => {
+const MAX_TOASTS = 3;
+
+const Toaster = ({ duration }: { duration?: number }) => {
+    const [toasts, setToasts] = React.useState<Array<IToast>>([]);
+    const [heights, setHeights] = React.useState<Array<IHeights>>([]);
     const [expanded, setExpanded] = React.useState(false);
+
+    React.useEffect(() => {
+        return toastState.subscribe((toast) => {
+            setToasts((prevState) => [
+                toast,
+                ...(prevState.length === MAX_TOASTS ? prevState.slice(0, MAX_TOASTS - 1) : prevState),
+            ]);
+        });
+    }, []);
+
+    const removeToast = React.useCallback((id: number | string) => {
+        setToasts((prevState) => prevState.filter((toast) => toast.id !== id));
+    }, []);
 
     if (!toasts.length) return null;
 
@@ -28,8 +34,8 @@ const Toaster = ({
             >
                 {toasts.map((toast, index) => (
                     <Toast
-                        key={toast.id}
                         {...toast}
+                        key={toast.id}
                         heights={heights}
                         expanded={expanded}
                         setHeights={setHeights}

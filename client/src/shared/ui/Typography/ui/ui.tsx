@@ -14,10 +14,10 @@ const Typography: TypographyComponent = React.forwardRef(
                 ref={ref}
                 className={cn(
                     "truncate",
+                    props.className,
                     typographyVariants.variant[variant as keyof TypographyVariants["variant"]] ?? typographyVariants.variant.default,
                     typographyVariants.size[size as keyof TypographyVariants["size"]] ?? typographyVariants.size.default,
                     typographyVariants.weight[weight as keyof TypographyVariants["weight"]] ?? typographyVariants.weight.normal,
-                    props.className
                 )}
                 {...rest}
             >

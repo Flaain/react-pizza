@@ -1,17 +1,17 @@
 import React from "react";
 import cn from "@/shared/lib/classNames";
+import Typography from "../Typography/ui/ui";
 import { motion } from "framer-motion";
-import { IToastProps, ToastType } from "@/shared/hooks/useToast/types";
-import { getAsset } from "@/shared/hooks/useToast/assets";
+import { IToastProps } from "@/shared/lib/toast/types";
+import { assets } from "@/shared/lib/toast/assets";
 
-// const variants: Record<Exclude<ToastType, "default" | "action" | "normal">, string> = {
-//     error: "bg-red-400 text-white",
-//     success: "bg-green-500",
-//     info: "bg-blue-500",
-//     warning: "bg-yellow-500",
-// };
+const DEFAULT_GAP = 10;
 
-const DEFAULT_GAP = 12;
+const gaps = {
+    10: "after:h-[10px]",
+    20: "after:h-[20px]",
+    30: "after:h-[30px]",
+} // looks ugly but it's necessary to avoid issues with tailwind
 
 const Toast = ({
     id,
@@ -25,8 +25,8 @@ const Toast = ({
     title,
     type,
     index,
-    removeToast,
     setHeights,
+    removeToast,
     expanded,
     gap = DEFAULT_GAP,
     autoClose = true,
@@ -96,7 +96,7 @@ const Toast = ({
         <motion.li
             style={{ zIndex: toasts.length - index, height: expanded ? (heights[heightIndex]?.height ?? "auto") : (height || "auto") }}
             className={cn(
-                `bg-slate-100 absolute pointer-events-auto after:h-[${gap}px] transition-[height] duration-200 ease-in-out after:pointer-events-auto after:left-0 after:right-0 after:absolute after:-top-3 after:block max-w-[350px] w-full bottom-0 right-0 p-4 rounded-lg box-border border border-gray-200 border-solid shadow-md`
+                `bg-white absolute pointer-events-auto ${gaps[gap as keyof typeof gaps]} transition-[height] duration-200 ease-in-out after:pointer-events-auto after:left-0 after:right-0 after:absolute after:-top-3 after:block max-w-[350px] w-full bottom-0 right-0 p-4 rounded-lg box-border border border-gray-200 border-solid shadow-md`
                 // variants[type as keyof typeof variants] ?? "bg-white"
             )}
             ref={toastRef}
@@ -116,10 +116,10 @@ const Toast = ({
                     (expanded || !index) && "opacity-100"
                 )}
             >
-                {getAsset(type as ToastType)}
-                <div className='flex flex-col'>
-                    <span>{title}</span>
-                    {description && <p className='text-xs'>{description}</p>}
+                <span className="flex">{assets[type as keyof typeof assets]}</span>
+                <div className='flex flex-col truncate'>
+                    <Typography weight="medium">{title}</Typography>
+                    {description && <Typography as="p" size="sm" variant="description">{description}</Typography>}
                 </div>
                 {closeButton && (
                     <button

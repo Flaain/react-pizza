@@ -15,10 +15,10 @@ const CollapseInfo = ({ description, MAX_LENGTH = 100, title }: Props) => {
                         "after:absolute after:bg-gradient-to-b after:from-[#ffffff00] after:to-white after:h-[50px] after:bottom-0 after:w-full"
                 )}
             >
-                <Typography as='h3' size='md' weight='medium'>
+                <Typography as='h3' size='md' weight='semibold'>
                     {title}
                 </Typography>
-                <Typography className={cn("max-w-[700px]", !expanded && "max-h-[70px] overflow-hidden")}>
+                <Typography as='p' className={cn("text-primary-black opacity-80 text-left max-w-[700px]", !expanded && "max-h-[70px] overflow-hidden")}>
                     {description}
                 </Typography>
             </div>

@@ -5,13 +5,13 @@ import OrdersList from "./OrdersList";
 import { useOrders } from "../lib/hooks/useOrders";
 
 const Orders = () => {
-    const { isEmpty, loading } = useOrders();
+    const { isEmpty, loading, orders } = useOrders();
 
     if (isEmpty) return <EmptyOrders />;
 
     return (
         <section className={cn("pb-5", loading && "min-h-[calc(100vh-102px)]")}>
-            {loading ? <Spinner position='center' /> : <OrdersList />}
+            {loading ? <Spinner position='center' /> : <OrdersList orders={orders} />}
         </section>
     );
 };

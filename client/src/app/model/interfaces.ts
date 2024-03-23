@@ -28,7 +28,6 @@ export interface RootSliceState {
     _meta: Meta | null;
     products: Array<Product>;
     loading: boolean;
-    perPageLoading: boolean;
     error: unknown;
 }
 

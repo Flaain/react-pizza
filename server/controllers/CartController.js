@@ -1,10 +1,10 @@
 import jwt from "jsonwebtoken";
 import { isValidObjectId } from "mongoose";
-import { ConfigController } from "./ConfigController.js";
+import { BaseController } from "./BaseController.js";
 import { User } from "../models/User.js";
 import { initialSizes } from "../utils/constants/initial.js";
 
-export class CartController extends ConfigController {
+export class CartController extends BaseController {
     getCart = async (req, res) => {
         try {
             const revalidatedCart = await this._revalidateCart(req.body);

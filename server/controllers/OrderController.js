@@ -1,10 +1,10 @@
 import Stripe from "stripe";
-import { ConfigController } from "./ConfigController.js";
+import { BaseController } from "./BaseController.js";
 import { initialSizes, initialTypes } from "../utils/constants/initial.js";
 import { Order } from "../models/Order.js";
 import { User } from "../models/User.js";
 
-class OrderController extends ConfigController {
+class OrderController extends BaseController {
     constructor({ apiKey, config }) {
         super();
 

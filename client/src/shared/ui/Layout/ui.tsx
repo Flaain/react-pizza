@@ -1,4 +1,5 @@
 import Container from "../Container";
+import Toaster from "../Toaster";
 import { Outlet } from "react-router-dom";
 import { Props } from "./model/interfaces";
 
@@ -13,6 +14,7 @@ const Layout = ({ headerSlot, announcementSlot, footerSlot }: Props) => {
             ) : (
                 headerSlot
             )}
+            <Toaster />
             <Outlet />
             {footerSlot && footerSlot}
         </Container>

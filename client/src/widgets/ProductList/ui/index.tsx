@@ -4,16 +4,28 @@ import useInfiniteScroll from "@/pages/Home/lib/useInfiniteScroll";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { appSelector, cartSelector, userSelector } from "@/shared/model/selectors";
 import { getProductPerPage } from "@/pages/Home/model/asyncActions";
+import { ProductListProps } from "../model/interfaces";
 
-const ProductList = () => {
-    const { products, loading, perPageLoading } = useAppSelector(appSelector);
+const ProductList = ({ setPerPageLoading, perPageLoading }: ProductListProps) => {
+    const { products, loading } = useAppSelector(appSelector);
     const { cartLoading } = useAppSelector(cartSelector);
     const { isAuthInProgress } = useAppSelector(userSelector);
 
     const dispatch = useAsyncThunkDispatch();
 
+    const handleScroll = async (params: { page: number; params: URLSearchParams }) => {
+        try {
+            setPerPageLoading(true);
+            await dispatch(getProductPerPage(params));
+        } catch (error) {
+            console.error(error);
+        } finally {
+            setPerPageLoading(false);
+        }
+    };
+
     const ref = useInfiniteScroll<HTMLLIElement>({
-        callback: (page, params) => dispatch(getProductPerPage({ page, params })),
+        callback: handleScroll,
         threshold: 1,
         deps: [!loading, !perPageLoading],
     });

@@ -5,5 +5,4 @@ export const rootInitialState: RootSliceState = {
     products: [],
     error: null,
     loading: true,
-    perPageLoading: false,
 }

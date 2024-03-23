@@ -5,6 +5,6 @@ export interface ValidateParams {
 }
 
 export interface UseInfiniteScrollOptions extends IntersectionObserverInit {
-    callback: (page: number, params: URLSearchParams) => void;
-    deps: React.DependencyList; 
+    callback: (params: { page: number; params: URLSearchParams }) => void;
+    deps: React.DependencyList;
 }

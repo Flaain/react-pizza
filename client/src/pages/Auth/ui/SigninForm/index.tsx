@@ -3,7 +3,6 @@ import Input from "@/shared/ui/Input/ui";
 import PasswordInput from "@/shared/ui/PasswordInput/ui/ui";
 import AuthButton from "../AuthButton";
 import cn from "@/shared/lib/classNames";
-import Toaster from "@/shared/ui/Toaster/ui/ui";
 import Typography from "@/shared/ui/Typography/ui/ui";
 import { AnimatePresence, motion } from "framer-motion";
 import { errorsAnimation } from "@/widgets/FormUserAddress/model/animation";
@@ -12,22 +11,15 @@ import { signinform } from "../../model/form";
 import { FormProps } from "../../model/interfaces";
 import { useDispatch } from "react-redux";
 import { signin } from "@/app/redux/slice/user.slice";
-import { ApiError } from "@/shared/api/error";
 import { cartSelector } from "@/shared/model/selectors";
 import { useAppSelector } from "@/shared/model/store";
 import { api } from "@/shared/api";
 import { setCart } from "@/pages/Cart/model/slice";
-import { useToast } from "@/shared/hooks/useToast";
+import { toast } from "@/shared/lib/toast";
 
 const SigninForm = ({ setActiveForm }: FormProps) => {
     const { errors, isFormValid, register, submitHandler } = useForm();
     const { cart } = useAppSelector(cartSelector);
-    const {
-        toast,
-        toasts,
-        heights,
-        actions: { setHeights, removeToast },
-    } = useToast();
 
     const [loading, setLoading] = React.useState(false);
 
@@ -63,12 +55,7 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
             dispatch(signin(user));
         } catch (error) {
             console.error(error);
-            error instanceof ApiError &&
-                toast.error(error.message, {
-                    closeButton: true,
-                    recalculateRemainingTime: true,
-                    description: "Проверьте правильность введенных данных",
-                });
+            error instanceof Error && toast.error("Ошибка при входе", { description: error.message });
         } finally {
             setLoading(false);
         }
@@ -76,7 +63,6 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
 
     return (
         <div className='p-10 flex flex-col justify-center items-center max-w-[600px] w-full box-content'>
-            <Toaster toasts={toasts} heights={heights} setHeights={setHeights} removeToast={removeToast} />
             <div className='flex flex-col items-start self-start gap-3 mb-10'>
                 <Typography as='h1' size='5xl' weight='bold'>
                     Вход

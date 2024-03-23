@@ -1,11 +1,9 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
-import { ConfigController } from "./ConfigController.js";
-import { Order } from "../models/Order.js";
-import { months } from "../utils/constants/initial.js";
+import { BaseController } from "./BaseController.js";
 
-export class AuthController extends ConfigController {
+export class AuthController extends BaseController {
     signup = async (req, res) => {
         try {
             const { email, name, password } = req.body;
@@ -43,6 +41,7 @@ export class AuthController extends ConfigController {
             const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "30d" });
 
             const updateCart = await this._revalidateCart(user.cart.toObject());
+            const extraInfo = await this._getExtraInfo(user._id);
             const deliveryInfo = user.deliveryInfo && (await this._getDeliveryInfo({
                 id: user.deliveryInfo.id,
                 method: user.deliveryInfo.method,
@@ -55,7 +54,7 @@ export class AuthController extends ConfigController {
             const savedUser = await user.save();
             const { password: hashedPassword, __v, ...rest } = savedUser.toObject();
 
-            return res.json({ user: { ...rest, ...updateCart, deliveryInfo, token }, message: "Авторизация прошла успешно" });
+            return res.json({ user: { ...rest, ...updateCart, extraInfo, deliveryInfo, token }, message: "Авторизация прошла успешно" });
         } catch (error) {
             console.log(error);
             res.status(500).json({ message: error.message || "Во время авторизации произошла непредвиденная ошибка" });
@@ -70,60 +69,26 @@ export class AuthController extends ConfigController {
 
             const user = await this._getUser(token);
             const updateCart = await this._revalidateCart(user.cart.toObject());
+            const extraInfo = await this._getExtraInfo(user._id);
             const deliveryInfo = user.deliveryInfo && (await this._getDeliveryInfo({
                 id: user.deliveryInfo.id,
                 method: user.deliveryInfo.method,
                 throwError: false,
                 user
             }));
-            const orders = await Order.find({ user: user._id }).lean();
 
             !deliveryInfo && user.deliveryInfo && (user.deliveryInfo = undefined);
 
             const savedUser = await user.save();
             const { password, addresses, ...rest } = savedUser.toObject();
             
-            const date = new Date();
-            const sixMonthsAgo = new Date(date.getFullYear(), date.getMonth() - 6, date.getDate());
-
-            const lastSixMonthsOrders = await Order.find({ createdAt: { $gte: sixMonthsAgo, $lt: date } }).lean();
-            
-            const lastSixMonthsOrdersMap = new Map();
-
-            lastSixMonthsOrders.forEach(order => {
-                const orderDate = new Date(order.createdAt);
-                const month = orderDate.getMonth();
-
-                lastSixMonthsOrdersMap.set(month, (lastSixMonthsOrdersMap.get(month) ?? 0) + 1);
-            });
-
-            const extraInfo = orders.reduce((acc, order) => {
-                const isPayed = order.status === "PAID";
-                const totalOrdersPrice = acc.totalOrdersPrice + order.cart.total_price;
-                const purchaseAmount = acc.purchaseAmount + (isPayed ? (order.total_amount / 100) : 0);
-                const purchasePercent = (purchaseAmount / totalOrdersPrice) * 100;
-
-                return {
-                    ...acc,
-                    totalItemsCount: acc.totalItemsCount + order.cart.items.length,
-                    purchasePercent,
-                    purchaseAmount,
-                    totalOrdersPrice,
-                };
-            }, { totalItemsCount: 0, totalOrdersPrice: 0, purchaseAmount: 0, purchasePercent: 0 });
-            
             return res.json({
                 user: {
                     ...rest,
                     ...updateCart,
+                    extraInfo,
                     deliveryInfo,
                     addresses: addresses.map(({ _id, ...rest }) => ({ id: _id, ...rest })),
-                    extraInfo: {
-                        ordersGoods: orders.flatMap(({ cart: { items } }) => items.map((item) => ({ id: item._id, src: item.imageUrl }))).reverse().slice(0, 5),
-                        ordersCount: orders.length,
-                        lastSixMonthsOrders: [...lastSixMonthsOrdersMap.entries()].map(([date, count]) => ({ date: months[date], count })),
-                        ...extraInfo
-                    },
                 },
                 message: "Профиль успешно получен",
             });

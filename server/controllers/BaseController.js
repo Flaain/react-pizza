@@ -1,9 +1,10 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/User.js";
 import { isValidObjectId } from "mongoose";
-import { initialSizes } from "../utils/constants/initial.js";
+import { initialSizes, months } from "../utils/constants/initial.js";
+import { Order } from "../models/Order.js";
 
-export class ConfigController {
+export class BaseController {
     _revalidateCart = async (cart = []) => {
         try {
             const response = await fetch(process.env.MOKKY + `/products?id[]=${cart.map((item) => item.productId).join("&id[]=")}`);
@@ -61,19 +62,13 @@ export class ConfigController {
         return user;
     };
 
-    _revalidatePickupPoint = async (id) => {
-        const response = await fetch(process.env.MOKKY + `/addresses?id=${id}`);
-        const actualAddress = await response.json();
-
-        return actualAddress;
-    };
-
     _getDeliveryInfo = async ({ id, method, user, throwError = true }) => {
         if (!id || !method) throw new Error("Необходимо передать id и метод доставки");
 
         const actions = {
             pickup: async () => {
-                const { 0: revalidatedPickupPoint } = await this._revalidatePickupPoint(id);
+                const response = await fetch(process.env.MOKKY + `/addresses?id=${id}`);
+                const { 0: revalidatedPickupPoint } = await response.json();
 
                 if (!revalidatedPickupPoint) {
                     if (throwError) throw new Error("Пункт самовывоза не найден");
@@ -103,4 +98,42 @@ export class ConfigController {
 
         return address;
     };
+
+    _getExtraInfo = async (user_id) => {
+        const date = new Date();
+        const sixMonthsAgo = new Date(date.getFullYear(), date.getMonth() - 6, date.getDate());
+        const lastSixMonthsOrdersMap = new Map();
+
+        const orders = await Order.find({ user: user_id }).sort({ _id: -1 }).lean(); // from latest to oldest
+        const lastSixMonthsOrders = await Order.find({ createdAt: { $gte: sixMonthsAgo, $lt: date } }).lean();
+        const lastFiveorders = orders.slice(0, 5);
+
+        lastSixMonthsOrders.forEach((order) => {
+            const orderDate = new Date(order.createdAt);
+            const month = orderDate.getMonth();
+
+            lastSixMonthsOrdersMap.set(month, (lastSixMonthsOrdersMap.get(month) ?? 0) + 1);
+        });
+
+        const extraInfo = orders.reduce((acc, order) => {
+            const totalOrdersPrice = acc.totalOrdersPrice + order.cart.total_price;
+            const purchaseAmount = acc.purchaseAmount + ((order.total_amount / 100) || 0);
+            const purchasePercent = (purchaseAmount / totalOrdersPrice) * 100;
+
+            return {
+                ...acc,
+                purchasePercent,
+                purchaseAmount,
+                totalOrdersPrice,
+                totalItemsCount: acc.totalItemsCount + order.cart.items.length,
+            };
+        }, { totalItemsCount: 0, totalOrdersPrice: 0, purchaseAmount: 0, purchasePercent: 0 });
+
+        return {
+            ...extraInfo,
+            ordersGoods: lastFiveorders.flatMap(({ cart: { items } }) => items.map((item) => ({ id: item._id, src: item.imageUrl }))).slice(0, 5),
+            lastSixMonthsOrders: [...lastSixMonthsOrdersMap.entries()].map(([date, count]) => ({ date: months[date], count })),
+            ordersCount: orders.length
+        }
+    }
 }

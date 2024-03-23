@@ -13,9 +13,10 @@ import { initialCategories } from "@/shared/config/constants";
 import { fetchProducts } from "@/app/redux";
 
 const Home = () => {
-    const { products, loading, perPageLoading } = useAppSelector(appSelector);
+    const { products, loading } = useAppSelector(appSelector);
 
     const [searchParams, setSearchParams] = useSearchParams();
+    const [perPageLoading, setPerPageLoading] = React.useState(false);
 
     const activeCategory = searchParams.get("category");
     const title = activeCategory !== null ? initialCategories.get(Number(activeCategory))?.name : "Все";
@@ -40,7 +41,7 @@ const Home = () => {
                     <Typography as="h1" size="3xl" weight="bold">{`${title} пиццы`}</Typography>
                 </div>
                 <>
-                    <ProductList />
+                    <ProductList setPerPageLoading={setPerPageLoading} perPageLoading={perPageLoading} />
                     {perPageLoading && (
                         <div className='relative pt-20 flex items-center justify-center'>
                             <Spinner position='bottom' />

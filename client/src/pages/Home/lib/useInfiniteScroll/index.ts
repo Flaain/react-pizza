@@ -13,7 +13,7 @@ const useInfiniteScroll = <T extends HTMLElement>({ callback, root, rootMargin, 
             observer.current?.disconnect();
             observer.current = new IntersectionObserver((entries) => {
                 if (entries[0].isIntersecting && _meta.total_pages > _meta.current_page && _meta.total_items > products.length) {
-                    callback(_meta.current_page + 1, new URLSearchParams(document.location.search));
+                    callback({ page: _meta.current_page + 1, params: new URLSearchParams(document.location.search) });
                 }
             }, { root, rootMargin, threshold });
             node && observer.current.observe(node);

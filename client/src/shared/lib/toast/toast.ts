@@ -19,7 +19,7 @@ export class Toast extends Observer {
 
     private create = (toast: IToast) => {
         this.toasts = [toast, ...(this.toasts.length === this.MAX_TOASTS ? this.toasts.slice(0, this.MAX_TOASTS - 1) : this.toasts)];
-        this.subscribers.forEach((subscriber) => subscriber(toast));
+        this.notify(toast);
     };
 
     message = (message: string | React.ReactNode, options?: IExternalToast) => {

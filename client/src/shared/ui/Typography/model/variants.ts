@@ -2,8 +2,8 @@ import { TypographyVariants } from "./interfaces";
 
 export const typographyVariants: TypographyVariants = {
     variant: {
-        default: "text-primary-black",
-        primary: "text-primary-black text-center",
+        default: "text-white",
+        primary: "text-primary-black",
         secondary: "text-primary-gray ",
         accent: "text-primary-orange",
         description: "text-primary-black opacity-50 text-center",

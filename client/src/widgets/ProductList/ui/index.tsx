@@ -1,15 +1,17 @@
+import React from "react";
 import Card from "@/entities/Product/ui/ui";
 import ProductSkeleton from "@/entities/Product/ui/Skeletons/ProductSkeleton";
 import useInfiniteScroll from "@/pages/Home/lib/useInfiniteScroll";
 import { useAppSelector, useAsyncThunkDispatch } from "@/shared/model/store";
 import { appSelector, cartSelector, userSelector } from "@/shared/model/selectors";
 import { getProductPerPage } from "@/pages/Home/model/asyncActions";
-import { ProductListProps } from "../model/interfaces";
 
-const ProductList = ({ setPerPageLoading, perPageLoading }: ProductListProps) => {
+const ProductList = () => {
     const { products, loading } = useAppSelector(appSelector);
     const { cartLoading } = useAppSelector(cartSelector);
     const { isAuthInProgress } = useAppSelector(userSelector);
+
+    const [perPageLoading, setPerPageLoading] = React.useState(false);
 
     const dispatch = useAsyncThunkDispatch();
 
@@ -39,6 +41,7 @@ const ProductList = ({ setPerPageLoading, perPageLoading }: ProductListProps) =>
                           <Card {...item} />
                       </li>
                   ))}
+            {perPageLoading && [...Array(3)].map((_, index) => <ProductSkeleton key={index} />)}
         </ul>
     );
 };

@@ -2,7 +2,6 @@ import React from "react";
 import Container from "@/shared/ui/Container";
 import ProductList from "@/widgets/ProductList/ui";
 import Tools from "@/widgets/Tools/ui";
-import Spinner from "@/shared/ui/Spinner/ui";
 import Typography from "@/shared/ui/Typography/ui/ui";
 import getNotFoundTitle from "../lib/helpers/getNotFoundTitle";
 import { ViewWithSuspense as NotFound } from "@/pages/NotFound";
@@ -16,7 +15,6 @@ const Home = () => {
     const { products, loading } = useAppSelector(appSelector);
 
     const [searchParams, setSearchParams] = useSearchParams();
-    const [perPageLoading, setPerPageLoading] = React.useState(false);
 
     const activeCategory = searchParams.get("category");
     const title = activeCategory !== null ? initialCategories.get(Number(activeCategory))?.name : "Все";
@@ -34,20 +32,13 @@ const Home = () => {
     if (!loading && !products.length) return <NotFound title={getNotFoundTitle(activeCategory, searchParams.get("search") ?? "")} backLink />;
 
     return (
-        <section className="pb-5">
+        <section className='pb-5'>
             <Container>
                 <div className='flex flex-col gap-5 pb-5'>
                     <Tools searchParams={searchParams} setSearchParams={setSearchParams} />
-                    <Typography as="h1" size="3xl" weight="bold">{`${title} пиццы`}</Typography>
+                    <Typography as='h1' size='3xl' weight='bold'>{`${title} пиццы`}</Typography>
                 </div>
-                <>
-                    <ProductList setPerPageLoading={setPerPageLoading} perPageLoading={perPageLoading} />
-                    {perPageLoading && (
-                        <div className='relative pt-20 flex items-center justify-center'>
-                            <Spinner position='bottom' />
-                        </div>
-                    )}
-                </>
+                <ProductList />
             </Container>
         </section>
     );

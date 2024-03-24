@@ -69,13 +69,13 @@ const SigninForm = ({ setActiveForm }: FormProps) => {
                 </Typography>
                 <div className='inline-flex items-center'>
                     <Typography as='p' size='md'>
-                        Уже есть аккаунт?&nbsp;
+                        Нет аккаунта?&nbsp;
                     </Typography>
                     <button
-                        onClick={() => setActiveForm("signin")}
+                        onClick={() => setActiveForm("signup")}
                         className='text-lg font-medium text-primary-orange border-b-2 cursor-pointer border-solid border-primary-orange'
                     >
-                        Войти
+                        Регистрация
                     </button>
                 </div>
             </div>

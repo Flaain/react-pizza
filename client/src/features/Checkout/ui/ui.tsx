@@ -21,7 +21,7 @@ const Checkout = ({ setPaymentModalOpened }: CheckoutProps) => {
     return (
         <div
             className={cn(
-                "overflow-hidden row-start-1 col-start-6 col-end-8 sticky top-5 flex flex-col self-start justify-between gap-5 col-span-2 p-5 rounded-xl bg-white shadow-xl border border-solid border-primary-gray"
+                "overflow-hidden row-start-1 col-start-6 col-end-8 sticky top-[102px] flex flex-col self-start justify-between gap-5 col-span-2 p-5 rounded-xl bg-white shadow-xl border border-solid border-primary-gray"
             )}
         >
             {deliveryInfo && paymentInfo ? (

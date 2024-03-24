@@ -1,7 +1,7 @@
 import Container from "@/shared/ui/Container";
+import CallToActionBlockSkeleton from "@/shared/ui/CallToActionBlock/ui/Skeleton";
 import { CartItemSkeleton } from "@/entities/Product";
 import { CheckoutSkeleton } from "@/features/Checkout";
-import { InfoBlockSkeleton } from "@/features/InfoBlock";
 
 const CartSkeleton = () => {
     return (
@@ -19,8 +19,8 @@ const CartSkeleton = () => {
                             ))}
                         </ul>
                     </div>
-                    <InfoBlockSkeleton />
-                    <InfoBlockSkeleton />
+                    <CallToActionBlockSkeleton />
+                    <CallToActionBlockSkeleton />
                 </div>
                 <CheckoutSkeleton />
             </Container>

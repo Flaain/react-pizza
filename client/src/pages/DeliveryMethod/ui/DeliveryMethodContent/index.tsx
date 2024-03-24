@@ -5,11 +5,11 @@ import { Await, useLoaderData } from "react-router-dom";
 import { Address, IApiData } from "@/shared/model/interfaces";
 
 const DeliveryMethodModalContent = () => {
-    const data = useLoaderData() as Promise<IApiData<Array<Address>>>;
+    const { addresses } = useLoaderData() as { addresses: Promise<IApiData<Array<Address>>> };
 
     return (
         <React.Suspense fallback={<TabsSkeleton />}>
-            <Await resolve={data}>
+            <Await resolve={addresses}>
                 <MethodTabs />
             </Await>
         </React.Suspense>

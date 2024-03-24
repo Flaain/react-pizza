@@ -3,7 +3,6 @@ import Container from "@/shared/ui/Container";
 import cn from "@/shared/lib/classNames";
 import CartItemsList from "./CartItemsList";
 import Checkout from "@/features/Checkout/ui/ui";
-import InfoContainer from "@/widgets/InfoContainer/ui/ui";
 import PaymentModal from "@/widgets/PaymentModal/ui/ui";
 import Spinner from "@/shared/ui/Spinner/ui";
 import CartSkeleton from "./Skeletons/CartSkeleton";
@@ -16,6 +15,7 @@ import { AnimatePresence } from "framer-motion";
 import { EmptyCart } from "../model/lazy";
 import { useCart } from "../lib/hooks/useCart";
 import Typography from "@/shared/ui/Typography/ui/ui";
+import CallToActionContainer from "./CallToActionContainer";
 
 const Cart = () => {
     const { priceView: { totalItems } } = useAppSelector(cartSelector);
@@ -79,7 +79,7 @@ const Cart = () => {
                         </div>
                         {isCartMinimized ? <MinimizeCartInfo /> : <CartItemsList cart={cartArr} />}
                     </div>
-                    <InfoContainer setPaymentModalOpened={setPaymentModalOpened} />
+                    <CallToActionContainer setPaymentModalOpened={setPaymentModalOpened} />
                 </div>
                 <Checkout setPaymentModalOpened={setPaymentModalOpened} />
             </Container>

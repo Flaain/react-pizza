@@ -1,18 +1,16 @@
-import ModalContainer from "@/shared/ui/ModalContainer/ui";
 import TabsSkeleton from "@/shared/ui/Tabs/ui/Skeletons/TabsTriggerSkeleton";
-import ModalBody from "@/shared/ui/ModalBody/ui";
+import { Modal } from "@/shared/ui/Modal";
+import { routerList } from "@/shared/config/constants";
 import { useNavigate } from "react-router-dom";
 
 const ErrorElement = () => {
     const navigate = useNavigate();
 
     return (
-        <ModalContainer closeHandler={() => navigate('/cart')}>
-            <ModalBody>
-                <TabsSkeleton />
-            </ModalBody>
-        </ModalContainer>
+        <Modal closeHandler={() => navigate(routerList.CART.main)} title='Произошла ошибка'>
+            <TabsSkeleton />
+        </Modal>
     );
 };
 
-export default ErrorElement
+export default ErrorElement;

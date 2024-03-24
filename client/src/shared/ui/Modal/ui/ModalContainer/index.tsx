@@ -1,8 +1,8 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Props } from "../model/interfaces";
+import { ModalProps } from "../../model/interfaces";
 
-const ModalContainer = ({ children, closeHandler }: Props) => {
+const ModalContainer = ({ children, closeHandler }: Omit<ModalProps, "title">) => {
     React.useEffect(() => {
         const handleKeyUp = ({ key }: KeyboardEvent) => {
             key === "Escape" && closeHandler();
@@ -11,10 +11,10 @@ const ModalContainer = ({ children, closeHandler }: Props) => {
         document.body.style.paddingRight = window.innerWidth - document.body.offsetWidth + "px";
         document.body.classList.add("overflow-hidden");
         document.addEventListener("keyup", handleKeyUp);
-        
+
         return () => {
             document.body.classList.remove("overflow-hidden");
-            document.body.style.paddingRight = '0';
+            document.body.style.paddingRight = "0";
             document.removeEventListener("keyup", handleKeyUp);
         };
     }, []);

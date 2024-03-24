@@ -1,3 +1,4 @@
-export { default as ModalContainer } from "./ui/ModalContainer/ui";
-export { default as ModalHeader } from "./ui/ModalHeader/ui";
-export { default as ModalBody } from "./ui/ModalBody/ui";
+export { default as Modal } from "./ui/ui";
+export { default as ModalContainer } from "./ui/ModalContainer";
+export { default as ModalHeader } from "./ui/ModalHeader";
+export { default as ModalBody } from "./ui/ModalBody";

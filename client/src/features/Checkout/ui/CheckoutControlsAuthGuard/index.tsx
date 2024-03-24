@@ -69,11 +69,11 @@ const CheckoutControlsAuthGuard = () => {
         </>
     ) : (
         <p className='text-sm text-gray-400 select-none mt-2 leading-snug break-words'>
-            Пожалуйста,&#32;
+            Пожалуйста,&nbsp;
             <Link to='/auth?from=cart' className='text-primary-orange'>
                 войдите
             </Link>
-            &#32; или&#32;
+            &nbsp;или&nbsp;
             <Link to='/auth?from=cart' className='text-primary-orange'>
                 зарегистрируйтесь
             </Link>
